@@ -36,7 +36,7 @@ import static Team4450.Robot23.Constants.*;
 
 public class DriveBase extends SubsystemBase 
 {
-  private boolean       autoReturnToZero = false, fieldOriented = true, currentBrakeMode = true;
+  private boolean       autoReturnToZero = false, fieldOriented = true, currentBrakeMode = false;
   private double        distanceTraveled;
   private double        yawAngle, lastYawAngle;
   private Pose2d        lastPose;
@@ -234,6 +234,11 @@ public class DriveBase extends SubsystemBase
 
     m_backRightModule.setTranslation2d(new Translation2d(-DRIVETRAIN_TRACKWIDTH_METERS / 2.0, -DRIVETRAIN_WHEELBASE_METERS / 2.0));
     
+    // Set starting brake mode. Set by definition above. The swerve code has a built in default
+    // of brakes on but turning brakes off is much better when battery is low.
+
+    setBrakeMode(currentBrakeMode);
+
     // Encoders to zero.
     resetModuleEncoders();
 

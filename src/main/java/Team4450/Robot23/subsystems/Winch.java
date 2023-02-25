@@ -22,8 +22,6 @@ public class Winch  extends SubsystemBase
     {
         Util.consoleLog();
 
-        motor.setInverted(true);
-
         // Winch will start at max up position so that is encoder zero. Encoder max will
         // be winch at lowest position.
 
@@ -62,6 +60,14 @@ public class Winch  extends SubsystemBase
     public double getPosition()
     {
         return encoder.getPosition();
+    }
+
+    /**
+     * Reset Winch encoder to zero.
+     */
+    public void resetPosition()
+    {
+        encoder.setPosition(0);
     }
 
     /**

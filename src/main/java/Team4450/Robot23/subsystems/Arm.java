@@ -16,7 +16,7 @@ public class Arm extends SubsystemBase
     private RelativeEncoder encoder = motor.getEncoder();
     private DigitalInput    limitSwitch = new DigitalInput(ARM_SWITCH);
 
-    private final double    ARM_MAX = 1000;
+    private final double    ARM_MAX = 360;
 
     public Arm()
     {
@@ -25,7 +25,7 @@ public class Arm extends SubsystemBase
         // Arm will start all the way retracted and that is encoder zero.
         // Encoder max will represent arm fully extended.
 
-        encoder.setPosition(0);
+        resetPosition();
     }
 
     /**
@@ -43,7 +43,7 @@ public class Arm extends SubsystemBase
 
         //if (limitSwitch.get()) encoder.setPosition(0);
 
-        power = Util.clampValue(power, .50);
+        power = Util.clampValue(power, .70);
         
         motor.set(power);
     }
@@ -60,6 +60,14 @@ public class Arm extends SubsystemBase
     public double getPosition()
     {
         return encoder.getPosition();
+    }
+
+    /**
+     * Reset Arm encoder to zero.
+     */
+    public void resetPosition()
+    {
+        encoder.setPosition(0);
     }
 
     /**

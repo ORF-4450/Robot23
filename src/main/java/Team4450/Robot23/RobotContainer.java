@@ -381,6 +381,10 @@ public class RobotContainer
 
 		// Start or stop (if already in progress), the command to raise the arm to target position.
 		new Trigger(() -> utilityPad.getPOVAngle(0)).toggleOnTrue(raiseArm);
+
+		new Trigger(() -> utilityPad.getXButton()).onTrue(new InstantCommand(arm::resetPosition));
+		new Trigger(() -> utilityPad.getYButton()).onTrue(new InstantCommand(winch::resetPosition));
+		new Trigger(() -> utilityPad.getBButton()).onTrue(new InstantCommand(claw::resetPosition));
 	}
 
 	/**

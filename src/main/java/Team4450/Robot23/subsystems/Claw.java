@@ -34,9 +34,9 @@ public class Claw extends SubsystemBase
 
         //if (limitSwitch.get()) encoder.reset();
 
-        power = Util.clampValue(power, .30);
+        power = Util.clampValue(power, .20);
         
-        motor.set(power);
+        motor.set(Util.squareInput(power));
     }
 
     public void stop()
@@ -47,6 +47,14 @@ public class Claw extends SubsystemBase
     public int getPosition()
     {
         return encoder.get();
+    }
+
+    /**
+     * Reset Claw encoder to zero.
+     */
+    public void resetPosition()
+    {
+        encoder.reset();
     }
 
     /**

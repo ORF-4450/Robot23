@@ -16,7 +16,7 @@ public class Arm extends SubsystemBase
     private RelativeEncoder encoder = motor.getEncoder();
     private DigitalInput    limitSwitch = new DigitalInput(ARM_SWITCH);
 
-    private final double    ARM_MAX = 360;
+    //private final double    ARM_MAX = 360;
 
     public Arm()
     {

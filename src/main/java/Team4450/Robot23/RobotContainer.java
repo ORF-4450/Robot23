@@ -16,13 +16,16 @@ import Team4450.Lib.MonitorCompressor;
 import Team4450.Lib.MonitorPDP;
 import Team4450.Lib.NavX;
 import Team4450.Lib.Util;
+import Team4450.Robot23.commands.CloseClaw;
 import Team4450.Robot23.commands.DriveArm;
 import Team4450.Robot23.commands.DriveClaw;
 import Team4450.Robot23.commands.DriveCommand;
 import Team4450.Robot23.commands.DriveWinch;
 import Team4450.Robot23.commands.DropArm;
+import Team4450.Robot23.commands.ExtendArm;
 import Team4450.Robot23.commands.OpenClaw;
 import Team4450.Robot23.commands.RaiseArm;
+import Team4450.Robot23.commands.RaiseArmStart;
 import Team4450.Robot23.commands.RetractArm;
 import Team4450.Robot23.commands.SetToStartPositionCommand;
 import Team4450.Robot23.commands.Utility.NotifierCommand;
@@ -75,7 +78,10 @@ public class RobotContainer
 	private DropArm				dropArm;
 	private RetractArm			retractArm;
 	private OpenClaw			openClaw;
-	private RaiseArm			raiseArm;
+	private RaiseArm			raiseArm1, raiseArm2;
+	private CloseClaw			closeClawCube, closeClawCone;
+	private ExtendArm			extendArm1, extendArm2;
+	private RaiseArmStart		raiseArmStart;
 
 	// Some notes about Commands.
 	// When a Command is created with the New operator, its constructor is called. When the
@@ -201,10 +207,16 @@ public class RobotContainer
 
 		// Create any persistent commands.
 
-		dropArm = new DropArm(winch);
+		dropArm = new DropArm(winch, arm);
 		retractArm = new RetractArm(arm);
 		openClaw = new OpenClaw(claw);
-		raiseArm = new RaiseArm(winch);
+		closeClawCone = new CloseClaw(claw, 10000);
+		closeClawCube = new  CloseClaw(claw, 5000);
+		raiseArm1 = new RaiseArm(winch, 100);
+		raiseArm2 = new RaiseArm(winch, 200);
+		extendArm1 = new ExtendArm(arm, 100);
+		extendArm2 = new ExtendArm(arm, 200);
+		raiseArmStart = new RaiseArmStart(winch);
 
 		// Set any subsystem Default commands.
 
@@ -370,17 +382,35 @@ public class RobotContainer
 			//.onTrue(new InstantCommand(pickup::toggleDeploy, pickup));
 		//	.onTrue(new NotifierCommand(pickup::toggleDeploy, 0.0, "DeployPickup", pickup));
 
+		// Start or stop (if already in progress), the command to raise arm to start position.
+		//new Trigger(() -> utilityPad.getPOVAngle(0)).toggleOnTrue(raiseArmStart);
+
 		// Start or stop (if already in progress), the command to drop arm to low position.
-		new Trigger(() -> utilityPad.getPOVAngle(180)).toggleOnTrue(dropArm);
+		//new Trigger(() -> utilityPad.getRightBumper()).toggleOnTrue(dropArm);
 
 		// Start or stop (if already in progress), the command to retract arm to inward position.
-		new Trigger(() -> utilityPad.getPOVAngle(270)).toggleOnTrue(retractArm);
+		//new Trigger(() -> utilityPad.getPOVAngle(180)).toggleOnTrue(retractArm);
 
 		// Start or stop (if already in progress), the command to fully open the claw.
-		new Trigger(() -> utilityPad.getRightBumper()).toggleOnTrue(openClaw);
+		//new Trigger(() -> utilityPad.getRightTrigger()).toggleOnTrue(openClaw);
 
-		// Start or stop (if already in progress), the command to raise the arm to target position.
-		new Trigger(() -> utilityPad.getPOVAngle(0)).toggleOnTrue(raiseArm);
+		// Start or stop (if already in progress), the command to close claw on cube.
+		//new Trigger(() -> utilityPad.getLeftBumper()).toggleOnTrue(closeClawCube);
+
+		// Start or stop (if already in progress), the command to close claw on cone.
+		//new Trigger(() -> utilityPad.getLeftTrigger()).toggleOnTrue(closeClawCone);
+
+		// Start or stop (if already in progress), the command to raise the arm to target position 1.
+		//new Trigger(() -> utilityPad.getYButton()).toggleOnTrue(raiseArm1);
+
+		// Start or stop (if already in progress), the command to raise the arm to target position 2.
+		//new Trigger(() -> utilityPad.getXButton()).toggleOnTrue(raiseArm2);
+
+		// Start or stop (if already in progress), the command to extend the arm to target position 1.
+		//new Trigger(() -> utilityPad.getBButton()).toggleOnTrue(extendArm1);
+
+		// Start or stop (if already in progress), the command to extend the arm to target position 2.
+		//new Trigger(() -> utilityPad.getAButton()).toggleOnTrue(extendArm2);
 
 		new Trigger(() -> utilityPad.getXButton()).onTrue(new InstantCommand(arm::resetPosition));
 		new Trigger(() -> utilityPad.getYButton()).onTrue(new InstantCommand(winch::resetPosition));

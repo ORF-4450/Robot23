@@ -48,9 +48,10 @@ Port	Device blk-pos	Description
 Digital I/O Ports
 Port	Device			Description
 -----------------------------------------------------------------------------------
-0       Limit Switch    Winch reset.
-1       Limit Switch    ARM reset.
-2       Limit Switch    Claw reset.
+0       Limit Switch    Winch lower reset.
+1       Limit Switch    Winch upper reset.
+2       Limit Switch    ARM reset.
+3       Limit Switch    Claw reset.
 
 
 Analog I/O Ports
@@ -119,8 +120,10 @@ Auto Program            Chooser         List of autonomous programs.
 Field Oriented          boolean         True when swerve drive is in field orientation mode.
 RaiseArm                boolean         True when RaiseArm command is active.
 RetractArm              boolean         True when RetractArm command is active.
+ExtractArm              boolean         True when ExtractArm command is active.
 DropArm                 boolean         True when DropArm command is active.
 OpenClaw                boolean         True when OpenClaw command is active.
+CloseClaw               boolean         True when CloseClaw command is active.
 
 
 Drive Base gearbox ratios: SDS Level 1 for approx 9.28 f/s or 3 m/s.

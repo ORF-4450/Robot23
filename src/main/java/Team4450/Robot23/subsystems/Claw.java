@@ -1,9 +1,10 @@
 package Team4450.Robot23.subsystems;
 
+import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
+import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import Team4450.Lib.FXEncoder;
 import Team4450.Lib.Util;
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import static Team4450.Robot23.Constants.*;
@@ -12,13 +13,29 @@ public class Claw extends SubsystemBase
 {
     private WPI_TalonFX     motor = new WPI_TalonFX(CLAW_MOTOR);
     private FXEncoder       encoder = new FXEncoder(motor);
-    private DigitalInput    limitSwitch = new DigitalInput(CLAW_SWITCH);
 
-    private final double    ARM_MAX = 1000;
+    private final double    CLAW_MAX = 15000;
 
     public Claw()
     {
         Util.consoleLog();
+
+        motor.setInverted(true);
+
+        encoder.setInverted(true);
+
+        // Enable automatic application of limit switches connected to the TalonFX controller.
+        // The JST wire used to connect the switches to the controller is wired as follows:
+        // black = forward switch, red = forward ground, white = reverse ground, yellow =
+        // reverse switch. Once enabled the controller automatically obeys the switches.
+
+        motor.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector,
+                                             LimitSwitchNormal.NormallyOpen,
+                                             30);
+
+        motor.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector,
+                                             LimitSwitchNormal.NormallyOpen,
+                                             30);
     }
 
     /**
@@ -36,8 +53,8 @@ public class Claw extends SubsystemBase
 
         power = Util.clampValue(power, .20);
         
-        motor.set(Util.squareInput(power));
-    }
+        motor.set(power);
+   }
 
     public void stop()
     {
@@ -58,12 +75,27 @@ public class Claw extends SubsystemBase
     }
 
     /**
-     * Returns claw open switch.
+     * Returns claw forward switch.
+     * @return True when claw fully closed.
+     */
+    public boolean getClosedSwitch()
+    {
+        if (motor.isFwdLimitSwitchClosed() == 1)
+            return true;
+        else
+            return false;
+    }
+
+    /**
+     * Returns claw reverse switch.
      * @return True when claw fully open.
      */
-    public boolean getSwitch()
+    public boolean getOpenSwitch()
     {
-        return limitSwitch.get();
+        if (motor.isRevLimitSwitchClosed() == 1)
+            return true;
+        else
+            return false;
     }
 
     public void updateDS()

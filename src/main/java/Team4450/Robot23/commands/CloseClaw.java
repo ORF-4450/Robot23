@@ -2,35 +2,35 @@ package Team4450.Robot23.commands;
 
 import Team4450.Lib.SynchronousPID;
 import Team4450.Lib.Util;
-import Team4450.Robot23.subsystems.Winch;
+import Team4450.Robot23.subsystems.Claw;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /**
- * Moves the arm to a target position.
+ * Moves the Claw to a target position.
  */
-public class RaiseArm extends CommandBase 
+public class CloseClaw extends CommandBase 
 {
-    private final Winch     winch;
+    private final Claw      claw;
     private double          targetPostion = 100;    // Revolutions of motor.
     private SynchronousPID  controller = new SynchronousPID(.01, 0, 0);
     private final double    tolerance = .5, maxPower = .30;
     private double          lastTimeCalled;
 
     /**
-     * Move winch to target position.
+     * Move claw to target position (closing it).
      * @param winch Winch subsystem.
      * @param targetPosition Target position in winch motor revolutions.
      */
-    public RaiseArm(Winch winch, double targetPosition)
+    public CloseClaw(Claw claw, double targetPosition)
     {
         Util.consoleLog();
 
-        this.winch = winch;
+        this.claw = claw;
 
         this.targetPostion = targetPosition;
 
-        addRequirements(winch);
+        addRequirements(claw);
     }
 
     @Override
@@ -44,7 +44,7 @@ public class RaiseArm extends CommandBase
 
         controller.setOutputRange(-maxPower, maxPower);
 
-        SmartDashboard.putBoolean("RaiseArm", true);
+        SmartDashboard.putBoolean("CloseClaw", true);
 
         lastTimeCalled = Util.timeStamp();
     }
@@ -56,24 +56,24 @@ public class RaiseArm extends CommandBase
 
         lastTimeCalled = Util.timeStamp();
 
-        double power = controller.calculate(winch.getPosition(), time);
+        double power = controller.calculate(claw.getPosition(), time);
 
-        winch.setPower(power);
+        claw.setPower(power);
     }
 
     @Override
     public boolean isFinished()
     {
-        return controller.onTarget(tolerance); // || winch.getUpperSwitch();
+        return controller.onTarget(tolerance);
     }
 
     @Override
     public void end(boolean interrupted) 
     {
-        winch.stop();
+        claw.stop();
 
         Util.consoleLog("interrupted=%b", interrupted);
 
-        SmartDashboard.putBoolean("RaiseArm", false);
+        SmartDashboard.putBoolean("CloseClaw", false);
     }
 }

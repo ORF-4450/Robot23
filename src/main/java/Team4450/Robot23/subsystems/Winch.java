@@ -14,7 +14,8 @@ public class Winch  extends SubsystemBase
 {
     private CANSparkMax     motor = new CANSparkMax(WINCH_MOTOR, MotorType.kBrushless);
     private RelativeEncoder encoder = motor.getEncoder();
-    private DigitalInput    lowLimitSwitch = new DigitalInput(WINCH_SWITCH);
+    private DigitalInput    lowerLimitSwitch = new DigitalInput(WINCH_SWITCH_LOWER);
+    private DigitalInput    upperLimitSwitch = new DigitalInput(WINCH_SWITCH_UPPER);
 
     private final double    WINCH_MAX = 1000;
 
@@ -37,11 +38,11 @@ public class Winch  extends SubsystemBase
         // If power negative, which means go down, check limit switch stop if true.
         // If power positive, which means go up, check encoder for max height, stop if there.
 
-        //if ((power < 0 && lowLimitSwitch.get()) || (power > 0 && encoder.getPosition() >= WINCH_MAX)) power = 0;
+        //if ((power < 0 && lowerLimitSwitch.get()) || (power > 0 && upperLimitSwitch.get()) power = 0;
 
         //if ((power < 0 && encoder.getPosition() >= WINCH_MAX) || (power > 0 && encoder.getPosition() <= 0)) power = 0;
 
-        //if (lowLimitSwitch.get()) encoder.setPosition(0);
+        //if (upperLimitSwitch.get()) encoder.setPosition(0);
 
         power = Util.clampValue(power, .30);
 
@@ -71,12 +72,21 @@ public class Winch  extends SubsystemBase
     }
 
     /**
-     * Returns state of low position limit switch.
+     * Returns state of lower position limit switch.
      * @return True is at low position.
      */
-    public boolean getLowSwitch()
+    public boolean getLowerSwitch()
     {
-        return lowLimitSwitch.get();
+        return lowerLimitSwitch.get();
+    }
+
+    /**
+     * Returns state of pperr position limit switch.
+     * @return True is at high position.
+     */
+    public boolean getUpperSwitch()
+    {
+        return upperLimitSwitch.get();
     }
 
     public void updateDS()

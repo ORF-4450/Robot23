@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /**
- * Drops the arm by running winch down until low position limit
+ * Opens the Claw by running the motor until Reverse limit
  * switch reports true.
  */
 public class OpenClaw extends CommandBase 
@@ -27,7 +27,7 @@ public class OpenClaw extends CommandBase
     {
         Util.consoleLog();
 
-        claw.setPower(.50);
+        claw.setPower(.20);
 
         SmartDashboard.putBoolean("OpenClaw", true);
     }
@@ -35,7 +35,7 @@ public class OpenClaw extends CommandBase
     @Override
     public boolean isFinished()
     {
-        return claw.getSwitch();
+        return claw.getOpenSwitch();
     }
 
     @Override
@@ -44,6 +44,8 @@ public class OpenClaw extends CommandBase
         claw.stop();
 
         Util.consoleLog("interrupted=%b", interrupted);
+
+        claw.resetPosition();
 
         SmartDashboard.putBoolean("OpenClaw", false);
     }

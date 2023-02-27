@@ -2,35 +2,35 @@ package Team4450.Robot23.commands;
 
 import Team4450.Lib.SynchronousPID;
 import Team4450.Lib.Util;
-import Team4450.Robot23.subsystems.Winch;
+import Team4450.Robot23.subsystems.Arm;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /**
  * Moves the arm to a target position.
  */
-public class RaiseArm extends CommandBase 
+public class ExtendArm extends CommandBase 
 {
-    private final Winch     winch;
+    private final Arm       arm;
     private double          targetPostion = 100;    // Revolutions of motor.
     private SynchronousPID  controller = new SynchronousPID(.01, 0, 0);
     private final double    tolerance = .5, maxPower = .30;
     private double          lastTimeCalled;
 
     /**
-     * Move winch to target position.
-     * @param winch Winch subsystem.
-     * @param targetPosition Target position in winch motor revolutions.
+     * Move arm to target position.
+     * @param arm Arm subsystem.
+     * @param targetPosition Target position in arm motor revolutions.
      */
-    public RaiseArm(Winch winch, double targetPosition)
+    public ExtendArm(Arm arm, double targetPosition)
     {
         Util.consoleLog();
 
-        this.winch = winch;
+        this.arm = arm;
 
         this.targetPostion = targetPosition;
 
-        addRequirements(winch);
+        addRequirements(arm);
     }
 
     @Override
@@ -44,7 +44,7 @@ public class RaiseArm extends CommandBase
 
         controller.setOutputRange(-maxPower, maxPower);
 
-        SmartDashboard.putBoolean("RaiseArm", true);
+        SmartDashboard.putBoolean("ExtendArm", true);
 
         lastTimeCalled = Util.timeStamp();
     }
@@ -56,9 +56,9 @@ public class RaiseArm extends CommandBase
 
         lastTimeCalled = Util.timeStamp();
 
-        double power = controller.calculate(winch.getPosition(), time);
+        double power = controller.calculate(arm.getPosition(), time);
 
-        winch.setPower(power);
+        arm.setPower(power);
     }
 
     @Override
@@ -70,10 +70,11 @@ public class RaiseArm extends CommandBase
     @Override
     public void end(boolean interrupted) 
     {
-        winch.stop();
+        arm.stop();
 
         Util.consoleLog("interrupted=%b", interrupted);
 
-        SmartDashboard.putBoolean("RaiseArm", false);
+        SmartDashboard.putBoolean("ExtendArm", false);
     }
 }
+

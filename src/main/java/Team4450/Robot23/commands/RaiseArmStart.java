@@ -1,7 +1,6 @@
 package Team4450.Robot23.commands;
 
 import Team4450.Lib.Util;
-import Team4450.Robot23.subsystems.Arm;
 import Team4450.Robot23.subsystems.Winch;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -10,17 +9,15 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
  * Drops the arm by running winch down until low position limit
  * switch reports true.
  */
-public class DropArm extends CommandBase 
+public class RaiseArmStart extends CommandBase 
 {
-    private final Winch     winch;
-    private final Arm       arm;
+    private final Winch      winch;
 
-    public DropArm(Winch winch, Arm arm)
+    public RaiseArmStart(Winch winch)
     {
         Util.consoleLog();
 
         this.winch = winch;
-        this.arm = arm;
 
         addRequirements(winch);
     }
@@ -30,20 +27,15 @@ public class DropArm extends CommandBase
     {
         Util.consoleLog();
 
-        // Do not drop if arm not fully retracted.
+        winch.setPower(.50);
 
-        if (arm.getSwitch())
-        {
-            winch.setPower(-.50);
-
-            SmartDashboard.putBoolean("DropArm", true);
-        }
+        SmartDashboard.putBoolean("RaiseArmStart", true);
     }
 
     @Override
     public boolean isFinished()
     {
-        return winch.getLowerSwitch() || !arm.getSwitch();
+        return winch.getUpperSwitch();
     }
 
     @Override
@@ -53,6 +45,7 @@ public class DropArm extends CommandBase
 
         Util.consoleLog("interrupted=%b", interrupted);
 
-        SmartDashboard.putBoolean("DropArm", false);
+        SmartDashboard.putBoolean("RaiseArmStart", false);
     }
 }
+

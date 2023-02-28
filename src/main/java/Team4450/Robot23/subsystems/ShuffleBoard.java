@@ -2,7 +2,6 @@ package Team4450.Robot23.subsystems;
 
 import Team4450.Lib.LCD;
 import Team4450.Lib.Util;
-import Team4450.Robot23.Robot;
 import Team4450.Robot23.RobotContainer;
 import Team4450.Robot23.commands.Utility.NotifierCommand;
 import static Team4450.Robot23.Constants.*;

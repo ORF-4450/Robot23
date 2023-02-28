@@ -705,7 +705,7 @@ public class DriveBase extends SubsystemBase
     // sense and suggests somewhere in the swerve code it is tracking
     // drive information that is not being reset and so with encoders
     // reset, the two bits of information are no longer in sync.
-    // TODO: Researh this further trying to explain why resetting the
+    // TODO: Research this further trying to explain why resetting the
     // encoders here does not work.
     //resetModuleEncoders();
   }

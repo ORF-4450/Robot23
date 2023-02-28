@@ -12,7 +12,6 @@ import com.pathplanner.lib.PathPlannerTrajectory;
 
 import Team4450.Lib.CameraFeed;
 import Team4450.Lib.XboxController;
-import Team4450.Lib.MonitorCompressor;
 import Team4450.Lib.MonitorPDP;
 import Team4450.Lib.NavX;
 import Team4450.Lib.Util;
@@ -37,12 +36,9 @@ import Team4450.Robot23.subsystems.Claw;
 import Team4450.Robot23.subsystems.DriveBase;
 import Team4450.Robot23.subsystems.ShuffleBoard;
 import Team4450.Robot23.subsystems.Winch;
-import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
-import edu.wpi.first.wpilibj.PneumaticsControlModule;
 import edu.wpi.first.wpilibj.PowerDistribution;
-import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.util.sendable.SendableRegistry;
@@ -400,16 +396,16 @@ public class RobotContainer
 		// Start or stop (if already in progress), the command to close claw on cone.
 		//new Trigger(() -> utilityPad.getLeftTrigger()).toggleOnTrue(closeClawCone);
 
-		// Start or stop (if already in progress), the command to raise the arm to target position 1.
+		// Start or stop (if already in progress), the command to raise the arm to scoring position 1.
 		//new Trigger(() -> utilityPad.getYButton()).toggleOnTrue(raiseArm1);
 
-		// Start or stop (if already in progress), the command to raise the arm to target position 2.
+		// Start or stop (if already in progress), the command to raise the arm to scoring position 2.
 		//new Trigger(() -> utilityPad.getXButton()).toggleOnTrue(raiseArm2);
 
-		// Start or stop (if already in progress), the command to extend the arm to target position 1.
+		// Start or stop (if already in progress), the command to extend the arm to scoring position 1.
 		//new Trigger(() -> utilityPad.getBButton()).toggleOnTrue(extendArm1);
 
-		// Start or stop (if already in progress), the command to extend the arm to target position 2.
+		// Start or stop (if already in progress), the command to extend the arm to scoring position 2.
 		//new Trigger(() -> utilityPad.getAButton()).toggleOnTrue(extendArm2);
 
 		new Trigger(() -> utilityPad.getXButton()).onTrue(new InstantCommand(arm::resetPosition));

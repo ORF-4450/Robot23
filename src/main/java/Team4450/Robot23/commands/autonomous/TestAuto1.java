@@ -3,7 +3,6 @@ package Team4450.Robot23.commands.autonomous;
 import static Team4450.Robot23.Constants.*;
 
 import Team4450.Lib.LCD;
-import Team4450.Lib.SRXMagneticEncoderRelative;
 import Team4450.Lib.Util;
 import Team4450.Robot23.RobotContainer;
 import Team4450.Robot23.commands.autonomous.AutoDriveProfiled.Brakes;
@@ -12,7 +11,6 @@ import Team4450.Robot23.commands.autonomous.AutoDriveProfiled.StopMotors;
 import Team4450.Robot23.subsystems.DriveBase;
 
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;

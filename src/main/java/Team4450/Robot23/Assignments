@@ -101,6 +101,16 @@ X Axis                  Claw Open/Close, right (+) is close, left is open.
 Utility GamePad - Buttons
 Button Name				Function
 -----------------------------------------------------------------------------------
+POV_0                   Raise arm to starting position.
+POV_180                 Fully retract arm.
+RIGHT_TRIGGER           Fully open claw.
+LEFT_TRIGGER            Close claw on cone.
+LEFT_BUMPER             Close claw on cube.
+RIGHT_BUMPER            Drop arm to lowest position.
+Y                       Move arm to scoring position 1.
+X                       Move arm to scoring position 2.
+B                       Extend arm to scoring position 1.
+A                       Extend arm to scoring position 2.
 
 
 Dashboard Indicators/Controls
@@ -120,7 +130,7 @@ Auto Program            Chooser         List of autonomous programs.
 Field Oriented          boolean         True when swerve drive is in field orientation mode.
 RaiseArm                boolean         True when RaiseArm command is active.
 RetractArm              boolean         True when RetractArm command is active.
-ExtractArm              boolean         True when ExtractArm command is active.
+ExtendArm               boolean         True when ExtendArm command is active.
 DropArm                 boolean         True when DropArm command is active.
 OpenClaw                boolean         True when OpenClaw command is active.
 CloseClaw               boolean         True when CloseClaw command is active.

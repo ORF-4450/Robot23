@@ -12,9 +12,9 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 public class CloseClaw extends CommandBase 
 {
     private final Claw      claw;
-    private double          targetPostion = 100;    // Revolutions of motor.
+    private double          targetPostion = 3000;    // Revolutions of motor.
     private SynchronousPID  controller = new SynchronousPID(.01, 0, 0);
-    private final double    tolerance = .5, maxPower = .30;
+    private final double    tolerance = 100, maxPower = .20;
     private double          lastTimeCalled;
 
     /**
@@ -58,7 +58,7 @@ public class CloseClaw extends CommandBase
 
         double power = controller.calculate(claw.getPosition(), time);
 
-        claw.setPower(power);
+        claw.setPower(-power);
     }
 
     @Override

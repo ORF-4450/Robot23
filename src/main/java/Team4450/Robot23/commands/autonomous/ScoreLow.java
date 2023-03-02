@@ -5,11 +5,15 @@ import static Team4450.Robot23.Constants.*;
 import Team4450.Lib.LCD;
 import Team4450.Lib.Util;
 import Team4450.Robot23.RobotContainer;
+import Team4450.Robot23.commands.DropArm;
+import Team4450.Robot23.commands.OpenClaw;
 import Team4450.Robot23.commands.autonomous.AutoDriveProfiled.Brakes;
 import Team4450.Robot23.commands.autonomous.AutoDriveProfiled.Pid;
 import Team4450.Robot23.commands.autonomous.AutoDriveProfiled.StopMotors;
+import Team4450.Robot23.subsystems.Arm;
+import Team4450.Robot23.subsystems.Claw;
 import Team4450.Robot23.subsystems.DriveBase;
-
+import Team4450.Robot23.subsystems.Winch;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -18,38 +22,52 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 /**
- * This is an example autonomous command using 4450 written library of auto driving
- * support commands.
+ * This an autonomous command score in lowest position then drive straight out 
+ * a specified distance in meters. The distance is set by which starting pose 
+ * is selected.
  */
-public class TestAuto1 extends CommandBase
+public class ScoreLow extends CommandBase
 {
-	private final DriveBase driveBase;
+	private final DriveBase         driveBase;
+    private final Winch             winch;
+    private final Arm               arm;
+    private final Claw              claw;
 	
 	private SequentialCommandGroup	commands = null;
 	private Command					command = null;
 	private	Pose2d					startingPose;
+    private int                     startingPoseIndex;
 
 	/**
-	 * Creates a new TestAuto1 autonomous command. This command demonstrates one
-	 * possible structure for an autonomous command and shows the use of the 
-	 * autonomous driving support commands.
+	 * Creates a new ScoreLow autonomous command.
 	 *
 	 * @param driveBase DriveBase subsystem used by this command to drive the robot.
+     * @param winch Winch subsystem.
+     * @param arm Arm subsystem.
+     * @param claw Claw subsystem.
+     * @param startingPose Start location pose.
+     * @param startingPoseIndex The starting pose position 0-9.
 	 */
-	public TestAuto1(DriveBase driveBase, Pose2d startingPose) 
+	public ScoreLow(DriveBase driveBase, Winch winch, Arm arm, Claw claw,
+                    Pose2d startingPose, Integer startingPoseIndex) 
 	{
-		Util.consoleLog();
+		Util.consoleLog("idx=%d", startingPoseIndex);
 		
 		this.driveBase = driveBase;
+        this.winch = winch;
+        this.arm = arm;
+        this.claw = claw;
 
 		this.startingPose = startingPose;
+
+        this.startingPoseIndex = startingPoseIndex;
 			  
 		// Use addRequirements() here to declare subsystem dependencies.
 		// This command is requiring the driveBase for itself and all 
 		// commands added to the command list. If any command in the
 		// list also requires the drive base it will cause this command
 		// to be interrupted.
-		addRequirements(this.driveBase);
+		addRequirements(this.driveBase, this.winch, this.arm, this.claw);
 	}
 	
 	/**
@@ -63,7 +81,7 @@ public class TestAuto1 extends CommandBase
 		
 		//driveBase.setMotorSafety(false);  // Turn off watchdog.
 		
-	  	LCD.printLine(LCD_1, "Mode: Auto - TestAuto1 - All=%s, Location=%d, FMS=%b, msg=%s", alliance.name(), location, 
+	  	LCD.printLine(LCD_1, "Mode: Auto - ScoreLow - All=%s, Location=%d, FMS=%b, msg=%s", alliance.name(), location, 
 				DriverStation.isFMSAttached(), gameMessage);
 
 		SmartDashboard.putBoolean("Autonomous Active", true);
@@ -79,62 +97,37 @@ public class TestAuto1 extends CommandBase
 		// auto routine. Robot must be placed in same starting location each time for pose tracking
 		// to work.
 		driveBase.setOdometry(startingPose);
+
+        double distance = 0;
+
+        // Start position 1-9 are indexed as 1-9. Distance to drive in meters.
+
+        if (startingPoseIndex == 1) distance = 3.5;
+        if (startingPoseIndex == 9) distance = 3.5;
 		
 		// Since a typical autonomous program consists of multiple actions, which are commands
 		// in this style of programming, we will create a list of commands for the actions to
 		// be taken in this auto program and add them to a sequential command list to be 
-		// executed one after the other until done.
+		// executed one after the other until done at run time.
 		
 		commands = new SequentialCommandGroup();
 		
-		// First action is to drive forkward 1 meters and stop.
+        // First action is to lower the arm to lowest position.
+
+        command = new DropArm(winch, arm);
+
+		commands.addCommands(command);
+
+        // Next action is to open the claw.
+
+        command = new OpenClaw(claw);
+
+		commands.addCommands(command);
+
+		// Last action is to drive forward distance meters and stop.
 		
-		command = new AutoDriveProfiled(driveBase, 1, StopMotors.stop, Brakes.on);
+		command = new AutoDriveProfiled(driveBase, distance, StopMotors.stop, Brakes.on);
 		
-		//commands.addCommands(command);
-		
-		// Next action is to drive backward 1 meters and stop. 
-		
-		command = new AutoDriveProfiled(driveBase, -1, StopMotors.stop, Brakes.on);
-		
-		//commands.addCommands(command);
-
-		// Now strafe left 1 meters.
-
-		command = new AutoStrafeProfiled(driveBase, 1, StopMotors.stop, Brakes.on);
-		
-		//commands.addCommands(command);
-
-		// Now strafe right 1 meters.
-
-		command = new AutoStrafeProfiled(driveBase, -1, StopMotors.stop, Brakes.on);
-		
-		//commands.addCommands(command);
-
-		// Now rotate 90 degrees left.
-
-		command = new AutoRotate(driveBase, 90);
-
-		//commands.addCommands(command);
-
-		// Now rotate 180 degrees right.
-
-		command = new AutoRotateProfiled(driveBase, -180);
-
-		//commands.addCommands(command);
-
-		// Now rotate 90 degrees left.
-
-		command = new AutoRotateProfiled(driveBase, 90);
-
-		//commands.addCommands(command);
-
-		// Now drive ahead 1.683 meter to charge station.
-
-		//ommand = new AutoDrive(driveBase, .50, 1.683, StopMotors.stop, Brakes.on, Pid.on);
-
-		command = new AutoDrive(driveBase, .50, 3.429, StopMotors.stop, Brakes.on, Pid.on);
-
 		commands.addCommands(command);
 
 		// Launch autonomous command sequence.

@@ -38,7 +38,7 @@ public class AutoDrivePPTrajectory extends PPSwerveControllerCommand
      * @param stop          Set stop or not at trajectory end.
      * @param brakes        If stopping, set if brakes on or off.
      */
-    AutoDrivePPTrajectory(DriveBase driveBase, PathPlannerTrajectory trajectory, StopMotors stop, Brakes brakes)
+    public AutoDrivePPTrajectory(DriveBase driveBase, PathPlannerTrajectory trajectory, StopMotors stop, Brakes brakes)
     {
         super(trajectory,
             driveBase::getRobotPose, 

@@ -45,8 +45,6 @@ public class OpenClaw extends CommandBase
 
         Util.consoleLog("interrupted=%b", interrupted);
 
-        claw.resetPosition();
-
         SmartDashboard.putBoolean("OpenClaw", false);
     }
 }

@@ -63,12 +63,13 @@ public class ShuffleBoard extends SubsystemBase
                       RobotContainer.utilityPad.getLeftY(), RobotContainer.utilityPad.getRightX(),
                       RobotContainer.utilityPad.getRightY());
 
-        LCD.printLine(LCD_7, "winchEnc=%.2f  LowSw=%b  highSw=%b - armEnc=%.2f  armSw=%b - clawEnc=%d  open=%b  closed=%b",
+        LCD.printLine(LCD_7, "winchEnc=%.2f  LowSw=%b  highSw=%b - armEnc=%.2f  armSw=%b",
                       RobotContainer.winch.getPosition(), RobotContainer.winch.getLowerSwitch(),
                       RobotContainer.winch.getUpperSwitch(), RobotContainer.arm.getPosition(), 
-                      RobotContainer.arm.getSwitch(),
-                      RobotContainer.claw.getPosition(), RobotContainer.claw.getOpenSwitch(),
-                      RobotContainer.claw.getPosition(), RobotContainer.claw.getClosedSwitch());                      
+                      RobotContainer.arm.getSwitch());
+
+        LCD.printLine(LCD_8, "clawEnc=%d  open=%b",
+                      RobotContainer.claw.getPosition(), RobotContainer.claw.getOpenSwitch());                      
                           
         if (tracing) FunctionTracer.INSTANCE.exitFunction("ShuffleBoard.updateDS");
     }

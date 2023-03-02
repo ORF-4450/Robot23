@@ -28,6 +28,8 @@ import Team4450.Robot23.commands.RaiseArmStart;
 import Team4450.Robot23.commands.RetractArm;
 import Team4450.Robot23.commands.SetToStartPositionCommand;
 import Team4450.Robot23.commands.Utility.NotifierCommand;
+import Team4450.Robot23.commands.autonomous.DriveOut;
+import Team4450.Robot23.commands.autonomous.ScoreLow;
 import Team4450.Robot23.commands.autonomous.TestAuto1;
 import Team4450.Robot23.commands.autonomous.TestAuto3;
 import Team4450.Robot23.commands.autonomous.TestAuto4;
@@ -124,6 +126,8 @@ public class RobotContainer
 	private enum AutoProgram
 	{
 		NoProgram,
+		DriveOut,
+		ScoreLow,
 		TestAuto1,
 		TestAuto3,
 		TestAuto4
@@ -206,8 +210,8 @@ public class RobotContainer
 		dropArm = new DropArm(winch, arm);
 		retractArm = new RetractArm(arm);
 		openClaw = new OpenClaw(claw);
-		closeClawCone = new CloseClaw(claw, 10000);
-		closeClawCube = new  CloseClaw(claw, 5000);
+		closeClawCone = new CloseClaw(claw, 13000);
+		closeClawCube = new  CloseClaw(claw, 3000);
 		raiseArm1 = new RaiseArm(winch, 100);
 		raiseArm2 = new RaiseArm(winch, 200);
 		extendArm1 = new ExtendArm(arm, 100);
@@ -388,13 +392,13 @@ public class RobotContainer
 		//new Trigger(() -> utilityPad.getPOVAngle(180)).toggleOnTrue(retractArm);
 
 		// Start or stop (if already in progress), the command to fully open the claw.
-		//new Trigger(() -> utilityPad.getRightTrigger()).toggleOnTrue(openClaw);
+		new Trigger(() -> utilityPad.getRightTrigger()).toggleOnTrue(openClaw);
 
 		// Start or stop (if already in progress), the command to close claw on cube.
-		//new Trigger(() -> utilityPad.getLeftBumper()).toggleOnTrue(closeClawCube);
+		new Trigger(() -> utilityPad.getLeftBumper()).toggleOnTrue(closeClawCube);
 
 		// Start or stop (if already in progress), the command to close claw on cone.
-		//new Trigger(() -> utilityPad.getLeftTrigger()).toggleOnTrue(closeClawCone);
+		new Trigger(() -> utilityPad.getLeftTrigger()).toggleOnTrue(closeClawCone);
 
 		// Start or stop (if already in progress), the command to raise the arm to scoring position 1.
 		//new Trigger(() -> utilityPad.getYButton()).toggleOnTrue(raiseArm1);
@@ -423,7 +427,7 @@ public class RobotContainer
 	{
 		AutoProgram		program = AutoProgram.NoProgram;
 		Pose2d			startingPose = DEFAULT_STARTING_POSE;
-		Integer			startingPoseIndex;
+		Integer			startingPoseIndex = 0;
 		Command			autoCommand = null;
 		
 		Util.consoleLog();
@@ -440,9 +444,6 @@ public class RobotContainer
 			
 			if (alliance == Alliance.Red) startingPose = new Pose2d(startingPose.getX(), 8.014 - startingPose.getY(), 
 																	startingPose.getRotation());
-
-			// startingPose = new Pose2d(16.542 - startingPose.getX(), 8.014 - startingPose.getY(), 
-			// startingPose.getRotation());
 		}
 		catch (Exception e)	{ Util.logException(e); }
 		
@@ -452,6 +453,14 @@ public class RobotContainer
 				autoCommand = null;
 				break;
  				
+			case DriveOut:
+				autoCommand = new DriveOut(driveBase, startingPose, startingPoseIndex);
+				break;
+ 				
+			case ScoreLow:
+				autoCommand = new ScoreLow(driveBase, winch, arm, claw, startingPose, startingPoseIndex);
+				break;
+				
 			case TestAuto1:
 			 	autoCommand = new TestAuto1(driveBase, startingPose);
 			 	break;
@@ -479,6 +488,8 @@ public class RobotContainer
 		
 		SendableRegistry.add(autoChooser, "Auto Program");
 		autoChooser.setDefaultOption("No Program", AutoProgram.NoProgram);
+		autoChooser.addOption("Drive Out", AutoProgram.DriveOut);		
+		autoChooser.addOption("Score Low", AutoProgram.ScoreLow);		
 		autoChooser.addOption("Test Auto 1", AutoProgram.TestAuto1);		
 		autoChooser.addOption("Test Auto 3", AutoProgram.TestAuto3);		
 		autoChooser.addOption("Test Auto 4", AutoProgram.TestAuto4);		
@@ -496,16 +507,10 @@ public class RobotContainer
 		startingPoseChooser = new SendableChooser<Integer>();
 		
 		SendableRegistry.add(startingPoseChooser, "Start Position");
-		startingPoseChooser.setDefaultOption("1", 0);
+		startingPoseChooser.setDefaultOption("None", 0);
 
-		for (Integer i = 2; i < 10; i++) startingPoseChooser.addOption(i.toString(), i - 1);		
+		for (Integer i = 1; i < 10; i++) startingPoseChooser.addOption(i.toString(), i);		
 		
-		// startingPoseChooser = new SendableChooser<Pose2d>();
-		
-		// SendableRegistry.add(startingPoseChooser, "Start Position");
-		// startingPoseChooser.setDefaultOption("Default", DEFAULT_STARTING_POSE);
-		// //startingPoseChooser.addOption("Blue 1", BLUE_1);		
-				
 		SmartDashboard.putData(startingPoseChooser);
 	}
 

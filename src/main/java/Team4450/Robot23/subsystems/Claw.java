@@ -14,7 +14,7 @@ public class Claw extends SubsystemBase
     private WPI_TalonFX     motor = new WPI_TalonFX(CLAW_MOTOR);
     private FXEncoder       encoder = new FXEncoder(motor);
 
-    private final double    CLAW_MAX = 15000;
+    private final double    CLAW_MAX = 13000;
 
     public Claw()
     {
@@ -24,17 +24,19 @@ public class Claw extends SubsystemBase
 
         encoder.setInverted(true);
 
-        // Enable automatic application of limit switches connected to the TalonFX controller.
+        // Disable automatic application of limit switches connected to the TalonFX controller.
         // The JST wire used to connect the switches to the controller is wired as follows:
         // black = forward switch, red = forward ground, white = reverse ground, yellow =
         // reverse switch. Once enabled the controller automatically obeys the switches.
+        // unfortunately the robot is wired for reverse, which prevents claw from closing.
+        // So we turn auto application of the switches off and do it in our code below.
 
         motor.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector,
-                                             LimitSwitchNormal.NormallyOpen,
+                                             LimitSwitchNormal.Disabled,
                                              30);
 
         motor.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector,
-                                             LimitSwitchNormal.NormallyOpen,
+                                             LimitSwitchNormal.Disabled,
                                              30);
     }
 
@@ -45,11 +47,11 @@ public class Claw extends SubsystemBase
     public void setPower(double power)
     {
         // If power positive, which means open, check limit switch stop if true.
-        // If power negative, which means close, check encoder for max height, stop if there.
+        // If power negative, which means close, check encoder for max open, stop if there.
 
-        //if ((power > 0 && limitSwitch.get()) || (power < 0 && encoder.get() >= ARM_MAX)) power = 0;
+        if ((power > 0 && getOpenSwitch()) || (power < 0 && encoder.get() >= CLAW_MAX)) power = 0;
 
-        //if (limitSwitch.get()) encoder.reset();
+        if (getOpenSwitch()) encoder.reset();
 
         power = Util.clampValue(power, .20);
         
@@ -75,27 +77,15 @@ public class Claw extends SubsystemBase
     }
 
     /**
-     * Returns claw forward switch.
-     * @return True when claw fully closed.
-     */
-    public boolean getClosedSwitch()
-    {
-        if (motor.isFwdLimitSwitchClosed() == 1)
-            return true;
-        else
-            return false;
-    }
-
-    /**
-     * Returns claw reverse switch.
+     * Returns claw fully open switch state.
      * @return True when claw fully open.
      */
     public boolean getOpenSwitch()
     {
         if (motor.isRevLimitSwitchClosed() == 1)
-            return true;
-        else
             return false;
+        else
+            return true;
     }
 
     public void updateDS()

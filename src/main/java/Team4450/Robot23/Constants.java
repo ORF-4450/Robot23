@@ -24,7 +24,7 @@ import edu.wpi.first.wpilibj.DriverStation;
  */
 public final class Constants
 {
-	public static String		PROGRAM_NAME = "RAC23-02.28.23-1";
+	public static String		PROGRAM_NAME = "RAC23-03.01.23-2";
 
 	public static Robot			robot;
 
@@ -74,7 +74,8 @@ public final class Constants
 
     public static Pose2d[]      STARTING_POSES = new Pose2d[]
     {
-        new Pose2d(2.553, 4.915, Rotation2d.fromDegrees(0)),
+        new Pose2d(2.553, 4.915, Rotation2d.fromDegrees(0)), // First pose is the default if driver selects no
+        new Pose2d(2.553, 4.915, Rotation2d.fromDegrees(0)), // starting pose. Then positions 1-9.
         new Pose2d(2.553, 4.360, Rotation2d.fromDegrees(0)),
         new Pose2d(2.553, 3.836, Rotation2d.fromDegrees(0)),
         new Pose2d(2.553, 3.361, Rotation2d.fromDegrees(0)),

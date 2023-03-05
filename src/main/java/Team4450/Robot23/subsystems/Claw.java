@@ -28,8 +28,9 @@ public class Claw extends SubsystemBase
         // The JST wire used to connect the switches to the controller is wired as follows:
         // black = forward switch, red = forward ground, white = reverse ground, yellow =
         // reverse switch. Once enabled the controller automatically obeys the switches.
-        // unfortunately the robot is wired for reverse, which prevents claw from closing.
-        // So we turn auto application of the switches off and do it in our code below.
+        // unfortunately we guessed on what "forward/reverse" mean, so the robot is wired for 
+        // reverse, which it turns out prevents claw from closing. So we turn auto application 
+        // of the switches off and do it in our code below.
 
         motor.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector,
                                              LimitSwitchNormal.Disabled,
@@ -63,6 +64,10 @@ public class Claw extends SubsystemBase
         motor.stopMotor();
     }
 
+    /**
+     * Return encoder tick count.
+     * @return The current tick count.
+     */
     public int getPosition()
     {
         return encoder.get();

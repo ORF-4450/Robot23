@@ -22,6 +22,7 @@ import Team4450.Robot23.commands.DriveCommand;
 import Team4450.Robot23.commands.DriveWinch;
 import Team4450.Robot23.commands.DropArm;
 import Team4450.Robot23.commands.ExtendArm;
+import Team4450.Robot23.commands.HoldWinchPosition;
 import Team4450.Robot23.commands.OpenClaw;
 import Team4450.Robot23.commands.RaiseArm;
 import Team4450.Robot23.commands.RaiseArmStart;
@@ -80,6 +81,7 @@ public class RobotContainer
 	private CloseClaw			closeClawCube, closeClawCone;
 	private ExtendArm			extendArm1, extendArm2;
 	private RaiseArmStart		raiseArmStart;
+	private HoldWinchPosition	holdWinchPosition;
 
 	// Some notes about Commands.
 	// When a Command is created with the New operator, its constructor is called. When the
@@ -214,9 +216,10 @@ public class RobotContainer
 		closeClawCube = new  CloseClaw(claw, 3000);
 		raiseArm1 = new RaiseArm(winch, 100);
 		raiseArm2 = new RaiseArm(winch, 200);
-		extendArm1 = new ExtendArm(arm, 100);
-		extendArm2 = new ExtendArm(arm, 200);
+		extendArm1 = new ExtendArm(arm, 200);
+		extendArm2 = new ExtendArm(arm, 300);
 		raiseArmStart = new RaiseArmStart(winch);
+		holdWinchPosition = new HoldWinchPosition(winch);
 
 		// Set any subsystem Default commands.
 
@@ -358,6 +361,9 @@ public class RobotContainer
 		// Reset drive wheel distance traveled.
 		new Trigger(() -> driverPad.getXButton())
     		.onTrue(new InstantCommand(driveBase::resetDistanceTraveled));
+
+		// Apply holding voltage to winch.
+		new Trigger(() -> driverPad.getRightTrigger()).toggleOnTrue(holdWinchPosition);
 	 
 		// -------- Utility pad buttons ----------
 		// What follows is an example from 2022 robot:
@@ -383,10 +389,10 @@ public class RobotContainer
 		//	.onTrue(new NotifierCommand(pickup::toggleDeploy, 0.0, "DeployPickup", pickup));
 
 		// Start or stop (if already in progress), the command to raise arm to start position.
-		//new Trigger(() -> utilityPad.getPOVAngle(0)).toggleOnTrue(raiseArmStart);
+		new Trigger(() -> utilityPad.getPOVAngle(0)).toggleOnTrue(raiseArmStart);
 
 		// Start or stop (if already in progress), the command to drop arm to low position.
-		//new Trigger(() -> utilityPad.getRightBumper()).toggleOnTrue(dropArm);
+		new Trigger(() -> utilityPad.getRightBumper()).toggleOnTrue(dropArm);
 
 		// Start or stop (if already in progress), the command to retract arm to inward position.
 		//new Trigger(() -> utilityPad.getPOVAngle(180)).toggleOnTrue(retractArm);
@@ -401,20 +407,20 @@ public class RobotContainer
 		new Trigger(() -> utilityPad.getLeftTrigger()).toggleOnTrue(closeClawCone);
 
 		// Start or stop (if already in progress), the command to raise the arm to scoring position 1.
-		//new Trigger(() -> utilityPad.getYButton()).toggleOnTrue(raiseArm1);
+		new Trigger(() -> utilityPad.getYButton()).toggleOnTrue(raiseArm1);
 
 		// Start or stop (if already in progress), the command to raise the arm to scoring position 2.
 		//new Trigger(() -> utilityPad.getXButton()).toggleOnTrue(raiseArm2);
 
 		// Start or stop (if already in progress), the command to extend the arm to scoring position 1.
-		//new Trigger(() -> utilityPad.getBButton()).toggleOnTrue(extendArm1);
+		new Trigger(() -> utilityPad.getBButton()).toggleOnTrue(extendArm1);
 
 		// Start or stop (if already in progress), the command to extend the arm to scoring position 2.
-		//new Trigger(() -> utilityPad.getAButton()).toggleOnTrue(extendArm2);
+		new Trigger(() -> utilityPad.getAButton()).toggleOnTrue(extendArm2);
 
 		new Trigger(() -> utilityPad.getXButton()).onTrue(new InstantCommand(arm::resetPosition));
-		new Trigger(() -> utilityPad.getYButton()).onTrue(new InstantCommand(winch::resetPosition));
-		new Trigger(() -> utilityPad.getBButton()).onTrue(new InstantCommand(claw::resetPosition));
+		//new Trigger(() -> utilityPad.getYButton()).onTrue(new InstantCommand(winch::resetPosition));
+		//new Trigger(() -> utilityPad.getBButton()).onTrue(new InstantCommand(claw::resetPosition));
 	}
 
 	/**

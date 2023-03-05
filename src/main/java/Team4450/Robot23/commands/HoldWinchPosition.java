@@ -9,26 +9,22 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 /**
  * Moves the arm to a target position.
  */
-public class RaiseArm extends CommandBase 
+public class HoldWinchPosition extends CommandBase 
 {
     private final Winch     winch;
-    private double          targetPostion = 100;    // Revolutions of motor.
-    private SynchronousPID  controller = new SynchronousPID(.01, 0, 0);
-    private final double    tolerance = .5, maxPower = .30;
+    private SynchronousPID  controller = new SynchronousPID(0.1, 0, 0);
+    private final double    tolerance = .25, maxPower = .10;
     private double          lastTimeCalled;
 
     /**
      * Move winch to target position.
      * @param winch Winch subsystem.
-     * @param targetPosition Target position in winch motor revolutions.
      */
-    public RaiseArm(Winch winch, double targetPosition)
+    public HoldWinchPosition(Winch winch)
     {
         Util.consoleLog();
 
         this.winch = winch;
-
-        this.targetPostion = targetPosition;
 
         addRequirements(winch);
     }
@@ -40,11 +36,11 @@ public class RaiseArm extends CommandBase
 
         controller.reset();
 
-        controller.setSetpoint(targetPostion);
+        controller.setSetpoint(winch.getPosition());
 
         controller.setOutputRange(-maxPower, maxPower);
 
-        SmartDashboard.putBoolean("RaiseArm", true);
+        SmartDashboard.putBoolean("HoldWinch", true);
 
         lastTimeCalled = Util.timeStamp();
     }
@@ -64,7 +60,9 @@ public class RaiseArm extends CommandBase
     @Override
     public boolean isFinished()
     {
-        return controller.onTarget(tolerance) || winch.getUpperSwitch();
+        // Note: This commands runs until canceled.
+        //return controller.onTarget(tolerance); // || winch.getUpperSwitch();
+        return false;
     }
 
     @Override
@@ -74,6 +72,6 @@ public class RaiseArm extends CommandBase
 
         Util.consoleLog("interrupted=%b", interrupted);
 
-        SmartDashboard.putBoolean("RaiseArm", false);
+        SmartDashboard.putBoolean("HoldWinch", false);
     }
 }

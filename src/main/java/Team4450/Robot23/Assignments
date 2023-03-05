@@ -75,6 +75,7 @@ X Axis                  Rotate.
 Driver GamePad - Buttons
 Button Name				Function
 -----------------------------------------------------------------------------------
+RIGHT_TRIGGER           Hold winch position.
 BACK                    Toggle field/robot orientation driving.
 START                   Align wheels to start position.
 LEFT_BUMPER             Slow Mode.

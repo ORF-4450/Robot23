@@ -17,7 +17,7 @@ public class Winch  extends SubsystemBase
     private DigitalInput    lowerLimitSwitch = new DigitalInput(WINCH_SWITCH_LOWER);
     private DigitalInput    upperLimitSwitch = new DigitalInput(WINCH_SWITCH_UPPER);
 
-    private final double    WINCH_MAX = 1000;
+    private final double    WINCH_MAX = 116;    // Revolutions.
 
     public Winch()
     {
@@ -36,15 +36,17 @@ public class Winch  extends SubsystemBase
     public void setPower(double power)
     {
         // If power negative, which means go down, check limit switch stop if true.
-        // If power positive, which means go up, check encoder for max height, stop if there.
+        // If power positive, which means go up, check limit for max height, stop if true.
 
-        //if ((power < 0 && lowerLimitSwitch.get()) || (power > 0 && upperLimitSwitch.get()) power = 0;
+        if ((power < 0 && lowerLimitSwitch.get()) || (power > 0 && upperLimitSwitch.get())) power = 0;
+        
+        //if (power > 0 && upperLimitSwitch.get()) power = 0;
 
         //if ((power < 0 && encoder.getPosition() >= WINCH_MAX) || (power > 0 && encoder.getPosition() <= 0)) power = 0;
 
-        //if (upperLimitSwitch.get()) encoder.setPosition(0);
+        if (upperLimitSwitch.get() || lowerLimitSwitch.get()) encoder.setPosition(0);
 
-        power = Util.clampValue(power, .30);
+        power = Util.clampValue(power, .70);
 
         motor.set(power);
     }
@@ -87,6 +89,11 @@ public class Winch  extends SubsystemBase
     public boolean getUpperSwitch()
     {
         return upperLimitSwitch.get();
+    }
+
+    public void holdPosition()
+    {
+        setPower(.10);
     }
 
     public void updateDS()

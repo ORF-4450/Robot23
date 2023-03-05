@@ -30,9 +30,9 @@ public class DropArm extends CommandBase
     {
         Util.consoleLog();
 
-        // Do not drop if arm not fully retracted.
+        // Do not drop if arm not mostly retracted.
 
-        if (arm.getSwitch())
+        if (arm.getPosition() < 100)
         {
             winch.setPower(-.50);
 
@@ -43,7 +43,7 @@ public class DropArm extends CommandBase
     @Override
     public boolean isFinished()
     {
-        return winch.getLowerSwitch() || !arm.getSwitch();
+        return winch.getLowerSwitch(); // || !arm.getSwitch();
     }
 
     @Override

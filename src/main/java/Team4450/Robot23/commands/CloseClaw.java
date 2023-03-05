@@ -12,15 +12,15 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 public class CloseClaw extends CommandBase 
 {
     private final Claw      claw;
-    private double          targetPostion = 3000;    // Revolutions of motor.
-    private SynchronousPID  controller = new SynchronousPID(.01, 0, 0);
-    private final double    tolerance = 100, maxPower = .20;
+    private double          targetPostion = 3000;    // Encoder tick count.
+    private SynchronousPID  controller = new SynchronousPID(.0001, .00001, 0);
+    private final double    tolerance = 1000, maxPower = .20;
     private double          lastTimeCalled;
 
     /**
      * Move claw to target position (closing it).
-     * @param winch Winch subsystem.
-     * @param targetPosition Target position in winch motor revolutions.
+     * @param claw Claw subsystem.
+     * @param targetPosition Target position in encoder tick counts.
      */
     public CloseClaw(Claw claw, double targetPosition)
     {
@@ -55,6 +55,11 @@ public class CloseClaw extends CommandBase
         double time = Util.getElaspedTime(lastTimeCalled);
 
         lastTimeCalled = Util.timeStamp();
+
+        // Note that the encoder will count + from fully open position
+        // where it is reset. This results in the PID controller generating
+        // a + power value. However, - power is required to close the claw.
+        // Hence the inversion of the power below.
 
         double power = controller.calculate(claw.getPosition(), time);
 

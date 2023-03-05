@@ -16,7 +16,7 @@ public class Arm extends SubsystemBase
     private RelativeEncoder encoder = motor.getEncoder();
     private DigitalInput    limitSwitch = new DigitalInput(ARM_SWITCH);
 
-    //private final double    ARM_MAX = 360;
+    private final double    ARM_MAX = 460;  // Revolutions of motor, not spool due to gearbox.
 
     public Arm()
     {
@@ -40,12 +40,16 @@ public class Arm extends SubsystemBase
         //if ((power > 0 && limitSwitch.get()) || (power < 0 && encoder.getPosition() >= ARM_MAX)) power = 0;
 
         //if ((power > 0 && encoder.getPosition() <= 0) || (power < 0 && encoder.getPosition() >= ARM_MAX)) power = 0;
+        
+        if ((power < 0 && encoder.getPosition() >= ARM_MAX)) power = 0;
 
         //if (limitSwitch.get()) encoder.setPosition(0);
 
-        power = Util.clampValue(power, .70);
+        power = Util.clampValue(power, 1.0);
         
-        motor.set(power);
+        // Invert since they put the rope on the spools the wrong way...
+
+        motor.set(-power);
     }
 
     public void stop()

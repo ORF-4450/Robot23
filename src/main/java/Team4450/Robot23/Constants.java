@@ -24,7 +24,7 @@ import edu.wpi.first.wpilibj.DriverStation;
  */
 public final class Constants
 {
-	public static String		PROGRAM_NAME = "RAC23-03.04.23-3";
+	public static String		PROGRAM_NAME = "RAC23-03.07.23-1";
 
 	public static Robot			robot;
 
@@ -97,12 +97,12 @@ public final class Constants
     public static final double  ROTATION_DEADBAND = .05;
 
     // Slew is rate of change per second in whatever unit you are using.
-    // We are doing % stick input so unit is 100% or 1. So a slew of i is
+    // We are doing % stick input so unit is 100% or 1. So a slew of 1 is
     // ramp to 1 (100% power) in 1 second. So a slew of 3 is 3 units per
     // second or 1 unit in 1/3 second. So larger slew is faster ramp to
     // 100%. 1.5 is 100% in 3/4 second. 2 is 100% in 1/2 second.
     public static final double  THROTTLE_SLEW = 1.5;        
-    public static final double  ROTATION_SLEW = 2.0;  //3.0;
+    public static final double  ROTATION_SLEW = 1.0;  //3.0;
 
     /**
      * The left-to-right distance between the drivetrain wheels
@@ -142,7 +142,7 @@ public final class Constants
     // Robot will go faster than this, more like 3 mps but this value tones down autonomous speed.
 
     public static final double  MAX_WHEEL_SPEED = 2.0;     // Meters per second.
-    public static final double  MAX_WHEEL_ACCEL = 1.0;     // Meters per second per second.
+    public static final double  MAX_WHEEL_ACCEL = 2.0;     // Meters per second per second.
     
     // Estimated by eyeball observation. Needs to be estimated each new robot.
 

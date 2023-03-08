@@ -451,7 +451,7 @@ public class DriveBase extends SubsystemBase
 
     distanceTraveled += currentDistance;
 
-    SmartDashboard.putNumber("Distance Traveled(m)", distanceTraveled); // * -1);
+    SmartDashboard.putNumber("Distance Traveled(m)", distanceTraveled);
     
     // Track gyro yaw to support simulation of resettable yaw.
 
@@ -529,21 +529,11 @@ public class DriveBase extends SubsystemBase
   {
     Util.consoleLog("Pose: x=%.3f  y=%.3f  rot=%.2f deg", pose.getX(), pose.getY(), pose.getRotation().getDegrees());
 
-    // This is the old way of doing it (pre-2023).
-    //m_odometry.resetPosition(pose, pose.getRotation());
-
     modulePositions[0] = m_frontLeftModule.getFieldPosition();
     modulePositions[1] = m_frontRightModule.getFieldPosition();
     modulePositions[2] = m_backLeftModule.getFieldPosition();
     modulePositions[3] = m_backRightModule.getFieldPosition();
 
-    // TODO: The first parameter is gyro angle but found success using the
-    // pose angle, but this may not be the correct way to do this now that
-    // odometry is using position instead of velocity (as of 2023).
-
-    //m_odometry.resetPosition(pose.getRotation(), modulePositions, pose);
-    
-    // TODO: Try this when robot running again.
     m_odometry.resetPosition(getGyroAngleRotation2d(), modulePositions, pose);
 
     lastPose = pose;

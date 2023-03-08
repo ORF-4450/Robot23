@@ -57,7 +57,8 @@ public class Winch  extends SubsystemBase
     }
 
     /**
-     * Return Winch encoder position.
+     * Return Winch encoder position. Note winch encoder counts up (+) when power
+     * is + (going up) and down (-) when power is - (going down).
      * @return Position in revolutions.
      */
     public double getPosition()

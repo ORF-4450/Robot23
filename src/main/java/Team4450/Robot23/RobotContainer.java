@@ -81,7 +81,7 @@ public class RobotContainer
 	private CloseClaw			closeClawCube, closeClawCone;
 	private ExtendArm			extendArm1, extendArm2;
 	private RaiseArmStart		raiseArmStart;
-	private HoldWinchPosition	holdWinchPosition;
+	//private HoldWinchPosition	holdWinchPosition;
 
 	// Some notes about Commands.
 	// When a Command is created with the New operator, its constructor is called. When the
@@ -212,14 +212,13 @@ public class RobotContainer
 		dropArm = new DropArm(winch, arm);
 		retractArm = new RetractArm(arm);
 		openClaw = new OpenClaw(claw);
-		closeClawCone = new CloseClaw(claw, 13000);
+		closeClawCone = new CloseClaw(claw, 13500);
 		closeClawCube = new  CloseClaw(claw, 3000);
-		raiseArm1 = new RaiseArm(winch, 100);
-		raiseArm2 = new RaiseArm(winch, 200);
-		extendArm1 = new ExtendArm(arm, 200);
-		extendArm2 = new ExtendArm(arm, 300);
+		raiseArm1 = new RaiseArm(winch, 61);
+		raiseArm2 = new RaiseArm(winch, 61);
+		extendArm1 = new ExtendArm(arm, 180);
+		extendArm2 = new ExtendArm(arm, 430);
 		raiseArmStart = new RaiseArmStart(winch);
-		holdWinchPosition = new HoldWinchPosition(winch);
 
 		// Set any subsystem Default commands.
 
@@ -305,15 +304,15 @@ public class RobotContainer
         // being done while we are getting started up. Hopefully will complete before we are ready to
         // use the trajectory.
 		
-		NotifierCommand loadTrajectory = new NotifierCommand(this::loadTestTrajectory, 0);
-        loadTrajectory.setRunWhenDisabled(true);
-        CommandScheduler.getInstance().schedule(loadTrajectory);
+		// NotifierCommand loadTrajectory = new NotifierCommand(this::loadTestTrajectory, 0);
+        // loadTrajectory.setRunWhenDisabled(true);
+        // CommandScheduler.getInstance().schedule(loadTrajectory);
 		
-		//testTrajectory = loadTrajectoryFile("Slalom-1.wpilib.json");
+		// //testTrajectory = loadTrajectoryFile("Slalom-1.wpilib.json");
 		
-		loadTrajectory = new NotifierCommand(this::loadPPTestTrajectory, 0);
-        loadTrajectory.setRunWhenDisabled(true);
-        CommandScheduler.getInstance().schedule(loadTrajectory);
+		// loadTrajectory = new NotifierCommand(this::loadPPTestTrajectory, 0);
+        // loadTrajectory.setRunWhenDisabled(true);
+        // CommandScheduler.getInstance().schedule(loadTrajectory);
 
 		//PathPlannerTrajectory ppTestTrajectory = loadPPTrajectoryFile("richard");
 	}
@@ -363,8 +362,8 @@ public class RobotContainer
     		.onTrue(new InstantCommand(driveBase::resetDistanceTraveled));
 
 		// Apply holding voltage to winch.
-		new Trigger(() -> driverPad.getRightTrigger()).toggleOnTrue(holdWinchPosition);
-	 
+		new Trigger(() -> driverPad.getRightTrigger()).toggleOnTrue(new HoldWinchPosition(winch));
+		
 		// -------- Utility pad buttons ----------
 		// What follows is an example from 2022 robot:
 		// Toggle extend Pickup.
@@ -380,7 +379,7 @@ public class RobotContainer
 		// So any function that operates valves will trigger the watchdogs. Again, the watchdog 
 		// notifications are only a warning (though too much delay on main thread can effect robot
 		// operation) they can fill the Riolog to the point it is not useful.
-		// Note: the threaded command can only execute a run(((((nable (function on a class) not a Command.
+		// Note: the threaded command can only execute a runable (function on a class) not a Command.
 		
 		// Toggle pickup deployment
 		//new Trigger(() -> utilityPad.getLeftBumper())
@@ -395,7 +394,7 @@ public class RobotContainer
 		new Trigger(() -> utilityPad.getRightBumper()).toggleOnTrue(dropArm);
 
 		// Start or stop (if already in progress), the command to retract arm to inward position.
-		//new Trigger(() -> utilityPad.getPOVAngle(180)).toggleOnTrue(retractArm);
+		new Trigger(() -> utilityPad.getPOVAngle(180)).toggleOnTrue(retractArm);
 
 		// Start or stop (if already in progress), the command to fully open the claw.
 		new Trigger(() -> utilityPad.getRightTrigger()).toggleOnTrue(openClaw);

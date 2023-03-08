@@ -87,8 +87,8 @@ public class DriveOut extends CommandBase
 
         // Start position 1-9 are indexed as 1-9. Distance to drive in meters.
 
-        if (startingPoseIndex == 1) distance = 3.5;
-        if (startingPoseIndex == 9) distance = 3.5;
+        if (startingPoseIndex == 1) distance = 3.75;
+        if (startingPoseIndex == 9) distance = 3.75;
 		
 		// Since a typical autonomous program consists of multiple actions, which are commands
 		// in this style of programming, we will create a list of commands for the actions to

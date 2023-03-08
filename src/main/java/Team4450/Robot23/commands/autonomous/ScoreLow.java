@@ -7,6 +7,7 @@ import Team4450.Lib.Util;
 import Team4450.Robot23.RobotContainer;
 import Team4450.Robot23.commands.DropArm;
 import Team4450.Robot23.commands.OpenClaw;
+import Team4450.Robot23.commands.RaiseArm;
 import Team4450.Robot23.commands.autonomous.AutoDriveProfiled.Brakes;
 import Team4450.Robot23.commands.autonomous.AutoDriveProfiled.Pid;
 import Team4450.Robot23.commands.autonomous.AutoDriveProfiled.StopMotors;
@@ -19,6 +20,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 /**
@@ -114,7 +116,8 @@ public class ScoreLow extends CommandBase
 		
         // First action is to lower the arm to lowest position.
 
-        command = new DropArm(winch, arm);
+//        command = new DropArm(winch, arm);
+		command = new RaiseArm(winch, -68);
 
 		commands.addCommands(command);
 
@@ -124,11 +127,23 @@ public class ScoreLow extends CommandBase
 
 		commands.addCommands(command);
 
+		// Next two commands will be run in parallel.
+
+		ParallelCommandGroup pCommands = new ParallelCommandGroup();
+
+		// Next action is to raise the arm.
+
+		command = new RaiseArm(winch, 100);
+
+		pCommands.addCommands(command);
+
 		// Last action is to drive forward distance meters and stop.
 		
 		command = new AutoDriveProfiled(driveBase, distance, StopMotors.stop, Brakes.on);
 		
-		commands.addCommands(command);
+		pCommands.addCommands(command);
+
+		commands.addCommands(pCommands);
 
 		// Launch autonomous command sequence.
 		

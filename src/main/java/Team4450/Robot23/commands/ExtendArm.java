@@ -14,7 +14,7 @@ public class ExtendArm extends CommandBase
     private final Arm       arm;
     private double          targetPostion = 100;    // Revolutions of motor.
     private SynchronousPID  controller = new SynchronousPID(.01, 0, 0);
-    private final double    tolerance = .5, maxPower = .30;
+    private final double    tolerance = 5, maxPower = .20;
     private double          lastTimeCalled;
 
     /**
@@ -58,7 +58,10 @@ public class ExtendArm extends CommandBase
 
         double power = controller.calculate(arm.getPosition(), time);
 
-        arm.setPower(power);
+        // Invert power because calculation above returns + result but arm
+        // wants - power to extend.
+
+        arm.setPower(-power);
     }
 
     @Override

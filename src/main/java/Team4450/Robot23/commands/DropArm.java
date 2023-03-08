@@ -34,7 +34,7 @@ public class DropArm extends CommandBase
 
         if (arm.getPosition() < 100)
         {
-            winch.setPower(-.50);
+            winch.setPower(-.30);
 
             SmartDashboard.putBoolean("DropArm", true);
         }

@@ -7,9 +7,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /**
- * Moves the arm to a target position going up.
+ * Moves the arm to a target position going down.
  */
-public class RaiseArm extends CommandBase 
+public class LowerArm extends CommandBase 
 {
     private final Winch     winch;
     private double          targetPostion = 100;    // Revolutions of motor.
@@ -18,11 +18,11 @@ public class RaiseArm extends CommandBase
     private double          lastTimeCalled;
 
     /**
-     * Move winch to target position going upward.
+     * Move winch to target position going downward.
      * @param winch Winch subsystem.
-     * @param targetPosition Target position in winch motor revolutions (+).
+     * @param targetPosition Target position in winch motor revolutions (-).
      */
-    public RaiseArm(Winch winch, double targetPosition)
+    public LowerArm(Winch winch, double targetPosition)
     {
         Util.consoleLog();
 
@@ -44,7 +44,7 @@ public class RaiseArm extends CommandBase
 
         controller.setOutputRange(-maxPower, maxPower);
 
-        SmartDashboard.putBoolean("RaiseArm", true);
+        SmartDashboard.putBoolean("LowerArm", true);
 
         lastTimeCalled = Util.timeStamp();
     }
@@ -64,7 +64,7 @@ public class RaiseArm extends CommandBase
     @Override
     public boolean isFinished()
     {
-        return controller.onTarget(tolerance) || winch.getUpperSwitch();
+        return controller.onTarget(tolerance) || winch.getLowerSwitch();
     }
 
     @Override
@@ -74,6 +74,6 @@ public class RaiseArm extends CommandBase
 
         Util.consoleLog("interrupted=%b", interrupted);
 
-        SmartDashboard.putBoolean("RaiseArm", false);
+        SmartDashboard.putBoolean("LowerArm", false);
     }
 }

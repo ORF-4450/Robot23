@@ -24,6 +24,7 @@ import Team4450.Robot23.commands.DropArm;
 import Team4450.Robot23.commands.ExtendArm;
 import Team4450.Robot23.commands.HoldWinchPosition;
 import Team4450.Robot23.commands.OpenClaw;
+import Team4450.Robot23.commands.ParkWheels;
 import Team4450.Robot23.commands.RaiseArm;
 import Team4450.Robot23.commands.RaiseArmStart;
 import Team4450.Robot23.commands.RetractArm;
@@ -345,20 +346,26 @@ public class RobotContainer
     	new Trigger(() -> driverPad.getBackButton())
         	.onTrue(new InstantCommand(driveBase::toggleFieldOriented));
 		
+		// NOTE: Left bumper engages "slow" mode and is defined in DriveCommand.
+
 		// Change camera feed. 
 		new Trigger(() -> driverPad.getRightBumper())
     		.onTrue(new InstantCommand(cameraFeed::ChangeCamera));
 
 		// Reset yaw angle to zero.
-		new Trigger(() -> driverPad.getAButton())
+		new Trigger(() -> driverPad.getPOVAngle(180))
     		.onTrue(new InstantCommand(driveBase::resetYaw));
 
 		// Toggle drive motors between brake and coast.
 		new Trigger(() -> driverPad.getBButton())
     		.onTrue(new InstantCommand(driveBase::toggleBrakeMode));
 
-		// Reset drive wheel distance traveled.
+		// Set drive wheels to parking orientation.
 		new Trigger(() -> driverPad.getXButton())
+    		.onTrue(new ParkWheels(driveBase));
+
+		// Reset drive wheel distance traveled.
+		new Trigger(() -> driverPad.getPOVAngle(270))
     		.onTrue(new InstantCommand(driveBase::resetDistanceTraveled));
 
 		// Apply holding voltage to winch.

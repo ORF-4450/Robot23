@@ -81,9 +81,10 @@ START                   Align wheels to start position.
 LEFT_BUMPER             Slow Mode.
 RIGHT_BUMPER       		Switch Cameras.
 POV_90                  Switch DS tab.
-A                       Reset simulated yaw.
+POV_180                 Reset simulated yaw.
+POV_270                 Reset simulated distance traveled.
 B                       Toggle drive wheel brake mode.
-X                       Reset simulated distance traveled.
+X                       Drivebase park mode.
 
 
 Utility GamePad - Left Joystick
@@ -130,6 +131,7 @@ Overload				boolean			True when brownout has occurred.
 Auto Program            Chooser         List of autonomous programs.
 Field Oriented          boolean         True when swerve drive is in field orientation mode.
 RaiseArm                boolean         True when RaiseArm command is active.
+LowerArm                boolean         True when LowerArm command is active.
 RetractArm              boolean         True when RetractArm command is active.
 ExtendArm               boolean         True when ExtendArm command is active.
 DropArm                 boolean         True when DropArm command is active.

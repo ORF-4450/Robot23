@@ -6,6 +6,7 @@ import Team4450.Lib.LCD;
 import Team4450.Lib.Util;
 import Team4450.Robot23.RobotContainer;
 import Team4450.Robot23.commands.DropArm;
+import Team4450.Robot23.commands.LowerArm;
 import Team4450.Robot23.commands.OpenClaw;
 import Team4450.Robot23.commands.RaiseArm;
 import Team4450.Robot23.commands.autonomous.AutoDriveProfiled.Brakes;
@@ -114,10 +115,11 @@ public class ScoreLow extends CommandBase
 		
 		commands = new SequentialCommandGroup();
 		
-        // First action is to lower the arm to lowest position.
+        // First action is to lower the arm to drop position.
 
 //        command = new DropArm(winch, arm);
-		command = new RaiseArm(winch, -68);
+
+		command = new LowerArm(winch, -68);
 
 		commands.addCommands(command);
 

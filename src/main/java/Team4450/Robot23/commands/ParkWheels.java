@@ -29,13 +29,16 @@ public class ParkWheels extends CommandBase
 
         timeStamp = Util.timeStamp();
 
-        driveBase.drive(0, 0, .05);
+        driveBase.drive(0, 0, .10);
     }
 
     @Override
     public boolean isFinished()
     {
-        return Util.getElaspedTime(timeStamp) > .25 ? true : false;
+        if (Util.getElaspedTime(timeStamp) > .20) 
+            return true;
+        else
+            return false;
     }
 
     @Override

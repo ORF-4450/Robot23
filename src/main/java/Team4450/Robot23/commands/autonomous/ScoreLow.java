@@ -105,8 +105,8 @@ public class ScoreLow extends CommandBase
 
         // Start position 1-9 are indexed as 1-9. Distance to drive in meters.
 
-        if (startingPoseIndex == 1) distance = 3.5;
-        if (startingPoseIndex == 9) distance = 3.5;
+        if (startingPoseIndex == 1) distance = 4.0;
+        if (startingPoseIndex == 9) distance = 4.0;
 		
 		// Since a typical autonomous program consists of multiple actions, which are commands
 		// in this style of programming, we will create a list of commands for the actions to
@@ -141,7 +141,7 @@ public class ScoreLow extends CommandBase
 
 		// Last action is to drive forward distance meters and stop.
 		
-		command = new AutoDriveProfiled(driveBase, distance, StopMotors.stop, Brakes.on);
+		command = new AutoDriveProfiled(driveBase, distance, StopMotors.stop, Brakes.off);
 		
 		pCommands.addCommands(command);
 

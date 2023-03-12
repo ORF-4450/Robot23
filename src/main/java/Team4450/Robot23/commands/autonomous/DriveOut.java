@@ -99,7 +99,7 @@ public class DriveOut extends CommandBase
 		
 		// First action is to drive forward distance meters and stop.
 		
-		command = new AutoDriveProfiled(driveBase, distance, StopMotors.stop, Brakes.on);
+		command = new AutoDriveProfiled(driveBase, distance, StopMotors.stop, Brakes.off);
 		
 		commands.addCommands(command);
 

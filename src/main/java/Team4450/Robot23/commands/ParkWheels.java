@@ -29,7 +29,7 @@ public class ParkWheels extends CommandBase
 
         timeStamp = Util.timeStamp();
 
-        driveBase.drive(0, 0, .10);
+        driveBase.drive(0, 0, .03);
     }
 
     @Override

@@ -109,10 +109,10 @@ RIGHT_TRIGGER           Fully open claw.
 LEFT_TRIGGER            Close claw on cone.
 LEFT_BUMPER             Close claw on cube.
 RIGHT_BUMPER            Drop arm to lowest position.
-Y                       Move arm to scoring position 1.
-X                       Move arm to scoring position 2.
-B                       Extend arm to scoring position 1.
-A                       Extend arm to scoring position 2.
+X                       Move arm to feed station position.
+Y                       Move arm to high scoring position.
+B                       Move arm to mid scoring position.
+A                       Override Arm encoder zero.
 
 
 Dashboard Indicators/Controls
@@ -129,6 +129,7 @@ Brakes					boolean			True when drive motors are in brake mode.
 Low Battery				boolean			True when battery is low.
 Overload				boolean			True when brownout has occurred.
 Auto Program            Chooser         List of autonomous programs.
+Autonomous active       boolean         True if any auto program is active.
 Field Oriented          boolean         True when swerve drive is in field orientation mode.
 RaiseArm                boolean         True when RaiseArm command is active.
 LowerArm                boolean         True when LowerArm command is active.
@@ -137,6 +138,9 @@ ExtendArm               boolean         True when ExtendArm command is active.
 DropArm                 boolean         True when DropArm command is active.
 OpenClaw                boolean         True when OpenClaw command is active.
 CloseClaw               boolean         True when CloseClaw command is active.
+FeedStation             boolean         True when FeedStation command is active.
+ScoreHigh               boolean         True when ScoreHigh command is active.
+ScoreMid                boolean         True when ScoreMid command is active.
 
 
 Drive Base gearbox ratios: SDS Level 1 for approx 9.28 f/s or 3 m/s.

@@ -27,7 +27,7 @@ public class RetractArm extends CommandBase
     {
         Util.consoleLog();
 
-        arm.setPower(.20);
+        arm.setPower(.30);
 
         SmartDashboard.putBoolean("RetractArm", true);
     }
@@ -35,7 +35,7 @@ public class RetractArm extends CommandBase
     @Override
     public boolean isFinished()
     {
-        if (arm.getPosition() <= 0) 
+        if (arm.getPosition() <= 1) 
             return true;
         else 
             return false;

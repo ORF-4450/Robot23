@@ -6,20 +6,23 @@ import Team4450.Lib.Util;
 import Team4450.Robot23.subsystems.Arm;
 import static Team4450.Robot23.Constants.*;
 
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class DriveArm extends CommandBase 
 {
-    private final Arm           arm;
+    private final Arm               arm;
+    private final XboxController    controller;
 
     private final DoubleSupplier armSupplier;
 
-    public DriveArm(Arm arm, DoubleSupplier armSupplier)
+    public DriveArm(Arm arm, DoubleSupplier armSupplier, XboxController controller)
     {
         Util.consoleLog();
 
         this.arm = arm;
         this.armSupplier = armSupplier;
+        this.controller = controller;
 
         addRequirements(arm);
     }
@@ -29,9 +32,12 @@ public class DriveArm extends CommandBase
     {
         double power = deadband(armSupplier.getAsDouble(), THROTTLE_DEADBAND);
 
-        power = Util.squareInput(power);
+        //power = Util.squareInput(power);
 
-        arm.setPower(power);
+        if (controller.getAButton())
+            arm.setPowerNoLimit(power);
+        else
+            arm.setPower(power);
     }
 
     @Override

@@ -12,9 +12,9 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 public class ExtendArm extends CommandBase 
 {
     private final Arm       arm;
-    private double          targetPostion = 100;    // Revolutions of motor.
-    private SynchronousPID  controller = new SynchronousPID(.01, 0, 0);
-    private final double    tolerance = 5, maxPower = .20;
+    private double          targetPostion = 0;    // Revolutions of motor.
+    private SynchronousPID  controller = new SynchronousPID(.10, .001, .025);
+    private final double    tolerance = 2, maxPower = .40;
     private double          lastTimeCalled;
 
     /**
@@ -67,7 +67,7 @@ public class ExtendArm extends CommandBase
     @Override
     public boolean isFinished()
     {
-        return controller.onTarget(tolerance); // || winch.getUpperSwitch();
+        return controller.onTarget(tolerance); 
     }
 
     @Override

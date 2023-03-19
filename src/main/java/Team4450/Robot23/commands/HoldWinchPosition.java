@@ -61,7 +61,6 @@ public class HoldWinchPosition extends CommandBase
     public boolean isFinished()
     {
         // Note: This commands runs until canceled.
-        //return controller.onTarget(tolerance); // || winch.getUpperSwitch();
         return false;
     }
 

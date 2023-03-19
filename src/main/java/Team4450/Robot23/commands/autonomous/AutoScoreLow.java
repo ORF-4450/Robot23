@@ -5,7 +5,6 @@ import static Team4450.Robot23.Constants.*;
 import Team4450.Lib.LCD;
 import Team4450.Lib.Util;
 import Team4450.Robot23.RobotContainer;
-import Team4450.Robot23.commands.DropArm;
 import Team4450.Robot23.commands.LowerArm;
 import Team4450.Robot23.commands.OpenClaw;
 import Team4450.Robot23.commands.RaiseArm;
@@ -29,7 +28,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
  * a specified distance in meters. The distance is set by which starting pose 
  * is selected.
  */
-public class ScoreLow extends CommandBase
+public class AutoScoreLow extends CommandBase
 {
 	private final DriveBase         driveBase;
     private final Winch             winch;
@@ -51,7 +50,7 @@ public class ScoreLow extends CommandBase
      * @param startingPose Start location pose.
      * @param startingPoseIndex The starting pose position 0-9.
 	 */
-	public ScoreLow(DriveBase driveBase, Winch winch, Arm arm, Claw claw,
+	public AutoScoreLow(DriveBase driveBase, Winch winch, Arm arm, Claw claw,
                     Pose2d startingPose, Integer startingPoseIndex) 
 	{
 		Util.consoleLog("idx=%d", startingPoseIndex);

@@ -12,15 +12,20 @@ import static Team4450.Robot23.Constants.*;
 
 public class Arm extends SubsystemBase
 {
+    private Winch           winch;
     private CANSparkMax     motor = new CANSparkMax(ARM_MOTOR, MotorType.kBrushless);
     private RelativeEncoder encoder = motor.getEncoder();
     private DigitalInput    limitSwitch = new DigitalInput(ARM_SWITCH);
 
-    private final double    ARM_MAX = 460;  // Revolutions of motor, not spool due to gearbox.
+    private final double    ARM_MAX = 102;      // Revolutions of motor, not spool due to gearbox.
+    private final double    ARM_LIMIT = 50;
+    private final double    WINCH_LIMIT = -45;
 
-    public Arm()
+    public Arm(Winch winch)
     {
         Util.consoleLog();
+
+        this.winch = winch;
 
         // Arm will start all the way retracted and that is encoder zero.
         // Encoder max will represent arm fully extended.
@@ -34,16 +39,40 @@ public class Arm extends SubsystemBase
      */
     public void setPower(double power)
     {
-        // If power positive, which means retract, check limit switch stop if true.
+        // Limit extension if winch too low.
+
+        double armMax = ARM_MAX;
+
+        if (winch.getPosition() < WINCH_LIMIT) armMax = ARM_LIMIT;
+
+        // If power positive, which means retract, check encoder stop if 1 or less.
+        // 1 instead of zero for safety.
         // If power negative, which means extend, check encoder for max extend, stop if there.
 
         //if ((power > 0 && limitSwitch.get()) || (power < 0 && encoder.getPosition() >= ARM_MAX)) power = 0;
 
-        //if ((power > 0 && encoder.getPosition() <= 0) || (power < 0 && encoder.getPosition() >= ARM_MAX)) power = 0;
+        if ((power > 0 && encoder.getPosition() <= 1) || (power < 0 && encoder.getPosition() >= armMax)) power = 0;
         
-        if ((power < 0 && encoder.getPosition() >= ARM_MAX)) power = 0;
+        //if ((power < 0 && encoder.getPosition() >= ARM_MAX)) power = 0;
 
-        //if (limitSwitch.get()) encoder.setPosition(0);
+        //if (limitSwitch.get()) resetPosition();
+
+        power = Util.squareInput(power);
+
+        power = Util.clampValue(power, 1.0);
+        
+        // Invert since they put the rope on the spools the wrong way...
+
+        motor.set(-power);
+    }
+
+    /**
+     * Set Arm motor power.
+     * @param power -1..+1, + is retract arm, - is extend arm.
+     */
+    public void setPowerNoLimit(double power)
+    {
+        power = Util.squareInput(power);
 
         power = Util.clampValue(power, 1.0);
         
@@ -75,7 +104,7 @@ public class Arm extends SubsystemBase
     }
 
     /**
-     * Return Arm retracted limit switch state.
+     * Return Arm retracted limit switch state. Not currently implemented.
      * @return True if switch contacted (arm fully retracted).
      */
     public boolean getSwitch()

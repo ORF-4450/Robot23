@@ -22,16 +22,20 @@ import Team4450.Robot23.commands.DriveCommand;
 import Team4450.Robot23.commands.DriveWinch;
 import Team4450.Robot23.commands.DropArm;
 import Team4450.Robot23.commands.ExtendArm;
+import Team4450.Robot23.commands.FeedStation;
 import Team4450.Robot23.commands.HoldWinchPosition;
+import Team4450.Robot23.commands.LowerArm;
 import Team4450.Robot23.commands.OpenClaw;
 import Team4450.Robot23.commands.ParkWheels;
 import Team4450.Robot23.commands.RaiseArm;
 import Team4450.Robot23.commands.RaiseArmStart;
 import Team4450.Robot23.commands.RetractArm;
+import Team4450.Robot23.commands.ScoreHigh;
+import Team4450.Robot23.commands.ScoreMid;
 import Team4450.Robot23.commands.SetToStartPositionCommand;
 import Team4450.Robot23.commands.Utility.NotifierCommand;
 import Team4450.Robot23.commands.autonomous.DriveOut;
-import Team4450.Robot23.commands.autonomous.ScoreLow;
+import Team4450.Robot23.commands.autonomous.AutoScoreLow;
 import Team4450.Robot23.commands.autonomous.TestAuto1;
 import Team4450.Robot23.commands.autonomous.TestAuto3;
 import Team4450.Robot23.commands.autonomous.TestAuto4;
@@ -75,13 +79,14 @@ public class RobotContainer
 
     // Persistent Commands.
 
-	private DropArm				dropArm;
-	private RetractArm			retractArm;
-	private OpenClaw			openClaw;
-	private RaiseArm			raiseArm1, raiseArm2;
-	private CloseClaw			closeClawCube, closeClawCone;
-	private ExtendArm			extendArm1, extendArm2;
-	private RaiseArmStart		raiseArmStart;
+	//private DropArm				dropArm;
+	//private RetractArm			retractArm;
+	//private OpenClaw			openClaw;
+	//private RaiseArm			raiseArm1, raiseArm2;
+	//private LowerArm			lowerArm1;
+	//private CloseClaw			closeClawCube, closeClawCone;
+	//private ExtendArm			extendArm1, extendArm2;
+	//private RaiseArmStart		raiseArmStart;
 	//private HoldWinchPosition	holdWinchPosition;
 
 	// Some notes about Commands.
@@ -205,21 +210,22 @@ public class RobotContainer
 		shuffleBoard = new ShuffleBoard();
 		driveBase = new DriveBase();
 		winch = new Winch();
-		arm = new Arm();
+		arm = new Arm(winch);
 		claw = new Claw();
 
 		// Create any persistent commands.
 
-		dropArm = new DropArm(winch, arm);
-		retractArm = new RetractArm(arm);
-		openClaw = new OpenClaw(claw);
-		closeClawCone = new CloseClaw(claw, 13500);
-		closeClawCube = new  CloseClaw(claw, 3000);
-		raiseArm1 = new RaiseArm(winch, 61);
-		raiseArm2 = new RaiseArm(winch, 61);
-		extendArm1 = new ExtendArm(arm, 180);
-		extendArm2 = new ExtendArm(arm, 430);
-		raiseArmStart = new RaiseArmStart(winch);
+		//dropArm = new DropArm(winch, arm);
+		//retractArm = new RetractArm(arm);
+		//openClaw = new OpenClaw(claw);
+		//closeClawCone = new CloseClaw(claw, 13500);
+		//closeClawCube = new  CloseClaw(claw, 3000);
+		//raiseArm1 = new RaiseArm(winch, -63); // out
+		//raiseArm2 = new RaiseArm(winch, -63); // out
+		//lowerArm1 = new LowerArm(winch,-40);
+		//extendArm1 = new ExtendArm(arm, 100);
+		//extendArm2 = new ExtendArm(arm, 47); // out
+		//raiseArmStart = new RaiseArmStart(winch);
 
 		// Set any subsystem Default commands.
 
@@ -261,7 +267,7 @@ public class RobotContainer
 
 		claw.setDefaultCommand(new DriveClaw(claw, () -> utilityPad.getRightX()));
 
-		arm.setDefaultCommand(new DriveArm(arm, () -> utilityPad.getLeftY()));
+		arm.setDefaultCommand(new DriveArm(arm, () -> utilityPad.getLeftY(), utilityPad));
 
 		// Start the compressor, PDP and camera feed monitoring Tasks.
 
@@ -369,7 +375,8 @@ public class RobotContainer
     		.onTrue(new InstantCommand(driveBase::resetDistanceTraveled));
 
 		// Apply holding voltage to winch.
-		new Trigger(() -> driverPad.getRightTrigger()).toggleOnTrue(new HoldWinchPosition(winch));
+		new Trigger(() -> driverPad.getRightTrigger())		//.toggleOnTrue(new HoldWinchPosition(winch));
+			.onTrue(new InstantCommand(winch::toggleHoldPosition));
 		
 		// -------- Utility pad buttons ----------
 		// What follows is an example from 2022 robot:
@@ -395,36 +402,36 @@ public class RobotContainer
 		//	.onTrue(new NotifierCommand(pickup::toggleDeploy, 0.0, "DeployPickup", pickup));
 
 		// Start or stop (if already in progress), the command to raise arm to start position.
-		new Trigger(() -> utilityPad.getPOVAngle(0)).toggleOnTrue(raiseArmStart);
+		new Trigger(() -> utilityPad.getPOVAngle(0)).toggleOnTrue(new RaiseArmStart(winch));
 
 		// Start or stop (if already in progress), the command to drop arm to low position.
-		new Trigger(() -> utilityPad.getRightBumper()).toggleOnTrue(dropArm);
+		//new Trigger(() -> utilityPad.getRightBumper()).toggleOnTrue(new DropArm(winch, arm));
 
 		// Start or stop (if already in progress), the command to retract arm to inward position.
-		new Trigger(() -> utilityPad.getPOVAngle(180)).toggleOnTrue(retractArm);
+		new Trigger(() -> utilityPad.getPOVAngle(180)).toggleOnTrue(new RetractArm(arm));
 
 		// Start or stop (if already in progress), the command to fully open the claw.
-		new Trigger(() -> utilityPad.getRightTrigger()).toggleOnTrue(openClaw);
+		new Trigger(() -> utilityPad.getRightTrigger()).toggleOnTrue(new OpenClaw(claw));
 
 		// Start or stop (if already in progress), the command to close claw on cube.
-		new Trigger(() -> utilityPad.getLeftBumper()).toggleOnTrue(closeClawCube);
+		new Trigger(() -> utilityPad.getLeftBumper()).toggleOnTrue(new  CloseClaw(claw, 3000));
 
 		// Start or stop (if already in progress), the command to close claw on cone.
-		new Trigger(() -> utilityPad.getLeftTrigger()).toggleOnTrue(closeClawCone);
+		new Trigger(() -> utilityPad.getLeftTrigger()).toggleOnTrue(new CloseClaw(claw, 13500));
 
-		// Start or stop (if already in progress), the command to raise the arm to scoring position 1.
-		new Trigger(() -> utilityPad.getYButton()).toggleOnTrue(raiseArm1);
+		// Start or stop (if already in progress), the command to lower the arm to scoring position 1.
+		//new Trigger(() -> utilityPad.getYButton()).toggleOnTrue(lowerArm1);
 
-		// Start or stop (if already in progress), the command to raise the arm to scoring position 2.
-		//new Trigger(() -> utilityPad.getXButton()).toggleOnTrue(raiseArm2);
+		// Start or stop (if already in progress), the command to position for feeder pickup.
+		new Trigger(() -> utilityPad.getXButton()).toggleOnTrue(new FeedStation(winch, arm, claw));
 
-		// Start or stop (if already in progress), the command to extend the arm to scoring position 1.
-		new Trigger(() -> utilityPad.getBButton()).toggleOnTrue(extendArm1);
+		// Start or stop (if already in progress), the command to extend the arm to mid scoring position.
+		new Trigger(() -> utilityPad.getBButton()).toggleOnTrue(new ScoreMid(winch, arm, claw));
 
-		// Start or stop (if already in progress), the command to extend the arm to scoring position 2.
-		new Trigger(() -> utilityPad.getAButton()).toggleOnTrue(extendArm2);
+		// Start or stop (if already in progress), the command to extend the arm to high scoring position.
+		new Trigger(() -> utilityPad.getYButton()).toggleOnTrue(new ScoreHigh(winch, arm, claw));
 
-		new Trigger(() -> utilityPad.getXButton()).onTrue(new InstantCommand(arm::resetPosition));
+		new Trigger(() -> utilityPad.getPOVAngle(270)).onTrue(new InstantCommand(arm::resetPosition));
 		//new Trigger(() -> utilityPad.getYButton()).onTrue(new InstantCommand(winch::resetPosition));
 		//new Trigger(() -> utilityPad.getBButton()).onTrue(new InstantCommand(claw::resetPosition));
 	}
@@ -470,7 +477,7 @@ public class RobotContainer
 				break;
  				
 			case ScoreLow:
-				autoCommand = new ScoreLow(driveBase, winch, arm, claw, startingPose, startingPoseIndex);
+				autoCommand = new AutoScoreLow(driveBase, winch, arm, claw, startingPose, startingPoseIndex);
 				break;
 				
 			case TestAuto1:

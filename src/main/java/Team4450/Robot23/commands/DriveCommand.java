@@ -94,13 +94,13 @@ public class DriveCommand extends CommandBase
 
         if (controller.getLeftBumper())
         {
-            throttle = Util.clampValue(throttle, .30);
-            strafe = Util.clampValue(strafe, .30);
-            rotation = Util.clampValue(rotation, .30);
+            throttle = Util.clampValue(throttle, .20);
+            strafe = Util.clampValue(strafe, .20);
+            rotation = Util.clampValue(rotation, .20);
         }
         else
             rotation = Util.clampValue(rotation, .60);
-            
+
         driveBase.drive(throttle, strafe, rotation);
     }
 

@@ -20,7 +20,7 @@ public class RaiseArm extends CommandBase
     /**
      * Move winch to target position going upward.
      * @param winch Winch subsystem.
-     * @param targetPosition Target position in winch motor revolutions (+).
+     * @param targetPosition Target position in winch motor revolutions (-).
      */
     public RaiseArm(Winch winch, double targetPosition)
     {

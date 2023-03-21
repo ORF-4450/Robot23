@@ -7,17 +7,21 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /**
- * Moves the arm to a target position.
+ * Holds winch at current position. Not being used at this time. Hold function
+ * moved to Winch subsystem for more flexibility and doing hold in Autonomous
+ * programs.
  */
 public class HoldWinchPosition extends CommandBase 
 {
     private final Winch     winch;
     private SynchronousPID  controller = new SynchronousPID(0.1, 0, 0);
-    private final double    tolerance = .25, maxPower = .10;
+    private final double    maxPower = .10;
     private double          lastTimeCalled;
 
     /**
-     * Move winch to target position.
+     * Holds winch at current position. Not being used at this time. Hold function
+     * moved to Winch subsystem for more flexibility and doing hold in Autonomous
+     * programs.
      * @param winch Winch subsystem.
      */
     public HoldWinchPosition(Winch winch)

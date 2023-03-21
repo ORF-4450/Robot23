@@ -6,8 +6,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /**
- * Retracts the arm by running arm inward until limit
- * switch reports true.
+ * Retracts the arm by running arm inward until encoder
+ * reports zero.
  */
 public class RetractArm extends CommandBase 
 {

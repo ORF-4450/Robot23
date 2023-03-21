@@ -51,7 +51,7 @@ public class ScoreHigh extends CommandBase
 
         command = new InstantCommand(winch::toggleHoldPosition);
 
-		//pCommands.addCommands(command);
+		pCommands.addCommands(command);
 
         // Next action is to extend arms.
 

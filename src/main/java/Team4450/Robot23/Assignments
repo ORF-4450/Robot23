@@ -105,6 +105,7 @@ Button Name				Function
 -----------------------------------------------------------------------------------
 POV_0                   Raise arm to starting position.
 POV_180                 Fully retract arm.
+POV_270                 Reset Arm encoder to zero.
 RIGHT_TRIGGER           Fully open claw.
 LEFT_TRIGGER            Close claw on cone.
 LEFT_BUMPER             Close claw on cube.
@@ -112,7 +113,7 @@ RIGHT_BUMPER            Drop arm to lowest position.
 X                       Move arm to feed station position.
 Y                       Move arm to high scoring position.
 B                       Move arm to mid scoring position.
-A                       Override Arm encoder zero.
+A                       Override Arm encoder zero (DriveArm).
 
 
 Dashboard Indicators/Controls

@@ -5,9 +5,11 @@ import static Team4450.Robot23.Constants.*;
 import Team4450.Lib.LCD;
 import Team4450.Lib.Util;
 import Team4450.Robot23.RobotContainer;
+import Team4450.Robot23.commands.ExtendArm;
 import Team4450.Robot23.commands.LowerArm;
 import Team4450.Robot23.commands.OpenClaw;
 import Team4450.Robot23.commands.RaiseArm;
+import Team4450.Robot23.commands.RetractArm;
 import Team4450.Robot23.commands.autonomous.AutoDriveProfiled.Brakes;
 import Team4450.Robot23.commands.autonomous.AutoDriveProfiled.StopMotors;
 import Team4450.Robot23.subsystems.Arm;
@@ -19,15 +21,16 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 /**
- * This an autonomous command score in lowest position then drive straight out 
+ * This an autonomous command to score in highest position then drive straight out 
  * a specified distance in meters. The distance is set by which starting pose 
  * is selected.
  */
-public class AutoScoreLow extends CommandBase
+public class AutoScoreHigh extends CommandBase
 {
 	private final DriveBase         driveBase;
     private final Winch             winch;
@@ -49,8 +52,8 @@ public class AutoScoreLow extends CommandBase
      * @param startingPose Start location pose.
      * @param startingPoseIndex The starting pose position 0-9.
 	 */
-	public AutoScoreLow(DriveBase driveBase, Winch winch, Arm arm, Claw claw,
-                    Pose2d startingPose, Integer startingPoseIndex) 
+	public AutoScoreHigh(DriveBase driveBase, Winch winch, Arm arm, Claw claw,
+                         Pose2d startingPose, Integer startingPoseIndex) 
 	{
 		Util.consoleLog("idx=%d", startingPoseIndex);
 		
@@ -82,7 +85,7 @@ public class AutoScoreLow extends CommandBase
 		
 		//driveBase.setMotorSafety(false);  // Turn off watchdog.
 		
-	  	LCD.printLine(LCD_1, "Mode: Auto - ScoreLow - All=%s, Location=%d, FMS=%b, msg=%s", alliance.name(), location, 
+	  	LCD.printLine(LCD_1, "Mode: Auto - ScoreHigh - All=%s, Location=%d, FMS=%b, msg=%s", alliance.name(), location, 
 				DriverStation.isFMSAttached(), gameMessage);
 
 		SmartDashboard.putBoolean("Autonomous Active", true);
@@ -113,13 +116,29 @@ public class AutoScoreLow extends CommandBase
 		
 		commands = new SequentialCommandGroup();
 		
-        // First action is to lower the arm to drop position.
+		ParallelCommandGroup pCommands = new ParallelCommandGroup();
 
-//        command = new DropArm(winch, arm);
+		// First action is to lower the arm.
 
-		command = new LowerArm(winch, -68);
+		Command command = new LowerArm(winch, -40);
 
-		commands.addCommands(command);
+		pCommands.addCommands(command);
+
+        // Now hold winch position.
+
+        command = new InstantCommand(winch::toggleHoldPosition);
+
+		pCommands.addCommands(command);
+
+        // Next action is to extend arms.
+
+        command = new ExtendArm(arm, 100);
+
+		pCommands.addCommands(command);
+
+        // Add group to command list.
+
+        commands.addCommands(pCommands);
 
         // Next action is to open the claw.
 
@@ -127,15 +146,21 @@ public class AutoScoreLow extends CommandBase
 
 		commands.addCommands(command);
 
-		// Next two commands will be run in parallel.
+		// Next commands will be run in parallel.
 
-		ParallelCommandGroup pCommands = new ParallelCommandGroup();
+		pCommands = new ParallelCommandGroup();
 
 		// Next action is to raise the arm.
 
 		command = new RaiseArm(winch, 100);
 
 		pCommands.addCommands(command);
+
+        // Next action is retract Arm.
+
+        command = new RetractArm(arm);
+
+        pCommands.addCommands(command);
 
 		// Last action is to drive forward distance meters and stop.
 		

@@ -59,7 +59,7 @@ public class Arm extends SubsystemBase
 
         power = Util.squareInput(power);
 
-        power = Util.clampValue(power, 1.0);
+        power = Util.clampValue(power, .75);
         
         // Invert since they put the rope on the spools the wrong way...
 
@@ -74,7 +74,7 @@ public class Arm extends SubsystemBase
     {
         power = Util.squareInput(power);
 
-        power = Util.clampValue(power, 1.0);
+        power = Util.clampValue(power, .75);
         
         // Invert since they put the rope on the spools the wrong way...
 

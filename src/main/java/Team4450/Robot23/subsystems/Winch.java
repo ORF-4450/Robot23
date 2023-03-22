@@ -70,7 +70,7 @@ public class Winch  extends SubsystemBase
     {
         // Periodic function called on each scheduler loop so we can use
         // it to run the pid controller to hold position.
-        
+
         if (holdPosition)
         {
             double time = Util.getElaspedTime(lastTimeCalled);
@@ -144,6 +144,8 @@ public class Winch  extends SubsystemBase
         }
         else
             holdPosition = false;
+
+        Util.consoleLog("%b", holdPosition);
 
         updateDS();
     }

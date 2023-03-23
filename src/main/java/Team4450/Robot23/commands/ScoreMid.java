@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 /**
  * Lower arm from fully up position to correct height for mid level scoring,
@@ -19,6 +20,7 @@ public class ScoreMid extends CommandBase
     private final Winch             winch;
     private final Arm               arm;
     private final Claw              claw;
+    private SequentialCommandGroup	commands;
     private ParallelCommandGroup    pCommands; 
 
     public ScoreMid(Winch winch, Arm arm, Claw claw)
@@ -36,32 +38,39 @@ public class ScoreMid extends CommandBase
     public void initialize()
     {
         Util.consoleLog();
+		
+		commands = new SequentialCommandGroup();
 
-		// Commands will be run in parallel.
+		// Several commands will be run in parallel.
 
 		pCommands = new ParallelCommandGroup();
 
 		// First action is to lower the arm.
 
-		Command command = new LowerArm(winch, -48);
-
-		pCommands.addCommands(command);
-
-        // Now hold winch position.
-
-        command = new InstantCommand(winch::toggleHoldPosition);
+		Command command = new LowerArm(winch, -47);
 
 		pCommands.addCommands(command);
 
         // Next action is to extend arms.
 
-        command = new ExtendArm(arm, 47);
+        command = new ExtendArm(arm, 105);
 
 		pCommands.addCommands(command);
 
+        // Add paralell commands to sequential commands.
+
+        commands.addCommands(pCommands);
+
+        // Now hold winch position.
+
+        command = new InstantCommand(winch::toggleHoldPosition);
+
+		commands.addCommands(command);
+
         // Run the commands, only if winch fully up.
 
-        if (winch.getUpperSwitch()) pCommands.schedule();
+        //if (winch.getUpperSwitch()) commands.schedule();
+        if (winch.getPosition() < -5) commands.schedule();
 
         SmartDashboard.putBoolean("ScoreMid", true);
     }
@@ -72,7 +81,7 @@ public class ScoreMid extends CommandBase
 		// Note: commands.isFinished() will not work to detect the end of the command list
 		// due to how FIRST coded the SquentialCommandGroup class. 
 		
-		return !pCommands.isScheduled();
+		return !commands.isScheduled();
     }
 
     @Override
@@ -80,7 +89,7 @@ public class ScoreMid extends CommandBase
     {
         Util.consoleLog("interrupted=%b", interrupted);
 
-        if (interrupted) pCommands.cancel();
+        if (interrupted) commands.cancel();
 
         SmartDashboard.putBoolean("ScoreMid", false);
     }

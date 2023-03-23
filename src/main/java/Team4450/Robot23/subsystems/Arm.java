@@ -17,8 +17,10 @@ public class Arm extends SubsystemBase
     private RelativeEncoder encoder = motor.getEncoder();
     private DigitalInput    limitSwitch = new DigitalInput(ARM_SWITCH);
 
-    private final double    ARM_MAX = 102;      // Revolutions of motor, not spool due to gearbox.
-    private final double    ARM_LIMIT = 50;
+    //private final double    ARM_MAX = 102;      // Revolutions of motor, not spool due to gearbox.
+    private final double    ARM_MAX = 245;      // Revolutions of motor, not spool due to gearbox.
+    //private final double    ARM_LIMIT = 50;
+    private final double    ARM_LIMIT = 120;
     private final double    WINCH_LIMIT = -45;
 
     public Arm(Winch winch)

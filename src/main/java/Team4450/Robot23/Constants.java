@@ -24,7 +24,7 @@ import edu.wpi.first.wpilibj.DriverStation;
  */
 public final class Constants
 {
-	public static String		PROGRAM_NAME = "RAC23-03.22.23-2";
+	public static String		PROGRAM_NAME = "RAC23-03.22.23-4";
 
 	public static Robot			robot;
 
@@ -141,8 +141,8 @@ public final class Constants
 	// Use these values in PathWeaver for speed and acceleration.
     // Robot will go faster than this, more like 3 mps but this value tones down autonomous speed.
 
-    public static final double  MAX_WHEEL_SPEED = 2.0;     // Meters per second.
-    public static final double  MAX_WHEEL_ACCEL = 2.0;     // Meters per second per second.
+    public static final double  MAX_WHEEL_SPEED = 3.0;     // Meters per second.
+    public static final double  MAX_WHEEL_ACCEL = 3.0;     // Meters per second per second.
     
     // Estimated by eyeball observation. Needs to be estimated each new robot.
 

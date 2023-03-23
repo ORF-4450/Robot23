@@ -38,7 +38,6 @@ public class AutoScoreHigh extends CommandBase
     private final Claw              claw;
 	
 	private SequentialCommandGroup	commands = null;
-	private Command					command = null;
 	private	Pose2d					startingPose;
     private int                     startingPoseIndex;
 
@@ -120,19 +119,19 @@ public class AutoScoreHigh extends CommandBase
 
 		// First action is to lower the arm.
 
-		Command command = new LowerArm(winch, -40);
+		Command command = new LowerArm(winch, -45);
 
 		pCommands.addCommands(command);
 
         // Now hold winch position.
 
-        command = new InstantCommand(winch::toggleHoldPosition);
+        //command = new InstantCommand(winch::toggleHoldPosition);
 
-		pCommands.addCommands(command);
+		//pCommands.addCommands(command);
 
         // Next action is to extend arms.
 
-        command = new ExtendArm(arm, 100);
+        command = new ExtendArm(arm, 233);
 
 		pCommands.addCommands(command);
 

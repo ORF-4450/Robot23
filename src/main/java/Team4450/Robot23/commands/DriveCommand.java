@@ -77,20 +77,8 @@ public class DriveCommand extends CommandBase
         // Have to invert for sim...not sure why.
         if (RobotBase.isSimulation()) rotation *= -1;
 
-        // Both squaring inputs and slew rate limiters are ways to slow down
-        // or smooth response to the joystick inputs. Will test both methods.
-
-        // Squaring seemed to really slow throttle response.
-        //throttle = squareTheInput(throttle);
-        //strafe = squareTheInput(strafe);
-        
-        rotation = squareTheInput(rotation);
-
-        throttle = slewX.calculate(throttle);
-        strafe = slewY.calculate(strafe);
-        rotation = slewRot.calculate(rotation);
-
-        // "Slow" mode. Caps speed while bumper held down.
+        // "Slow" mode. Caps speeds while bumper held down.
+        // Cap rotation to 60% rest of the time.
 
         if (controller.getLeftBumper())
         {
@@ -100,6 +88,21 @@ public class DriveCommand extends CommandBase
         }
         else
             rotation = Util.clampValue(rotation, .60);
+        
+        // Squaring inputs and slew rate limiters are ways to slow down
+        // or smooth response to the joystick inputs. Will test both methods.
+
+        // Squaring seemed to really slow throttle response but seemed to slow
+        // rotation effectively.
+
+        //throttle = squareTheInput(throttle);
+        //strafe = squareTheInput(strafe);
+
+        rotation = squareTheInput(rotation);
+
+        throttle = slewX.calculate(throttle);
+        strafe = slewY.calculate(strafe);
+        rotation = slewRot.calculate(rotation);
 
         driveBase.drive(throttle, strafe, rotation);
     }

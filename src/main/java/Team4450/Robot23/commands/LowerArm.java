@@ -14,7 +14,7 @@ public class LowerArm extends CommandBase
     private final Winch     winch;
     private double          targetPostion = 100;    // Revolutions of motor.
     private SynchronousPID  controller = new SynchronousPID(.02, 0, 0);
-    private final double    tolerance = 5, maxPower = .20;
+    private final double    tolerance = 2, maxPower = .20;
     private double          lastTimeCalled;
 
     /**

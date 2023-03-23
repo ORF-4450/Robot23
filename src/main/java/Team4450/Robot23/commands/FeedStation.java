@@ -47,12 +47,6 @@ public class FeedStation extends CommandBase
 
 		pCommands.addCommands(command);
         
-        // Now hold winch position.
-
-        command = new InstantCommand(winch::toggleHoldPosition);
-
-		pCommands.addCommands(command);
-
         // Next action is to open the claw.
 
         command = new OpenClaw(claw);
@@ -61,9 +55,15 @@ public class FeedStation extends CommandBase
 
         // Next action is to extend arms.
 
-        command = new ExtendArm(arm, 15);
+        command = new ExtendArm(arm, 37.8);
 
 		pCommands.addCommands(command);
+
+        // Now hold winch position.
+
+        //command = new InstantCommand(winch::toggleHoldPosition);
+
+		//pCommands.addCommands(command);
 
         // Run the commands, only if winch fully up.
 

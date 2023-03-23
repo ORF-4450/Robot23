@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 /**
  * Lower arm from fully up position to correct height for high scoring,
@@ -19,6 +20,7 @@ public class ScoreHigh extends CommandBase
     private final Winch             winch;
     private final Arm               arm;
     private final Claw              claw;
+    private SequentialCommandGroup	commands;
     private ParallelCommandGroup    pCommands; 
 
     public ScoreHigh(Winch winch, Arm arm, Claw claw)
@@ -36,32 +38,35 @@ public class ScoreHigh extends CommandBase
     public void initialize()
     {
         Util.consoleLog();
+		
+		commands = new SequentialCommandGroup();
 
-		// Commands will be run in parallel.
+		// Some commands will be run in parallel.
 
 		pCommands = new ParallelCommandGroup();
 
 		// First action is to lower the arm.
 
-		Command command = new LowerArm(winch, -40);
-
-		pCommands.addCommands(command);
-
-        // Now hold winch position.
-
-        command = new InstantCommand(winch::toggleHoldPosition);
+		Command command = new LowerArm(winch, -45);
 
 		pCommands.addCommands(command);
 
         // Next action is to extend arms.
 
-        command = new ExtendArm(arm, 100);
+        command = new ExtendArm(arm, 233);
 
 		pCommands.addCommands(command);
 
+        // Now hold winch position.
+
+        //command = new InstantCommand(winch::toggleHoldPosition);
+
+		//pCommands.addCommands(command);
+
         // Run the commands, only if winch fully up.
 
-        if (winch.getUpperSwitch()) pCommands.schedule();
+        //if (winch.getUpperSwitch()) pCommands.schedule();
+        if (winch.getPosition() < -5) pCommands.schedule();
 
         SmartDashboard.putBoolean("ScoreHigh", true);
     }

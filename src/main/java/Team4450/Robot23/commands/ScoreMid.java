@@ -67,10 +67,10 @@ public class ScoreMid extends CommandBase
 
 		commands.addCommands(command);
 
-        // Run the commands, only if winch fully up.
+        // Run the commands, only if winch mostly up.
 
         //if (winch.getUpperSwitch()) commands.schedule();
-        if (winch.getPosition() < -5) commands.schedule();
+        if (winch.getPosition() > -5) commands.schedule();
 
         SmartDashboard.putBoolean("ScoreMid", true);
     }

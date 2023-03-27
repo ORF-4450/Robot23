@@ -36,6 +36,7 @@ import Team4450.Robot23.commands.SetToStartPositionCommand;
 import Team4450.Robot23.commands.Utility.NotifierCommand;
 import Team4450.Robot23.commands.autonomous.DriveOut;
 import Team4450.Robot23.commands.autonomous.AutoScoreHigh;
+import Team4450.Robot23.commands.autonomous.AutoScoreHighNoDrive;
 import Team4450.Robot23.commands.autonomous.AutoScoreLow;
 import Team4450.Robot23.commands.autonomous.TestAuto1;
 import Team4450.Robot23.commands.autonomous.TestAuto3;
@@ -138,6 +139,7 @@ public class RobotContainer
 		DriveOut,
 		ScoreLow,
 		ScoreHigh,
+		ScoreHighNoDrive,
 		TestAuto1,
 		TestAuto3,
 		TestAuto4
@@ -485,6 +487,10 @@ public class RobotContainer
 			case ScoreHigh:
 				autoCommand = new AutoScoreHigh(driveBase, winch, arm, claw, startingPose, startingPoseIndex);
 				break;
+ 				
+			case ScoreHighNoDrive:
+				autoCommand = new AutoScoreHighNoDrive(driveBase, winch, arm, claw, startingPose, startingPoseIndex);
+				break;
 				
 			case TestAuto1:
 			 	autoCommand = new TestAuto1(driveBase, startingPose);
@@ -516,6 +522,7 @@ public class RobotContainer
 		autoChooser.addOption("Drive Out", AutoProgram.DriveOut);		
 		autoChooser.addOption("Score Low", AutoProgram.ScoreLow);		
 		autoChooser.addOption("Score High", AutoProgram.ScoreHigh);		
+		autoChooser.addOption("Score High No Drive", AutoProgram.ScoreHighNoDrive);		
 		autoChooser.addOption("Test Auto 1", AutoProgram.TestAuto1);		
 		autoChooser.addOption("Test Auto 3", AutoProgram.TestAuto3);		
 		autoChooser.addOption("Test Auto 4", AutoProgram.TestAuto4);		

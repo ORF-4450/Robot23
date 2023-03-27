@@ -14,7 +14,7 @@ public class Claw extends SubsystemBase
     private WPI_TalonFX     motor = new WPI_TalonFX(CLAW_MOTOR);
     private FXEncoder       encoder = new FXEncoder(motor);
 
-    private final double    CLAW_MAX = 13000;
+    private final double    CLAW_MAX = 13500;
 
     public Claw()
     {

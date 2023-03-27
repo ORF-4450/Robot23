@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 /**
  * Lower arm from fully up position to correct height for feeder station,
@@ -20,6 +21,7 @@ public class FeedStation extends CommandBase
     private final Arm               arm;
     private final Claw              claw;
     private ParallelCommandGroup    pCommands; 
+    private SequentialCommandGroup	commands;
 
     public FeedStation(Winch winch, Arm arm, Claw claw)
     {
@@ -36,8 +38,10 @@ public class FeedStation extends CommandBase
     public void initialize()
     {
         Util.consoleLog();
+		
+		commands = new SequentialCommandGroup();
 
-		// Commands will be run in parallel.
+		// Some commands will be run in parallel.
 
 		pCommands = new ParallelCommandGroup();
 
@@ -55,19 +59,24 @@ public class FeedStation extends CommandBase
 
         // Next action is to extend arms.
 
-        command = new ExtendArm(arm, 37.8);
+        command = new ExtendArm(arm, 40.8);
 
 		pCommands.addCommands(command);
+        
+        // Add parallel commands to sequential commands.
+
+        commands.addCommands(pCommands);
 
         // Now hold winch position.
 
-        //command = new InstantCommand(winch::toggleHoldPosition);
+        command = new InstantCommand(winch::toggleHoldPosition);
 
-		//pCommands.addCommands(command);
+		commands.addCommands(command);
 
-        // Run the commands, only if winch fully up.
+        // Run the commands, only if winch mostly up.
 
-        if (winch.getUpperSwitch()) pCommands.schedule();
+        //if (winch.getUpperSwitch()) commands.schedule();
+        if (winch.getPosition() > -5) commands.schedule();
 
         SmartDashboard.putBoolean("FeedStation", true);
     }
@@ -78,7 +87,7 @@ public class FeedStation extends CommandBase
 		// Note: commands.isFinished() will not work to detect the end of the command list
 		// due to how FIRST coded the SquentialCommandGroup class. 
 		
-		return !pCommands.isScheduled();
+		return !commands.isScheduled();
     }
 
     @Override
@@ -86,7 +95,7 @@ public class FeedStation extends CommandBase
     {
         Util.consoleLog("interrupted=%b", interrupted);
 
-        if (interrupted) pCommands.cancel();
+        if (interrupted) commands.cancel();
 
         SmartDashboard.putBoolean("FeedStation", false);
     }

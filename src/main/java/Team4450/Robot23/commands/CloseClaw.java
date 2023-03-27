@@ -14,7 +14,7 @@ public class CloseClaw extends CommandBase
     private final Claw      claw;
     private double          targetPostion = 3000;    // Encoder tick count.
     private SynchronousPID  controller = new SynchronousPID(.0001, .00001, 0);
-    private final double    tolerance = 1000, maxPower = .20;
+    private final double    tolerance = 200, maxPower = .20;
     private double          lastTimeCalled;
 
     /**

@@ -10,8 +10,6 @@ import Team4450.Robot23.commands.LowerArm;
 import Team4450.Robot23.commands.OpenClaw;
 import Team4450.Robot23.commands.RaiseArm;
 import Team4450.Robot23.commands.RetractArm;
-import Team4450.Robot23.commands.autonomous.AutoDriveProfiled.Brakes;
-import Team4450.Robot23.commands.autonomous.AutoDriveProfiled.StopMotors;
 import Team4450.Robot23.subsystems.Arm;
 import Team4450.Robot23.subsystems.Claw;
 import Team4450.Robot23.subsystems.DriveBase;
@@ -21,7 +19,6 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
@@ -30,7 +27,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
  * a specified distance in meters. The distance is set by which starting pose 
  * is selected.
  */
-public class AutoScoreHigh extends CommandBase
+public class AutoScoreHighNoDrive extends CommandBase
 {
 	private final DriveBase         driveBase;
     private final Winch             winch;
@@ -51,7 +48,7 @@ public class AutoScoreHigh extends CommandBase
      * @param startingPose Start location pose.
      * @param startingPoseIndex The starting pose position 0-9.
 	 */
-	public AutoScoreHigh(DriveBase driveBase, Winch winch, Arm arm, Claw claw,
+	public AutoScoreHighNoDrive(DriveBase driveBase, Winch winch, Arm arm, Claw claw,
                          Pose2d startingPose, Integer startingPoseIndex) 
 	{
 		Util.consoleLog("idx=%d", startingPoseIndex);
@@ -84,7 +81,7 @@ public class AutoScoreHigh extends CommandBase
 		
 		//driveBase.setMotorSafety(false);  // Turn off watchdog.
 		
-	  	LCD.printLine(LCD_1, "Mode: Auto - ScoreHigh - All=%s, Location=%d, FMS=%b, msg=%s", alliance.name(), location, 
+	  	LCD.printLine(LCD_1, "Mode: Auto - ScoreHighNoDrive - All=%s, Location=%d, FMS=%b, msg=%s", alliance.name(), location, 
 				DriverStation.isFMSAttached(), gameMessage);
 
 		SmartDashboard.putBoolean("Autonomous Active", true);
@@ -100,13 +97,6 @@ public class AutoScoreHigh extends CommandBase
 		// auto routine. Robot must be placed in same starting location each time for pose tracking
 		// to work.
 		driveBase.setOdometry(startingPose);
-
-        double distance = 0;
-
-        // Start position 1-9 are indexed as 1-9. Distance to drive in meters.
-
-        if (startingPoseIndex == 1) distance = 4.0;
-        if (startingPoseIndex == 9) distance = 4.0;
 		
 		// Since a typical autonomous program consists of multiple actions, which are commands
 		// in this style of programming, we will create a list of commands for the actions to
@@ -154,12 +144,6 @@ public class AutoScoreHigh extends CommandBase
         command = new RetractArm(arm);
 
         pCommands.addCommands(command);
-
-		// Last action is to drive forward distance meters and stop.
-		
-		command = new AutoDriveProfiled(driveBase, distance, StopMotors.stop, Brakes.off);
-		
-		pCommands.addCommands(command);
 
 		commands.addCommands(pCommands);
 

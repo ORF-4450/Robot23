@@ -53,20 +53,24 @@ public class ScoreHigh extends CommandBase
 
         // Next action is to extend arms.
 
-        command = new ExtendArm(arm, 233);
+        command = new ExtendArm(arm, 242);
 
 		pCommands.addCommands(command);
 
+        // Add parallel commands to sequential commands.
+
+        commands.addCommands(pCommands);
+
         // Now hold winch position.
 
-        //command = new InstantCommand(winch::toggleHoldPosition);
+        command = new InstantCommand(winch::toggleHoldPosition);
 
-		//pCommands.addCommands(command);
+		commands.addCommands(command);
 
-        // Run the commands, only if winch fully up.
+        // Run the commands, only if winch mostly up.
 
-        //if (winch.getUpperSwitch()) pCommands.schedule();
-        if (winch.getPosition() < -5) pCommands.schedule();
+        //if (winch.getUpperSwitch()) commands.schedule();
+        if (winch.getPosition() > -5) commands.schedule();
 
         SmartDashboard.putBoolean("ScoreHigh", true);
     }
@@ -77,7 +81,7 @@ public class ScoreHigh extends CommandBase
 		// Note: commands.isFinished() will not work to detect the end of the command list
 		// due to how FIRST coded the SquentialCommandGroup class. 
 		
-		return !pCommands.isScheduled();
+		return !commands.isScheduled();
     }
 
     @Override
@@ -85,7 +89,7 @@ public class ScoreHigh extends CommandBase
     {
         Util.consoleLog("interrupted=%b", interrupted);
 
-        if (interrupted) pCommands.cancel();
+        if (interrupted) commands.cancel();
 
         SmartDashboard.putBoolean("ScoreHigh", false);
     }

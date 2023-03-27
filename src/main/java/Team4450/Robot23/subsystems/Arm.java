@@ -21,7 +21,7 @@ public class Arm extends SubsystemBase
     private final double    ARM_MAX = 245;      // Revolutions of motor, not spool due to gearbox.
     //private final double    ARM_LIMIT = 50;
     private final double    ARM_LIMIT = 120;
-    private final double    WINCH_LIMIT = -45;
+    private final double    WINCH_LIMIT = -55;
 
     public Arm(Winch winch)
     {
@@ -45,7 +45,7 @@ public class Arm extends SubsystemBase
 
         double armMax = ARM_MAX;
 
-        if (winch.getPosition() < WINCH_LIMIT) armMax = ARM_LIMIT;
+        //if (winch.getPosition() < WINCH_LIMIT) armMax = ARM_LIMIT;
 
         // If power positive, which means retract, check encoder stop if 1 or less.
         // 1 instead of zero for safety.

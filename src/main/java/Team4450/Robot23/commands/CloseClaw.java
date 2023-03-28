@@ -12,9 +12,9 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 public class CloseClaw extends CommandBase 
 {
     private final Claw      claw;
-    private double          targetPostion = 3000;    // Encoder tick count.
+    private double          targetPostion = 3000;    // Default is cube encoder tick count.
     private SynchronousPID  controller = new SynchronousPID(.0001, .00001, 0);
-    private final double    tolerance = 200, maxPower = .20;
+    private final double    tolerance = 200, maxPower = .30;
     private double          lastTimeCalled;
 
     /**

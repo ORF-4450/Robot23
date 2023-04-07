@@ -121,7 +121,13 @@ public class Robot extends TimedRobot
       // here and then a few lines below delete it from the sendable system. This puts the version
       // info onto the dashboard but removes it from further updates.
 
-      SmartDashboard.putData("Version", SendableVersion.INSTANCE);
+      // Note: As of 2023 WPILib, deleting a Sendable actually removes the data from the dashboard
+      // so we had to replace adding the SendableVersion as a Sendable (putdata) and add the data
+      // manually to the dashboard in SendableVersion class.
+
+      SendableVersion.INSTANCE.updateDashBoard();
+
+      //SmartDashboard.putData("Version", SendableVersion.INSTANCE);
 
       // Instantiate our RobotContainer class. This will perform all necessary setup of the various
       // subsystems, commands and other items that are needed to to be ready before we start doing
@@ -129,7 +135,7 @@ public class Robot extends TimedRobot
 
       robotContainer = new RobotContainer();
 
-      SendableVersion.INSTANCE.removeSendable();
+      //SendableVersion.INSTANCE.removeSendable();
       
     } catch (Exception e) {
       Util.logException(e);

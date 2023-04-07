@@ -24,7 +24,7 @@ import edu.wpi.first.wpilibj.DriverStation;
  */
 public final class Constants
 {
-	public static String		PROGRAM_NAME = "RAC23-03.26.23-3";
+	public static String		PROGRAM_NAME = "RAC23-04.06.23-1";
 
 	public static Robot			robot;
 
@@ -101,7 +101,7 @@ public final class Constants
     // ramp to 1 (100% power) in 1 second. So a slew of 3 is 3 units per
     // second or 1 unit in 1/3 second. So larger slew is faster ramp to
     // 100%. 1.5 is 100% in 3/4 second. 2 is 100% in 1/2 second.
-    public static final double  THROTTLE_SLEW = 1.5;        
+    public static final double  THROTTLE_SLEW = 0.75;        
     public static final double  ROTATION_SLEW = 1.0;  //3.0;
 
     /**

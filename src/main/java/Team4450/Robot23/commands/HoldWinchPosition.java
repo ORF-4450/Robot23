@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 public class HoldWinchPosition extends CommandBase 
 {
     private final Winch     winch;
-    private SynchronousPID  controller = new SynchronousPID(0.1, 0, 0);
+    private SynchronousPID  controller = new SynchronousPID("HoldWinch", 0.1, 0, 0);
     private final double    maxPower = .10;
     private double          lastTimeCalled;
 

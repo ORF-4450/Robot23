@@ -59,7 +59,7 @@ public class FeedStation extends CommandBase
 
         // Next action is to extend arms.
 
-        command = new ExtendArm(arm, 40.8);
+        command = new ExtendArm(arm, 35.5);
 
 		pCommands.addCommands(command);
         

@@ -43,7 +43,7 @@ public class DropArm extends CommandBase
     @Override
     public boolean isFinished()
     {
-        return winch.getLowerSwitch(); // || !arm.getSwitch();
+        return winch.getPosition() <= winch.WINCH_MAX;
     }
 
     @Override

@@ -16,15 +16,16 @@ public class Winch  extends SubsystemBase
 {
     private CANSparkMax     motor = new CANSparkMax(WINCH_MOTOR, MotorType.kBrushless);
     private RelativeEncoder encoder = motor.getEncoder();
-    private DigitalInput    lowerLimitSwitch = new DigitalInput(WINCH_SWITCH_LOWER);
+    //private DigitalInput    lowerLimitSwitch = new DigitalInput(WINCH_SWITCH_LOWER);
     private DigitalInput    upperLimitSwitch = new DigitalInput(WINCH_SWITCH_UPPER);
     private boolean         holdPosition;
-    private SynchronousPID  controller = new SynchronousPID(0.1, 0, 0);
+    private SynchronousPID  controller = new SynchronousPID("Winch", 0.1, 0, 0);
     private final double    PID_MAXPOWER = .10;
     private double          lastTimeCalled;
 
-    private final double    WINCH_MAX = 116;        // Revolutions.
+    public final double     WINCH_MAX = -111;        // Revolutions.
     private final double    WINCH_MAX_POWER = .70;
+    
     public Winch()
     {
         Util.consoleLog();
@@ -47,16 +48,14 @@ public class Winch  extends SubsystemBase
 
         if (holdPosition) return;
 
-        // If power negative, which means go down, check limit switch stop if true.
+        // If power negative, which means go down, check encoder limit.
         // If power positive, which means go up, check limit switch for max height, stop if true.
         // Note we do not reset encoder at lower limit, only high limit and the encoder counts -
         // as we lower from high position.
 
-        if ((power < 0 && lowerLimitSwitch.get()) || (power > 0 && upperLimitSwitch.get())) power = 0;
-        
-        //if (power > 0 && upperLimitSwitch.get()) power = 0;
+        if (power > 0 && upperLimitSwitch.get()) power = 0;
 
-        //if ((power < 0 && encoder.getPosition() >= WINCH_MAX) || (power > 0 && encoder.getPosition() <= 0)) power = 0;
+        if (power < 0 && encoder.getPosition() <= WINCH_MAX) power = 0;
 
         if (upperLimitSwitch.get()) encoder.setPosition(0);
 
@@ -99,7 +98,7 @@ public class Winch  extends SubsystemBase
     }
 
     /**
-     * Reset Winch encoder to zero.
+     * Reset Winch encoder to zero. Only reset at high position.
      */
     public void resetPosition()
     {
@@ -110,13 +109,13 @@ public class Winch  extends SubsystemBase
      * Returns state of lower position limit switch.
      * @return True is at low position.
      */
-    public boolean getLowerSwitch()
-    {
-        return lowerLimitSwitch.get();
-    }
+    // public boolean getLowerSwitch()
+    // {
+    //     return lowerLimitSwitch.get();
+    // }
 
     /**
-     * Returns state of pperr position limit switch.
+     * Returns state of upper position limit switch.
      * @return True is at high position.
      */
     public boolean getUpperSwitch()

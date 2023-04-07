@@ -36,7 +36,8 @@ public class Arm extends SubsystemBase
     }
 
     /**
-     * Set Arm motor power.
+     * Set Arm motor power. Limited by max extension and zero extension
+     * and possibly by angle of winch.
      * @param power -1..+1, + is retract arm, - is extend arm.
      */
     public void setPower(double power)
@@ -51,25 +52,17 @@ public class Arm extends SubsystemBase
         // 1 instead of zero for safety.
         // If power negative, which means extend, check encoder for max extend, stop if there.
 
-        //if ((power > 0 && limitSwitch.get()) || (power < 0 && encoder.getPosition() >= ARM_MAX)) power = 0;
-
-        if ((power > 0 && encoder.getPosition() <= 1) || (power < 0 && encoder.getPosition() >= armMax)) power = 0;
-        
-        //if ((power < 0 && encoder.getPosition() >= ARM_MAX)) power = 0;
-
-        //if (limitSwitch.get()) resetPosition();
+        if ((power > 0 && getPosition() <= 1) || (power < 0 && getPosition() >= armMax)) power = 0;
 
         power = Util.squareInput(power);
 
         power = Util.clampValue(power, .75);
         
-        // Invert since they put the rope on the spools the wrong way...
-
-        motor.set(-power);
+        motor.set(power);
     }
 
     /**
-     * Set Arm motor power.
+     * Set Arm motor power. No limits.
      * @param power -1..+1, + is retract arm, - is extend arm.
      */
     public void setPowerNoLimit(double power)
@@ -78,9 +71,7 @@ public class Arm extends SubsystemBase
 
         power = Util.clampValue(power, .75);
         
-        // Invert since they put the rope on the spools the wrong way...
-
-        motor.set(-power);
+        motor.set(power);
     }
 
     public void stop()
@@ -94,7 +85,10 @@ public class Arm extends SubsystemBase
      */
     public double getPosition()
     {
-        return encoder.getPosition();
+        // Invert encoder since extending arm is measured as + encoder counts
+        // but we are applying - motor power to extend.
+
+        return -encoder.getPosition();
     }
 
     /**

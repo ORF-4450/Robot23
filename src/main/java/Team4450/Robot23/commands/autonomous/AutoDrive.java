@@ -82,7 +82,7 @@ public class AutoDrive extends CommandBase
 		
 		if (pid == Pid.on)
 		{
-			pidController = new SynchronousPID(kP, kI, kD);
+			pidController = new SynchronousPID("AutoDrive", kP, kI, kD);
 			
 			if (speed < 0)
 			{

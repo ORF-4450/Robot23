@@ -13,10 +13,7 @@ public class ExtendArm extends CommandBase
 {
     private final Arm       arm;
     private double          targetPostion = 0;    // Revolutions of motor.
-    //private SynchronousPID  controller = new SynchronousPID(.10, .001, .025);
-    //private SynchronousPID  controller = new SynchronousPID(.10, .005, .05);
-    private SynchronousPID  controller = new SynchronousPID(.25, .015, .05);
-    //private final double    tolerance = 2, maxPower = .40;
+    private SynchronousPID  controller = new SynchronousPID("Extend Arm", .25, .015, .05);
     private final double    tolerance = 2, maxPower = .75;
     private double          lastTimeCalled;
 

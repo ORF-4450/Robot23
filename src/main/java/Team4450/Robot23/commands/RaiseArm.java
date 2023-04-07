@@ -13,7 +13,7 @@ public class RaiseArm extends CommandBase
 {
     private final Winch     winch;
     private double          targetPostion = 100;    // Revolutions of motor.
-    private SynchronousPID  controller = new SynchronousPID(.01, 0, 0);
+    private SynchronousPID  controller = new SynchronousPID("RaiseArm", .01, 0, 0);
     private final double    tolerance = 5, maxPower = .30;
     private double          lastTimeCalled;
 

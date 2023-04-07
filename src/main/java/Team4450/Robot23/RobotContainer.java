@@ -81,16 +81,6 @@ public class RobotContainer
 
     // Persistent Commands.
 
-	//private DropArm				dropArm;
-	//private RetractArm			retractArm;
-	//private OpenClaw			openClaw;
-	//private RaiseArm			raiseArm1, raiseArm2;
-	//private LowerArm			lowerArm1;
-	//private CloseClaw			closeClawCube, closeClawCone;
-	//private ExtendArm			extendArm1, extendArm2;
-	//private RaiseArmStart		raiseArmStart;
-	//private HoldWinchPosition	holdWinchPosition;
-
 	// Some notes about Commands.
 	// When a Command is created with the New operator, its constructor is called. When the
 	// command is added to the Scheduler to be run, its initialize method is called. Then on
@@ -123,7 +113,7 @@ public class RobotContainer
 	// Navigation board.
 	public static NavX			navx;
 
-	private Thread      		monitorPDPThread;
+	private MonitorPDP     		monitorPDPThread;
 	//private MonitorCompressor	monitorCompressorThread;
     private CameraFeed			cameraFeed;
     
@@ -578,6 +568,8 @@ public class RobotContainer
 		
 		pdp.clearStickyFaults();
 		//pcm.clearAllStickyFaults();
+		
+		if (monitorPDPThread != null) monitorPDPThread.reset();
     }
          
     /**

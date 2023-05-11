@@ -164,7 +164,7 @@ public class DriveBase extends SubsystemBase
     //
     // Similar helpers also exist for Mk4 modules using the Mk4SwerveModuleHelper class.
 
-    // By default the swerve modules are created with the default Mk4ModuleConfiguration object.
+    // NOTE: By default the swerve modules are created with the default Mk4ModuleConfiguration object.
     // The Mk4ModuleConfiguration object contains all of the configurable tuning parameters available for
     // modules. If you wish to adjust this configuration, create a Mk4MmoduleConfiguration object here and
     // call it's methods to set the parameters you wish to adjust and then pass that configuration object 
@@ -320,12 +320,6 @@ public class DriveBase extends SubsystemBase
    */
   public void drive(double throttle, double strafe, double rotation)
   {
-    // Invert throttle & strafe to fix the problem with starting with robot
-    // facing backwards.
-
-    //throttle *= -1;
-    //strafe   *= -1;
-
     // Convert joystick % values into speeds.
 
     throttle *= MAX_VELOCITY_METERS_PER_SECOND;
@@ -372,7 +366,7 @@ public class DriveBase extends SubsystemBase
   }
 
   /**
-   * Set the swerve modules to their desired states;
+   * Set the swerve modules to desired states;
    * @param desiredStates Array of module states.
    */
   public void setModuleStates(SwerveModuleState[] states)

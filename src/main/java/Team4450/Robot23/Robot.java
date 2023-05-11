@@ -5,7 +5,7 @@ import static Team4450.Robot23.Constants.*;
 
 import Team4450.Lib.*;
 import Team4450.Robot23.wpilib.TimedRobot;
-
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -37,6 +37,8 @@ public class Robot extends TimedRobot
   {
     try {
       robot = this;   // Stored in Constants.
+      
+      //DataLogManager.start();
 
       LCD.clearAll();
       LCD.printLine(LCD_1, "Mode: RobotInit");

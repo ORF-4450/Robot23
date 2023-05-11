@@ -24,7 +24,7 @@ import edu.wpi.first.wpilibj.DriverStation;
  */
 public final class Constants
 {
-	public static String		PROGRAM_NAME = "RAC23-04.06.23-1";
+	public static String		PROGRAM_NAME = "RAC23-05.10.23-1";
 
 	public static Robot			robot;
 
@@ -91,7 +91,7 @@ public final class Constants
     // The maximum voltage that will be delivered to the drive motors. This can be reduced to cap the 
     // robot's maximum speed. Typically, this is useful during initial testing of the robot.
    
-	public static final double MAX_VOLTAGE = 9.0; //12.0;
+	public static final double MAX_VOLTAGE = 12.0;
 
 	public static final double  THROTTLE_DEADBAND = .05;
     public static final double  ROTATION_DEADBAND = .05;
@@ -99,9 +99,9 @@ public final class Constants
     // Slew is rate of change per second in whatever unit you are using.
     // We are doing % stick input so unit is 100% or 1. So a slew of 1 is
     // ramp to 1 (100% power) in 1 second. So a slew of 3 is 3 units per
-    // second or 1 unit in 1/3 second. So larger slew is faster ramp to
+    // second or 1 unit in 1/3 second. So larger slew is slower ramp to
     // 100%. 1.5 is 100% in 3/4 second. 2 is 100% in 1/2 second.
-    public static final double  THROTTLE_SLEW = 0.75;        
+    public static final double  THROTTLE_SLEW = 0.9;        
     public static final double  ROTATION_SLEW = 1.0;  //3.0;
 
     /**

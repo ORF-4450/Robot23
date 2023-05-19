@@ -309,7 +309,7 @@ public class DriveBase extends SubsystemBase
   }
 
   /**
-   * With the supplied directional speeds, generates a Chassis Speeds object which
+   * With the supplied directional % values, generates a Chassis Speeds object which
    * is used to command the swerve modules to move. This is how we drive
    * the robot. The motion specified continues until drive is called again.
    * This method is typically called by the driving command passing inputs (typically
@@ -366,7 +366,7 @@ public class DriveBase extends SubsystemBase
   }
 
   /**
-   * Set the swerve modules to desired states;
+   * Set the swerve modules to desired states.
    * @param desiredStates Array of module states.
    */
   public void setModuleStates(SwerveModuleState[] states)
@@ -374,6 +374,9 @@ public class DriveBase extends SubsystemBase
     
     SwerveDriveKinematics.desaturateWheelSpeeds(states, MAX_VELOCITY_METERS_PER_SECOND);
 
+    // Set the drive speed and direction of swerve module. Note that speed, as a % of max speed,
+    // is coverted to voltage as the same % of max voltage.
+    
     if (!autoReturnToZero && states[0].speedMetersPerSecond < 0.01)
         m_frontLeftModule.stop();
     else

@@ -2,8 +2,16 @@
   "NTProvider": {
     "types": {
       "/FMSInfo": "FMSInfo",
+      "/LiveWindow/Claw": "Subsystem",
       "/LiveWindow/DrivetrainSubsystem": "Subsystem",
+      "/LiveWindow/Ungrouped/DigitalInput[1]": "Digital Input",
+      "/LiveWindow/Ungrouped/DigitalInput[2]": "Digital Input",
+      "/LiveWindow/Ungrouped/PIDController[1]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[2]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[3]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[4]": "PIDController",
       "/LiveWindow/Ungrouped/Scheduler": "Scheduler",
+      "/LiveWindow/Ungrouped/Talon FX [15]": "Motor Controller",
       "/LiveWindow/Ungrouped/navX-Sensor[4]": "Gyro",
       "/SmartDashboard/Auto Program": "String Chooser",
       "/SmartDashboard/Field2d": "Field2d",
@@ -49,6 +57,15 @@
       "open": true
     },
     "transitory": {
+      "LiveWindow": {
+        "Ungrouped": {
+          "CloseClaw(cube)": {
+            "open": true
+          },
+          "open": true
+        },
+        "open": true
+      },
       "Shuffleboard": {
         "Drivetrain": {
           "Front Left Module": {

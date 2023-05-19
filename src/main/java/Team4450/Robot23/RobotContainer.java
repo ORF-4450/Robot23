@@ -408,10 +408,10 @@ public class RobotContainer
 		new Trigger(() -> utilityPad.getRightTrigger()).toggleOnTrue(new OpenClaw(claw));
 
 		// Start or stop (if already in progress), the command to close claw on cube.
-		new Trigger(() -> utilityPad.getLeftBumper()).toggleOnTrue(new  CloseClaw(claw, 3000));
+		new Trigger(() -> utilityPad.getLeftBumper()).toggleOnTrue(new  CloseClaw(claw, "cube", 3000));
 
 		// Start or stop (if already in progress), the command to close claw on cone.
-		new Trigger(() -> utilityPad.getLeftTrigger()).toggleOnTrue(new CloseClaw(claw, 13500));
+		new Trigger(() -> utilityPad.getLeftTrigger()).toggleOnTrue(new CloseClaw(claw, "cone", 13500));
 
 		// Start or stop (if already in progress), the command to lower the arm to scoring position 1.
 		//new Trigger(() -> utilityPad.getYButton()).toggleOnTrue(lowerArm1);

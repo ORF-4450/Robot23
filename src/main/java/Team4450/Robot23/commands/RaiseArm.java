@@ -14,7 +14,7 @@ public class RaiseArm extends CommandBase
     private final Winch     winch;
     private double          targetPostion = 100;    // Revolutions of motor.
     private SynchronousPID  controller = new SynchronousPID("RaiseArm", .01, 0, 0);
-    private final double    tolerance = 5, maxPower = .30;
+    private final double    tolerance = 1, maxPower = .30;
     private double          lastTimeCalled;
 
     /**
@@ -30,6 +30,8 @@ public class RaiseArm extends CommandBase
 
         this.targetPostion = targetPosition;
 
+        controller.setOutputRange(-maxPower, maxPower);
+
         addRequirements(winch);
     }
 
@@ -40,9 +42,9 @@ public class RaiseArm extends CommandBase
 
         controller.reset();
 
+        // Reset clears setpoint so we reestablish it here.
+        
         controller.setSetpoint(targetPostion);
-
-        controller.setOutputRange(-maxPower, maxPower);
 
         SmartDashboard.putBoolean("RaiseArm", true);
 

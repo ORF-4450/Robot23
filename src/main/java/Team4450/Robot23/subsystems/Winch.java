@@ -19,7 +19,7 @@ public class Winch  extends SubsystemBase
     //private DigitalInput    lowerLimitSwitch = new DigitalInput(WINCH_SWITCH_LOWER);
     private DigitalInput    upperLimitSwitch = new DigitalInput(WINCH_SWITCH_UPPER);
     private boolean         holdPosition;
-    private SynchronousPID  controller = new SynchronousPID("Winch", 0.1, 0, 0);
+    private SynchronousPID  controller = new SynchronousPID("Winch-Hold", 0.2, 0, 0);
     private final double    PID_MAXPOWER = .10;
     private double          lastTimeCalled;
 
@@ -29,6 +29,8 @@ public class Winch  extends SubsystemBase
     public Winch()
     {
         Util.consoleLog();
+
+        addChild("UpperLimitSwitch", upperLimitSwitch);
 
         // Winch will start at max up position so that is encoder zero. Encoder max will
         // be winch at lowest position.

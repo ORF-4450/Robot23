@@ -20,6 +20,9 @@ public class Claw extends SubsystemBase
     {
         Util.consoleLog();
 
+        addChild("TalonFX", motor);
+        addChild("Encoder", encoder);
+
         motor.setInverted(true);
 
         encoder.setInverted(true);

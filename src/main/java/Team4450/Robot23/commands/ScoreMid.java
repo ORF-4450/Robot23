@@ -90,6 +90,11 @@ public class ScoreMid extends CommandBase
         Util.consoleLog("interrupted=%b", interrupted);
 
         if (interrupted) commands.cancel();
+        
+        // Release the internal command lists since they are recreated each time this
+        // command is re-initialized.
+        //pCommands = null;
+        //commands = null;
 
         SmartDashboard.putBoolean("ScoreMid", false);
     }

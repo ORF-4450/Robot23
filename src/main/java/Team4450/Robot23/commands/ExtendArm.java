@@ -13,9 +13,8 @@ public class ExtendArm extends CommandBase
 {
     private final Arm       arm;
     private double          targetPostion = 0;    // Revolutions of motor.
-    //private SynchronousPID  controller = new SynchronousPID("Extend Arm", .25, .015, .05);
-    private SynchronousPID  controller = new SynchronousPID("Extend Arm", .03, .003, .003);
-    private final double    tolerance = 2, maxPower = .75;
+    private SynchronousPID  controller = new SynchronousPID("Extend Arm", .04, .004, .004);
+    private final double    tolerance = .5, maxPower = .80;
     private double          lastTimeCalled;
 
     /**
@@ -31,6 +30,8 @@ public class ExtendArm extends CommandBase
 
         this.targetPostion = targetPosition;
 
+        controller.setOutputRange(-maxPower, maxPower);
+
         addRequirements(arm);
     }
 
@@ -41,9 +42,9 @@ public class ExtendArm extends CommandBase
 
         controller.reset();
 
+        // Reset clears setpoint so we reestablish it here.
+        
         controller.setSetpoint(targetPostion);
-
-        controller.setOutputRange(-maxPower, maxPower);
 
         SmartDashboard.putBoolean("ExtendArm", true);
 

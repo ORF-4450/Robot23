@@ -13,8 +13,8 @@ public class LowerArm extends CommandBase
 {
     private final Winch     winch;
     private double          targetPostion = 100;    // Revolutions of motor.
-    private SynchronousPID  controller = new SynchronousPID("LowerArm", .02, 0, 0);
-    private final double    tolerance = 2, maxPower = .20;
+    private SynchronousPID  controller = new SynchronousPID("LowerArm", .03, .003, .003);
+    private final double    tolerance = .5, maxPower = .30;
     private double          lastTimeCalled;
 
     /**
@@ -30,6 +30,8 @@ public class LowerArm extends CommandBase
 
         this.targetPostion = targetPosition;
 
+        controller.setOutputRange(-maxPower, maxPower);
+
         addRequirements(winch);
     }
 
@@ -40,9 +42,9 @@ public class LowerArm extends CommandBase
 
         controller.reset();
 
+        // Reset clears setpoint so we reestablish it here.
+        
         controller.setSetpoint(targetPostion);
-
-        controller.setOutputRange(-maxPower, maxPower);
 
         SmartDashboard.putBoolean("LowerArm", true);
 

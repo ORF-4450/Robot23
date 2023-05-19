@@ -29,6 +29,8 @@ public class Arm extends SubsystemBase
 
         this.winch = winch;
 
+        addChild("ArmLimitSwitch", limitSwitch);
+
         // Arm will start all the way retracted and that is encoder zero.
         // Encoder max will represent arm fully extended.
 

@@ -18,8 +18,6 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 public class FeedStation extends CommandBase 
 {
     private final Winch             winch;
-    private final Arm               arm;
-    private final Claw              claw;
     private ParallelCommandGroup    pCommands; 
     private SequentialCommandGroup	commands;
 
@@ -28,16 +26,10 @@ public class FeedStation extends CommandBase
         Util.consoleLog();
 
         this.winch = winch;
-        this.arm = arm;
-        this.claw = claw;
 
         addRequirements(winch, arm, claw);
-    }
 
-    @Override
-    public void initialize()
-    {
-        Util.consoleLog();
+        // Build the command sequence to move arm to feed station position.
 		
 		commands = new SequentialCommandGroup();
 
@@ -47,7 +39,7 @@ public class FeedStation extends CommandBase
 
 		// First action is to lower the arm.
 
-		Command command = new LowerArm(winch, -37);
+		Command command = new LowerArm(winch, getName(), -37);
 
 		pCommands.addCommands(command);
         
@@ -59,7 +51,7 @@ public class FeedStation extends CommandBase
 
         // Next action is to extend arms.
 
-        command = new ExtendArm(arm, 35.5);
+        command = new ExtendArm(arm, getName(), 35.5);
 
 		pCommands.addCommands(command);
         
@@ -72,13 +64,18 @@ public class FeedStation extends CommandBase
         command = new InstantCommand(winch::toggleHoldPosition);
 
 		commands.addCommands(command);
+    }
+
+    @Override
+    public void initialize()
+    {
+        Util.consoleLog();
 
         // Run the commands, only if winch mostly up.
 
-        //if (winch.getUpperSwitch()) commands.schedule();
         if (winch.getPosition() > -5) commands.schedule();
 
-        SmartDashboard.putBoolean("FeedStation", true);
+        SmartDashboard.putBoolean(getName(), true);
     }
 
     @Override
@@ -97,7 +94,7 @@ public class FeedStation extends CommandBase
 
         if (interrupted) commands.cancel();
 
-        SmartDashboard.putBoolean("FeedStation", false);
+        SmartDashboard.putBoolean(getName(), false);
     }
 }
 

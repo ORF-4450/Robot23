@@ -13,9 +13,10 @@ public class ExtendArm extends CommandBase
 {
     private final Arm       arm;
     private double          targetPostion = 0;    // Revolutions of motor.
-    private SynchronousPID  controller = new SynchronousPID("Extend Arm", .04, .004, .004);
-    private final double    tolerance = .5, maxPower = .80;
+    private SynchronousPID  controller = new SynchronousPID("Extend Arm", .15, .015, .015);
+    private final double    tolerance = 0.5, maxPower = .80;
     private double          lastTimeCalled;
+    private static Integer  instances = 1;
 
     /**
      * Move arm to target position.
@@ -24,7 +25,20 @@ public class ExtendArm extends CommandBase
      */
     public ExtendArm(Arm arm, double targetPosition)
     {
-        Util.consoleLog();
+        this(arm, instances.toString(), targetPosition);
+
+        instances++;
+    }
+
+    /**
+     * Move arm to target position.
+     * @param arm Arm subsystem.
+     * @param name Title of command in LiveWindow.
+     * @param targetPosition Target position in arm motor revolutions.
+     */
+    public ExtendArm(Arm arm, String name, double targetPosition)
+    {
+        Util.consoleLog("%s: %.1f", name, targetPosition);
 
         this.arm = arm;
 
@@ -33,6 +47,10 @@ public class ExtendArm extends CommandBase
         controller.setOutputRange(-maxPower, maxPower);
 
         addRequirements(arm);
+        
+        setName(String.format("%s[%s]", getName(), name));
+
+        controller.setName(getName());
     }
 
     @Override
@@ -46,7 +64,7 @@ public class ExtendArm extends CommandBase
         
         controller.setSetpoint(targetPostion);
 
-        SmartDashboard.putBoolean("ExtendArm", true);
+        SmartDashboard.putBoolean(getName(), true);
 
         lastTimeCalled = Util.timeStamp();
     }
@@ -79,7 +97,7 @@ public class ExtendArm extends CommandBase
 
         Util.consoleLog("interrupted=%b", interrupted);
 
-        SmartDashboard.putBoolean("ExtendArm", false);
+        SmartDashboard.putBoolean(getName(), false);
     }
 }
 

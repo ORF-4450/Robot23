@@ -16,6 +16,7 @@ public class LowerArm extends CommandBase
     private SynchronousPID  controller = new SynchronousPID("LowerArm", .03, .003, .003);
     private final double    tolerance = .5, maxPower = .30;
     private double          lastTimeCalled;
+    private static Integer  instances = 1;
 
     /**
      * Move winch to target position going downward.
@@ -24,7 +25,20 @@ public class LowerArm extends CommandBase
      */
     public LowerArm(Winch winch, double targetPosition)
     {
-        Util.consoleLog();
+        this(winch, instances.toString(), targetPosition);
+
+        instances++;
+    }
+
+    /**
+     * Move winch to target position going downward.
+     * @param winch Winch subsystem.
+     * @param name Title of command in LiveWindow.
+     * @param targetPosition Target position in winch motor revolutions (-).
+     */
+    public LowerArm(Winch winch, String name, double targetPosition)
+    {
+        Util.consoleLog("%s: %.1f", name, targetPosition);
 
         this.winch = winch;
 
@@ -33,6 +47,10 @@ public class LowerArm extends CommandBase
         controller.setOutputRange(-maxPower, maxPower);
 
         addRequirements(winch);
+                
+        setName(String.format("%s[%s]", getName(), name));
+
+        controller.setName(getName());
     }
 
     @Override
@@ -46,7 +64,7 @@ public class LowerArm extends CommandBase
         
         controller.setSetpoint(targetPostion);
 
-        SmartDashboard.putBoolean("LowerArm", true);
+        SmartDashboard.putBoolean(getName(), true);
 
         lastTimeCalled = Util.timeStamp();
     }
@@ -76,6 +94,6 @@ public class LowerArm extends CommandBase
 
         Util.consoleLog("interrupted=%b", interrupted);
 
-        SmartDashboard.putBoolean("LowerArm", false);
+        SmartDashboard.putBoolean(getName(), false);
     }
 }

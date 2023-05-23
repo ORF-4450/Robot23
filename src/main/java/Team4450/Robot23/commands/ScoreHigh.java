@@ -32,12 +32,8 @@ public class ScoreHigh extends CommandBase
         this.claw = claw;
 
         addRequirements(winch, arm, claw);
-    }
 
-    @Override
-    public void initialize()
-    {
-        Util.consoleLog();
+        // Build the command sequence to move arm to high scoring position.
 		
 		commands = new SequentialCommandGroup();
 
@@ -47,13 +43,13 @@ public class ScoreHigh extends CommandBase
 
 		// First action is to lower the arm.
 
-		Command command = new LowerArm(winch, -45);
+		Command command = new LowerArm(winch, getName(), -45);
 
 		pCommands.addCommands(command);
 
         // Next action is to extend arms.
 
-        command = new ExtendArm(arm, 242);
+        command = new ExtendArm(arm, getName(), 242);
 
 		pCommands.addCommands(command);
 
@@ -66,13 +62,18 @@ public class ScoreHigh extends CommandBase
         command = new InstantCommand(winch::toggleHoldPosition);
 
 		commands.addCommands(command);
+    }
+
+    @Override
+    public void initialize()
+    {
+        Util.consoleLog();
 
         // Run the commands, only if winch mostly up.
 
-        //if (winch.getUpperSwitch()) commands.schedule();
         if (winch.getPosition() > -5) commands.schedule();
 
-        SmartDashboard.putBoolean("ScoreHigh", true);
+        SmartDashboard.putBoolean(getName(), true);
     }
 
     @Override
@@ -91,7 +92,7 @@ public class ScoreHigh extends CommandBase
 
         if (interrupted) commands.cancel();
 
-        SmartDashboard.putBoolean("ScoreHigh", false);
+        SmartDashboard.putBoolean(getName(), false);
     }
 }
 

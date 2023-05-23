@@ -18,8 +18,6 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 public class ScoreMid extends CommandBase 
 {
     private final Winch             winch;
-    private final Arm               arm;
-    private final Claw              claw;
     private SequentialCommandGroup	commands;
     private ParallelCommandGroup    pCommands; 
 
@@ -28,16 +26,10 @@ public class ScoreMid extends CommandBase
         Util.consoleLog();
 
         this.winch = winch;
-        this.arm = arm;
-        this.claw = claw;
 
         addRequirements(winch, arm, claw);
-    }
 
-    @Override
-    public void initialize()
-    {
-        Util.consoleLog();
+        // Build the command sequence to move arm to mid scoring position.
 		
 		commands = new SequentialCommandGroup();
 
@@ -47,13 +39,13 @@ public class ScoreMid extends CommandBase
 
 		// First action is to lower the arm.
 
-		Command command = new LowerArm(winch, -47);
+		Command command = new LowerArm(winch, getName(), -47);
 
 		pCommands.addCommands(command);
 
         // Next action is to extend arms.
 
-        command = new ExtendArm(arm, 105);
+        command = new ExtendArm(arm, getName(), 105);
 
 		pCommands.addCommands(command);
 
@@ -66,10 +58,15 @@ public class ScoreMid extends CommandBase
         command = new InstantCommand(winch::toggleHoldPosition);
 
 		commands.addCommands(command);
+    }
+
+    @Override
+    public void initialize()
+    {
+        Util.consoleLog();
 
         // Run the commands, only if winch mostly up.
 
-        //if (winch.getUpperSwitch()) commands.schedule();
         if (winch.getPosition() > -5) commands.schedule();
 
         SmartDashboard.putBoolean("ScoreMid", true);
@@ -91,11 +88,6 @@ public class ScoreMid extends CommandBase
 
         if (interrupted) commands.cancel();
         
-        // Release the internal command lists since they are recreated each time this
-        // command is re-initialized.
-        //pCommands = null;
-        //commands = null;
-
         SmartDashboard.putBoolean("ScoreMid", false);
     }
 }

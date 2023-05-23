@@ -13,7 +13,8 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
  * 
  * NOTE: this class has been modified from its original form to demonstrate how to
  * add the Sendable interface to a Command so we can adjust command parameters via
- * LiveWindow from one scheduling to the next.
+ * LiveWindow from one scheduling to the next. It also shows naming an instance of
+ * the command so the name shows in LiveWindow.
  */
 public class CloseClaw extends CommandBase  
 {
@@ -33,23 +34,7 @@ public class CloseClaw extends CommandBase
     {
         this(claw, instances.toString(), targetPosition);
 
-        //Util.consoleLog("%.1f", targetPosition);
-
-        // this.claw = claw;
-
-        // this.targetPostion = targetPosition;
-
-        // controller.setOutputRange(-maxPower, maxPower);
-
-        // controller.setSetpoint(targetPostion);
-
-        // addRequirements(claw);
-
-        //instances++;
-
-        //setName(String.format("%s(%d)", getName(), instances));
-
-        //SendableRegistry.addLW(this, getName());
+        instances++;
     }
 
     /**
@@ -72,9 +57,7 @@ public class CloseClaw extends CommandBase
 
         addRequirements(claw);
 
-        instances++;
-
-        setName(String.format("%s(%s)", getName(), name));
+        setName(String.format("%s[%s]", getName(), name));
 
         controller.setName(getName());
 
@@ -87,11 +70,15 @@ public class CloseClaw extends CommandBase
 
         controller.reset();
 
+        // We duplicate the range and setpoint initialization here so
+        // it can be changed from one scheduling to the next via Sendable,
+        // LiveWindow and OutlineViewer.
+
         controller.setOutputRange(-maxPower, maxPower);
 
         controller.setSetpoint(targetPostion);
 
-        SmartDashboard.putBoolean("CloseClaw", true);
+        SmartDashboard.putBoolean(getName(), true);
 
         lastTimeCalled = Util.timeStamp();
     }
@@ -126,7 +113,7 @@ public class CloseClaw extends CommandBase
 
         Util.consoleLog("interrupted=%b", interrupted);
 
-        SmartDashboard.putBoolean("CloseClaw", false);
+        SmartDashboard.putBoolean(getName(), false);
     }
 
     public void setTargetPosition(double position)

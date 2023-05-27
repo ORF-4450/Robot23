@@ -12,8 +12,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 public class LowerArm extends CommandBase 
 {
     private final Winch     winch;
-    private double          targetPostion = 100;    // Revolutions of motor.
-    private SynchronousPID  controller = new SynchronousPID("LowerArm", .03, .003, .003);
+    private SynchronousPID  controller = new SynchronousPID(getName(), .03, .003, .003);
     private final double    tolerance = .5, maxPower = .30;
     private double          lastTimeCalled;
     private static Integer  instances = 1;
@@ -41,8 +40,8 @@ public class LowerArm extends CommandBase
         Util.consoleLog("%s: %.1f", name, targetPosition);
 
         this.winch = winch;
-
-        this.targetPostion = targetPosition;
+        
+        controller.setSetpoint(targetPosition);
 
         controller.setOutputRange(-maxPower, maxPower);
 
@@ -59,10 +58,6 @@ public class LowerArm extends CommandBase
         Util.consoleLog();
 
         controller.reset();
-
-        // Reset clears setpoint so we reestablish it here.
-        
-        controller.setSetpoint(targetPostion);
 
         SmartDashboard.putBoolean(getName(), true);
 

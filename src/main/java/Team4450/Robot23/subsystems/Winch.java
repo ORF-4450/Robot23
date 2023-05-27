@@ -19,7 +19,7 @@ public class Winch  extends SubsystemBase
     //private DigitalInput    lowerLimitSwitch = new DigitalInput(WINCH_SWITCH_LOWER);
     private DigitalInput    upperLimitSwitch = new DigitalInput(WINCH_SWITCH_UPPER);
     private boolean         holdPosition;
-    private SynchronousPID  controller = new SynchronousPID("Winch-Hold", 0.2, 0, 0);
+    private SynchronousPID  controller = new SynchronousPID("WinchHold", 0.2, 0, 0);
     private final double    PID_MAXPOWER = .10;
     private double          lastTimeCalled;
 

@@ -69,7 +69,7 @@ public class ScoreMid extends CommandBase
 
         if (winch.getPosition() > -5) commands.schedule();
 
-        SmartDashboard.putBoolean("ScoreMid", true);
+        SmartDashboard.putBoolean(getName(), true);
     }
 
     @Override
@@ -88,7 +88,7 @@ public class ScoreMid extends CommandBase
 
         if (interrupted) commands.cancel();
         
-        SmartDashboard.putBoolean("ScoreMid", false);
+        SmartDashboard.putBoolean(getName(), false);
     }
 }
 

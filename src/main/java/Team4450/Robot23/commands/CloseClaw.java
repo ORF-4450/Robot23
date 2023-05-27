@@ -20,7 +20,7 @@ public class CloseClaw extends CommandBase
 {
     private final Claw      claw;
     private double          targetPostion = 3000;    // Default is cube encoder count.
-    private SynchronousPID  controller = new SynchronousPID("CloseClaw", .0001, .00001, 0);
+    private SynchronousPID  controller = new SynchronousPID(getName(), .0001, .00001, 0);
     private double          tolerance = 200, maxPower = .30;
     private double          lastTimeCalled;
     private static Integer  instances = 1;

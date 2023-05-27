@@ -30,6 +30,8 @@ public class HoldWinchPosition extends CommandBase
 
         this.winch = winch;
 
+        controller.setOutputRange(-maxPower, maxPower);
+
         addRequirements(winch);
     }
 
@@ -41,8 +43,6 @@ public class HoldWinchPosition extends CommandBase
         controller.reset();
 
         controller.setSetpoint(winch.getPosition());
-
-        controller.setOutputRange(-maxPower, maxPower);
 
         SmartDashboard.putBoolean("HoldWinch", true);
 

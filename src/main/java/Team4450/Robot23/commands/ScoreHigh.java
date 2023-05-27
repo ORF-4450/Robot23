@@ -18,8 +18,6 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 public class ScoreHigh extends CommandBase 
 {
     private final Winch             winch;
-    private final Arm               arm;
-    private final Claw              claw;
     private SequentialCommandGroup	commands;
     private ParallelCommandGroup    pCommands; 
 
@@ -28,8 +26,6 @@ public class ScoreHigh extends CommandBase
         Util.consoleLog();
 
         this.winch = winch;
-        this.arm = arm;
-        this.claw = claw;
 
         addRequirements(winch, arm, claw);
 

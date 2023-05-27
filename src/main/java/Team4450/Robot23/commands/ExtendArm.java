@@ -12,8 +12,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 public class ExtendArm extends CommandBase 
 {
     private final Arm       arm;
-    private double          targetPostion = 0;    // Revolutions of motor.
-    private SynchronousPID  controller = new SynchronousPID("Extend Arm", .15, .015, .015);
+    private SynchronousPID  controller = new SynchronousPID(getName(), .15, .015, .015);
     private final double    tolerance = 0.5, maxPower = .80;
     private double          lastTimeCalled;
     private static Integer  instances = 1;
@@ -42,9 +41,11 @@ public class ExtendArm extends CommandBase
 
         this.arm = arm;
 
-        this.targetPostion = targetPosition;
+        controller.setSetpoint(targetPosition);
 
         controller.setOutputRange(-maxPower, maxPower);
+
+        controller.setTolerance(tolerance);
 
         addRequirements(arm);
         
@@ -59,10 +60,6 @@ public class ExtendArm extends CommandBase
         Util.consoleLog();
 
         controller.reset();
-
-        // Reset clears setpoint so we reestablish it here.
-        
-        controller.setSetpoint(targetPostion);
 
         SmartDashboard.putBoolean(getName(), true);
 
@@ -87,7 +84,8 @@ public class ExtendArm extends CommandBase
     @Override
     public boolean isFinished()
     {
-        return controller.onTarget(tolerance); 
+        //return controller.onTarget(tolerance); 
+        return controller.onTarget(); 
     }
 
     @Override
@@ -100,4 +98,3 @@ public class ExtendArm extends CommandBase
         SmartDashboard.putBoolean(getName(), false);
     }
 }
-

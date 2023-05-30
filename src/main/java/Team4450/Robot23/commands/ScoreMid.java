@@ -49,7 +49,7 @@ public class ScoreMid extends CommandBase
 
 		pCommands.addCommands(command);
 
-        // Add paralell commands to sequential commands.
+        // Add parallel commands to sequential commands.
 
         commands.addCommands(pCommands);
 

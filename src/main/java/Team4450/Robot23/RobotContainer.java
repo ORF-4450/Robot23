@@ -44,6 +44,7 @@ import Team4450.Robot23.commands.autonomous.TestAuto4;
 import Team4450.Robot23.subsystems.Arm;
 import Team4450.Robot23.subsystems.Claw;
 import Team4450.Robot23.subsystems.DriveBase;
+import Team4450.Robot23.subsystems.Intake;
 import Team4450.Robot23.subsystems.ShuffleBoard;
 import Team4450.Robot23.subsystems.Winch;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -76,6 +77,7 @@ public class RobotContainer
 	public static Winch			winch;
 	public static Arm			arm;
 	public static Claw			claw;
+	public static Intake		intake;
 
 	// Subsystem Default Commands.
 
@@ -206,20 +208,9 @@ public class RobotContainer
 		winch = new Winch();
 		arm = new Arm(winch);
 		claw = new Claw();
+		intake = new Intake();
 
 		// Create any persistent commands.
-
-		//dropArm = new DropArm(winch, arm);
-		//retractArm = new RetractArm(arm);
-		//openClaw = new OpenClaw(claw);
-		//closeClawCone = new CloseClaw(claw, 13500);
-		//closeClawCube = new  CloseClaw(claw, 3000);
-		//raiseArm1 = new RaiseArm(winch, -63); // out
-		//raiseArm2 = new RaiseArm(winch, -63); // out
-		//lowerArm1 = new LowerArm(winch,-40);
-		//extendArm1 = new ExtendArm(arm, 100);
-		//extendArm2 = new ExtendArm(arm, 47); // out
-		//raiseArmStart = new RaiseArmStart(winch);
 
 		// Set any subsystem Default commands.
 

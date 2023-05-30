@@ -19,7 +19,7 @@ public class Winch  extends SubsystemBase
     //private DigitalInput    lowerLimitSwitch = new DigitalInput(WINCH_SWITCH_LOWER);
     private DigitalInput    upperLimitSwitch = new DigitalInput(WINCH_SWITCH_UPPER);
     private boolean         holdPosition;
-    private SynchronousPID  controller = new SynchronousPID("WinchHold", 0.2, 0, 0);
+    private SynchronousPID  controller = new SynchronousPID(getName() + "Hold", 0.2, 0, 0);
     private final double    PID_MAXPOWER = .10;
     private double          lastTimeCalled;
 
@@ -36,6 +36,10 @@ public class Winch  extends SubsystemBase
         // be winch at lowest position.
 
         encoder.setPosition(0);
+    
+        controller.setOutputRange(-PID_MAXPOWER, PID_MAXPOWER);
+
+        addChild(controller.getName(), controller);
     }
 
     /**
@@ -126,7 +130,7 @@ public class Winch  extends SubsystemBase
     }
 
     /**
-     * Starts or stop winch position hold function. Non xero winch input
+     * Starts or stop winch position hold function. Non zero input
      * power also turns off hold function.
      */
     public void toggleHoldPosition()
@@ -138,8 +142,6 @@ public class Winch  extends SubsystemBase
             controller.reset();
 
             controller.setSetpoint(getPosition());
-    
-            controller.setOutputRange(-PID_MAXPOWER, PID_MAXPOWER);
     
             lastTimeCalled = Util.timeStamp();
         }

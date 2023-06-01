@@ -24,6 +24,8 @@ import Team4450.Robot23.commands.DropArm;
 import Team4450.Robot23.commands.ExtendArm;
 import Team4450.Robot23.commands.FeedStation;
 import Team4450.Robot23.commands.HoldWinchPosition;
+import Team4450.Robot23.commands.IntakeCone;
+import Team4450.Robot23.commands.IntakeCube;
 import Team4450.Robot23.commands.LowerArm;
 import Team4450.Robot23.commands.OpenClaw;
 import Team4450.Robot23.commands.ParkWheels;
@@ -360,7 +362,7 @@ public class RobotContainer
     		.onTrue(new InstantCommand(driveBase::resetDistanceTraveled));
 
 		// Apply holding voltage to winch.
-		new Trigger(() -> driverPad.getRightTrigger())		//.toggleOnTrue(new HoldWinchPosition(winch));
+		new Trigger(() -> driverPad.getRightTrigger())		
 			.onTrue(new InstantCommand(winch::toggleHoldPosition));
 		
 		// -------- Utility pad buttons ----------
@@ -396,13 +398,13 @@ public class RobotContainer
 		new Trigger(() -> utilityPad.getPOVAngle(180)).toggleOnTrue(new RetractArm(arm));
 
 		// Start or stop (if already in progress), the command to fully open the claw.
-		new Trigger(() -> utilityPad.getRightTrigger()).toggleOnTrue(new OpenClaw(claw));
+		//new Trigger(() -> utilityPad.getRightTrigger()).toggleOnTrue(new OpenClaw(claw));
 
-		// Start or stop (if already in progress), the command to close claw on cube.
-		new Trigger(() -> utilityPad.getLeftBumper()).toggleOnTrue(new  CloseClaw(claw, "cube", 3000));
+		// Start or stop (if already in progress), the command to intake cube.
+		new Trigger(() -> utilityPad.getLeftBumper()).toggleOnTrue(new IntakeCube(intake));
 
-		// Start or stop (if already in progress), the command to close claw on cone.
-		new Trigger(() -> utilityPad.getLeftTrigger()).toggleOnTrue(new CloseClaw(claw, "cone", 13500));
+		// Start or stop (if already in progress), the command to intake cone.
+		new Trigger(() -> utilityPad.getLeftTrigger()).toggleOnTrue(new IntakeCone(intake));
 
 		// Start or stop (if already in progress), the command to lower the arm to scoring position 1.
 		//new Trigger(() -> utilityPad.getYButton()).toggleOnTrue(lowerArm1);

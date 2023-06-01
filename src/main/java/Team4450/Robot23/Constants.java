@@ -24,7 +24,7 @@ import edu.wpi.first.wpilibj.DriverStation;
  */
 public final class Constants
 {
-	public static String		PROGRAM_NAME = "RAC23-05.29.23-1";
+	public static String		PROGRAM_NAME = "RAC23-05.31.23-1";
 
 	public static Robot			robot;
 
@@ -38,7 +38,7 @@ public final class Constants
 	    
 	// Non-drive base motor controller port assignments
 
-    public static final int     CLAW_MOTOR = 15;
+    public static final int     CLAW_MOTOR = 150;
     public static final int     INTAKE_MOTOR = 15;
     public static final int     WINCH_MOTOR = 14;
     public static final int     ARM_MOTOR = 13;

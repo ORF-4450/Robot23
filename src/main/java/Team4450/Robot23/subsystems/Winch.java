@@ -76,6 +76,8 @@ public class Winch  extends SubsystemBase
         // Periodic function called on each scheduler loop so we can use
         // it to run the pid controller to hold position.
 
+        //if (holdPosition && robot.isDisabled()) toggleHoldPosition();   // Turn off hold when disabled.
+
         if (holdPosition)
         {
             double time = Util.getElaspedTime(lastTimeCalled);

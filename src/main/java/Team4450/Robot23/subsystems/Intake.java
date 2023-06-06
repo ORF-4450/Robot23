@@ -5,7 +5,6 @@ import Team4450.Lib.FXEncoder;
 import Team4450.Lib.SynchronousPID;
 import Team4450.Lib.Util;
 import edu.wpi.first.util.sendable.SendableBuilder;
-import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -17,10 +16,10 @@ public class Intake extends SubsystemBase
     private FXEncoder       encoder = new FXEncoder(motor);
 
     private final double    MAX_POWER = .50;
-    private double          maxCurrent, lastTimeCalled;
+    private double          maxCurrent, lastTimeCalled, lastPower;
     private boolean         holdPosition;
 
-    private SynchronousPID  controller = new SynchronousPID(getName() + "Hold", 0.0005, 0, 0);
+    private SynchronousPID  controller = new SynchronousPID(getName() + "Hold", 0.0001, 0, 0);
 
     public Intake()
     {
@@ -41,7 +40,7 @@ public class Intake extends SubsystemBase
         // Periodic function called on each scheduler loop so we can use
         // it to run the pid controller to hold position.
 
-        //if (holdPosition && robot.isDisabled()) toggleHoldPosition();   // Turn off hold when disabled.
+        if (holdPosition && robot.isDisabled()) toggleHoldPosition();   // Turn off hold when disabled.
 
         if (holdPosition)
         {
@@ -70,7 +69,24 @@ public class Intake extends SubsystemBase
         power = Util.clampValue(power, MAX_POWER);
         
         motor.set(power);
-   }
+
+        lastPower = power;
+    }
+
+    public void dropGamePiece()
+    {
+        if (!holdPosition) return;
+
+        setPower(-lastPower);
+        
+        try {
+            Thread.sleep(250);
+        }
+        catch (Exception e) {}
+
+        stop();
+    }
+   
 
     public void stop()
     {
@@ -118,6 +134,11 @@ public class Intake extends SubsystemBase
     public void resetMaxCurrent()
     {
         maxCurrent = 0;
+    }
+
+    public boolean isHoldingPosition()
+    {
+        return holdPosition;
     }
 
     /**

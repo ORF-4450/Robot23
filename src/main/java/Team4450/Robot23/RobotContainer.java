@@ -397,8 +397,8 @@ public class RobotContainer
 		// Start or stop (if already in progress), the command to retract arm to inward position.
 		new Trigger(() -> utilityPad.getPOVAngle(180)).toggleOnTrue(new RetractArm(arm));
 
-		// Start or stop (if already in progress), the command to fully open the claw.
-		//new Trigger(() -> utilityPad.getRightTrigger()).toggleOnTrue(new OpenClaw(claw));
+		// Start or stop (if already in progress), the command to drop loaded game piece.
+		new Trigger(() -> utilityPad.getRightTrigger()).toggleOnTrue(new InstantCommand(intake::dropGamePiece));
 
 		// Start or stop (if already in progress), the command to intake cube.
 		new Trigger(() -> utilityPad.getLeftBumper()).toggleOnTrue(new IntakeCube(intake));

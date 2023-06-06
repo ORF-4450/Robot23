@@ -31,6 +31,8 @@ public class IntakeCube extends CommandBase
     {
         Util.consoleLog();
 
+        if (intake.isHoldingPosition()) intake.toggleHoldPosition();
+
         intake.setPower(power);
 
         SmartDashboard.putBoolean(getName(), true);
@@ -47,7 +49,7 @@ public class IntakeCube extends CommandBase
     {
         intake.stop();
 
-        intake.toggleHoldPosition();
+        if (!interrupted) intake.toggleHoldPosition();
 
         Util.consoleLog("interrupted=%b", interrupted);
 

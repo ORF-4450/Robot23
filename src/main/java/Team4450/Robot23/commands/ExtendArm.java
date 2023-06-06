@@ -73,7 +73,6 @@ public class ExtendArm extends CommandBase
 
         lastTimeCalled = Util.timeStamp();
 
-        //double power = controller.calculate(arm.getPosition());
         double power = controller.calculate(arm.getPosition(), time);
 
         // Invert power because calculation above returns + result but arm

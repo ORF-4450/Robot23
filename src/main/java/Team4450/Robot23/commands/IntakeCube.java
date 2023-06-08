@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 public class IntakeCube extends CommandBase 
 {
     private final Intake    intake;
-    private double          power = .20, stallCurrent = 50;
+    private double          power = .15, stallCurrent = 50;
 
     public IntakeCube(Intake intake)
     {
@@ -56,12 +56,12 @@ public class IntakeCube extends CommandBase
         SmartDashboard.putBoolean(getName(), false);
     }
 
-    public void setStallCurrent(double current)
+    private void setStallCurrent(double current)
     {
         stallCurrent = current;
     }
 
-    public void setPower(double power)
+    private void setPower(double power)
     {
         this.power = power;
     }

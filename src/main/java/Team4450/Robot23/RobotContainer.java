@@ -252,7 +252,7 @@ public class RobotContainer
 
 		winch.setDefaultCommand(new DriveWinch(winch, () -> utilityPad.getRightY()));
 
-		claw.setDefaultCommand(new DriveClaw(claw, () -> utilityPad.getRightX()));
+		//claw.setDefaultCommand(new DriveClaw(claw, () -> utilityPad.getRightX()));
 
 		arm.setDefaultCommand(new DriveArm(arm, () -> utilityPad.getLeftY(), utilityPad));
 

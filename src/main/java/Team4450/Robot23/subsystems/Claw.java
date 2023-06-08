@@ -20,12 +20,12 @@ public class Claw extends SubsystemBase
     {
         Util.consoleLog();
 
-        addChild("TalonFX", motor);
-        addChild("Encoder", encoder);
+        // addChild("TalonFX", motor);
+        // addChild("Encoder", encoder);
 
-        motor.setInverted(true);
+        // motor.setInverted(true);
 
-        encoder.setInverted(true);
+        // encoder.setInverted(true);
 
         // Disable automatic application of limit switches connected to the TalonFX controller.
         // The JST wire used to connect the switches to the controller is wired as follows:
@@ -35,13 +35,13 @@ public class Claw extends SubsystemBase
         // reverse, which it turns out prevents claw from closing. So we turn auto application 
         // of the switches off and do it in our code below.
 
-        motor.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector,
-                                             LimitSwitchNormal.Disabled,
-                                             30);
+        // motor.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector,
+        //                                      LimitSwitchNormal.Disabled,
+        //                                      30);
 
-        motor.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector,
-                                             LimitSwitchNormal.Disabled,
-                                             30);
+        // motor.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector,
+        //                                      LimitSwitchNormal.Disabled,
+        //                                      30);
     }
 
     /**

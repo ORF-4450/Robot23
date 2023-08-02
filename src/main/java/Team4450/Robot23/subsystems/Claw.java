@@ -11,8 +11,8 @@ import static Team4450.Robot23.Constants.*;
 
 public class Claw extends SubsystemBase
 {
-    private WPI_TalonFX     motor = new WPI_TalonFX(CLAW_MOTOR);
-    private FXEncoder       encoder = new FXEncoder(motor);
+    private WPI_TalonFX     motor = null; //new WPI_TalonFX(CLAW_MOTOR);
+    private FXEncoder       encoder = null; //new FXEncoder(motor);
 
     private final double    CLAW_MAX = 13500;
 

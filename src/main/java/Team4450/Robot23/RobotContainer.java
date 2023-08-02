@@ -47,6 +47,7 @@ import Team4450.Robot23.subsystems.Arm;
 import Team4450.Robot23.subsystems.Claw;
 import Team4450.Robot23.subsystems.DriveBase;
 import Team4450.Robot23.subsystems.Intake;
+import Team4450.Robot23.subsystems.PhotonVision;
 import Team4450.Robot23.subsystems.ShuffleBoard;
 import Team4450.Robot23.subsystems.Winch;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -80,6 +81,7 @@ public class RobotContainer
 	public static Arm			arm;
 	public static Claw			claw;
 	public static Intake		intake;
+	public static PhotonVision	photonVision;
 
 	// Subsystem Default Commands.
 
@@ -211,6 +213,7 @@ public class RobotContainer
 		arm = new Arm(winch);
 		claw = new Claw();
 		intake = new Intake();
+		photonVision = new PhotonVision();
 
 		// Create any persistent commands.
 

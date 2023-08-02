@@ -184,7 +184,7 @@ public class Intake extends SubsystemBase
         {
             holdPosition = false;
 
-            Util.consoleLog("amps=%.1d max=%.1d  temp=%.0d max=%.0d", getMotorCurrent(), getMaxMotorCurrent(),
+            Util.consoleLog("amps=%.1f max=%.1f  temp=%.0f max=%.0f", getMotorCurrent(), getMaxMotorCurrent(),
                             getTemperature(), getMaxTemperature());
         }
 

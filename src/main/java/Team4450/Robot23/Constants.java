@@ -24,7 +24,7 @@ import edu.wpi.first.wpilibj.DriverStation;
  */
 public final class Constants
 {
-	public static String		PROGRAM_NAME = "RAC23-06.08.23-1";
+	public static String		PROGRAM_NAME = "RAC23-08.01.23-1";
 
 	public static Robot			robot;
 
@@ -92,7 +92,7 @@ public final class Constants
     // The maximum voltage that will be delivered to the drive motors. This can be reduced to cap the 
     // robot's maximum speed. Typically, this is useful during initial testing of the robot.
    
-	public static final double MAX_VOLTAGE = 6.0;
+	public static final double MAX_VOLTAGE = 8.0;
 
 	public static final double  THROTTLE_DEADBAND = .05;
     public static final double  ROTATION_DEADBAND = .05;

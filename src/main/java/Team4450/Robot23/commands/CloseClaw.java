@@ -129,6 +129,8 @@ public class CloseClaw extends CommandBase
     @Override
 	public void initSendable( SendableBuilder builder )
 	{
+        builder.setSmartDashboardType("Command");
+        
 		builder.addDoubleProperty("TargetPosition", ()-> targetPostion, this::setTargetPosition);
 		builder.addDoubleProperty("MaxPower", ()-> maxPower, this::setMaxPower);
 	}   	

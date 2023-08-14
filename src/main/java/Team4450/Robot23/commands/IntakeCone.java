@@ -69,6 +69,8 @@ public class IntakeCone extends CommandBase
     @Override
 	public void initSendable( SendableBuilder builder )
 	{
+        builder.setSmartDashboardType("Command");
+        
 		builder.addDoubleProperty("StallCurrent", ()-> stallCurrent, this::setStallCurrent);
 		builder.addDoubleProperty("Power", ()-> power, this::setPower);
 	}   

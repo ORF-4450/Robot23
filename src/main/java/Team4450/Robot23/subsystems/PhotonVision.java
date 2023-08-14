@@ -5,8 +5,10 @@ import static Team4450.Robot23.Constants.*;
 import org.photonvision.PhotonCamera;
 import org.photonvision.common.hardware.VisionLEDMode;
 import org.photonvision.targeting.PhotonPipelineResult;
+import org.photonvision.targeting.PhotonTrackedTarget;
 
 import Team4450.Lib.Util;
+import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class PhotonVision extends SubsystemBase
@@ -76,4 +78,26 @@ public class PhotonVision extends SubsystemBase
     {
         camera.takeOutputSnapshot();
     }
+        
+    @Override
+	public void initSendable( SendableBuilder builder )
+	{
+        //super.initSendable(builder);
+        builder.setSmartDashboardType("Subsystem");
+
+        PhotonPipelineResult result = getLatestResult();
+
+        builder.addBooleanProperty("has Targets", () -> result.hasTargets(), null);
+
+        if (result.hasTargets())
+        {
+            PhotonTrackedTarget target = result.getBestTarget();
+
+            builder.addDoubleProperty("target yaw", () -> target.getYaw(), null);
+            builder.addDoubleProperty("target area", () -> target.getArea(), null);
+        } else {
+            builder.addDoubleProperty("target yaw", () -> 0, null);
+            builder.addDoubleProperty("target area", () -> 0, null);
+        }
+	}   	
 }

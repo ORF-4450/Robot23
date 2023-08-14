@@ -69,7 +69,9 @@ public class IntakeCube extends CommandBase
     @Override
 	public void initSendable( SendableBuilder builder )
 	{
-		builder.addDoubleProperty("StallCurrent", ()-> stallCurrent, this::setStallCurrent);
+        builder.setSmartDashboardType("Command");
+
+        builder.addDoubleProperty("StallCurrent", ()-> stallCurrent, this::setStallCurrent);
 		builder.addDoubleProperty("Power", ()-> power, this::setPower);
 	}   
 }

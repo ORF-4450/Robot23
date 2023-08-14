@@ -15,6 +15,7 @@ import Team4450.Lib.XboxController;
 import Team4450.Lib.MonitorPDP;
 import Team4450.Lib.NavX;
 import Team4450.Lib.Util;
+import Team4450.Robot23.commands.AlignToTape;
 import Team4450.Robot23.commands.CloseClaw;
 import Team4450.Robot23.commands.DriveArm;
 import Team4450.Robot23.commands.DriveClaw;
@@ -367,6 +368,10 @@ public class RobotContainer
 		// Apply holding voltage to winch.
 		new Trigger(() -> driverPad.getRightTrigger())		
 			.onTrue(new InstantCommand(winch::toggleHoldPosition));
+
+		// Toggle automatic tape target alignment command.
+		new Trigger(() -> driverPad.getLeftTrigger())		
+			.toggleOnTrue(new AlignToTape(photonVision, driveBase));
 		
 		// -------- Utility pad buttons ----------
 		// What follows is an example from 2022 robot:

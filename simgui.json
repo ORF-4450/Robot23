@@ -2,8 +2,11 @@
   "NTProvider": {
     "types": {
       "/FMSInfo": "FMSInfo",
+      "/LiveWindow/Arm/ArmLimitSwitch": "Digital Input",
       "/LiveWindow/Claw": "Subsystem",
       "/LiveWindow/DrivetrainSubsystem": "Subsystem",
+      "/LiveWindow/Intake": "Subsystem",
+      "/LiveWindow/Intake/TalonFX": "Motor Controller",
       "/LiveWindow/Ungrouped/DigitalInput[1]": "Digital Input",
       "/LiveWindow/Ungrouped/DigitalInput[2]": "Digital Input",
       "/LiveWindow/Ungrouped/PIDController[1]": "PIDController",
@@ -13,6 +16,8 @@
       "/LiveWindow/Ungrouped/Scheduler": "Scheduler",
       "/LiveWindow/Ungrouped/Talon FX [15]": "Motor Controller",
       "/LiveWindow/Ungrouped/navX-Sensor[4]": "Gyro",
+      "/LiveWindow/Winch": "Subsystem",
+      "/LiveWindow/Winch/UpperLimitSwitch": "Digital Input",
       "/SmartDashboard/Auto Program": "String Chooser",
       "/SmartDashboard/Field2d": "Field2d",
       "/SmartDashboard/Gyro2": "Gyro",
@@ -58,8 +63,14 @@
     },
     "transitory": {
       "LiveWindow": {
+        "PhotonVision": {
+          "open": true
+        },
         "Ungrouped": {
           "CloseClaw(cube)": {
+            "open": true
+          },
+          "MonitorPDP": {
             "open": true
           },
           "open": true

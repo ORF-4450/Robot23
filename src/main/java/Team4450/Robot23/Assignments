@@ -75,6 +75,7 @@ X Axis                  Rotate.
 Driver GamePad - Buttons
 Button Name				Function
 -----------------------------------------------------------------------------------
+LEFT_TRIGGER            Toggle Auto Align to tape target.
 RIGHT_TRIGGER           Hold winch position.
 BACK                    Toggle field/robot orientation driving.
 START                   Align wheels to start position.

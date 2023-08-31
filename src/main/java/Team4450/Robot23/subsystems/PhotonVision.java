@@ -21,7 +21,7 @@ public class PhotonVision extends SubsystemBase
 
 	public PhotonVision() 
 	{
-        setLedMode(ledMode);
+        //setLedMode(ledMode);
 
 		Util.consoleLog("PhotonVision created!");
 	}

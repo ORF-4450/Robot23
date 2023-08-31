@@ -2,6 +2,7 @@ package Team4450.Robot23.commands;
 
 import Team4450.Lib.Util;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import Team4450.Robot23.RobotContainer;
 import Team4450.Robot23.subsystems.DriveBase;
 
 public class SetToStartPositionCommand extends CommandBase
@@ -26,7 +27,10 @@ public class SetToStartPositionCommand extends CommandBase
     
         startTime = Util.timeStamp();
 
-        driveBase.setModulesToStartPosition();;
+        driveBase.setModulesToStartPosition();
+
+        // Set navx yaw zero to align with facing down the field.
+        RobotContainer.navx.resetYaw();
     }
     
     @Override

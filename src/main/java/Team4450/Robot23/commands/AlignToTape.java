@@ -6,31 +6,51 @@ import org.photonvision.targeting.PhotonTrackedTarget;
 
 import Team4450.Lib.SynchronousPID;
 import Team4450.Lib.Util;
+import Team4450.Robot23.RobotContainer;
 import Team4450.Robot23.subsystems.DriveBase;
 import Team4450.Robot23.subsystems.PhotonVision;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
+/**
+ * This command uses target information returned by Photovision API, which
+ * returns data from PV running on the LimeLight. The targets yaw from the
+ * camera and the area of the target in the field of vision are used by two
+ * PID controllers to move the robot side to side and foward to scoring
+ * position. A third controller uses the NavX yaw to correct any rotation
+ * away from facing the scoring wall.
+ */
 public class AlignToTape extends CommandBase
 {
     private PhotonVision            photonVision;
     private PhotonPipelineResult    result;
     private DriveBase               driveBase;
-    private SynchronousPID          controller = new SynchronousPID("AlignToTape", 0.04, 0, 0);
-    private final double            maxSpeed = .15, tolerance = 0.5;
-    private double                  startTime, lastYaw;
-    private boolean                 finished;
-
+    private SynchronousPID          strafeController = new SynchronousPID("AlignToTape", 0.03, .003, .003);
+    private SynchronousPID          throttleController = new SynchronousPID("DriveToTape", 0.20, .020, .020);
+    private SynchronousPID          rotateController = new SynchronousPID("RotateToTape", 0.03, .003, .003);
+    private final double            maxSpeed = .15;
+    private double                  startTime, lastYaw, lastArea;
+    private boolean                 strafeLocked, throttleLocked, noTarget;
 
     public AlignToTape(PhotonVision photonVision, DriveBase driveBase)
     {
         this.photonVision = photonVision;
 
-        controller.setOutputRange(-maxSpeed, maxSpeed);
+        strafeController.setOutputRange(-maxSpeed, maxSpeed);
+        throttleController.setOutputRange(-maxSpeed, maxSpeed);
+        throttleController.setOutputRange(-maxSpeed, maxSpeed);
 
-        controller.setSetpoint(0);
+        // We want zero yaw to target as reported by PV.
+        strafeController.setSetpoint(0);
+        strafeController.setTolerance(.5);
 
-        controller.setTolerance(tolerance);
+        // We want to be close enough so that target is .80% of field
+        // of vision as reported by PV.
+        throttleController.setSetpoint(.80);
+        throttleController.setTolerance(.05);
+
+        rotateController.setSetpoint(0);
+        rotateController.setTolerance(.5);
 
         this.driveBase = driveBase;
 
@@ -49,10 +69,14 @@ public class AlignToTape extends CommandBase
 
         startTime = Util.timeStamp();
 
-        controller.reset();
+        strafeController.reset();
+        throttleController.reset();
+        rotateController.reset();
 
-        finished = false;
-        lastYaw = Double.NaN;
+        noTarget = strafeLocked = throttleLocked = false;
+        lastArea = lastYaw = Double.NaN;
+
+        //driveBase.setBrakeMode(true);
 
         SmartDashboard.putBoolean("AutoTarget", true);
         SmartDashboard.putBoolean("TargetLocked", false);
@@ -75,39 +99,58 @@ public class AlignToTape extends CommandBase
 
             lastYaw = target.getYaw();
 
-            double speed = controller.calculate(lastYaw);
-
-            if (controller.onTarget()) 
+            double strafe = strafeController.calculate(lastYaw);
+    
+            if (strafeController.onTarget()) 
             {
-                speed = 0;
-                finished =  true;
-                SmartDashboard.putBoolean("TargetLocked", true);
+                strafe = 0;
+                strafeLocked = true;
+            }
+    
+            SmartDashboard.putNumber("Strafe Speed", strafe);
+    
+            Util.consoleLog("yaw=%.2f  strafe=%.4f", lastYaw, strafe);
+            
+            lastArea = target.getArea();
+
+            double throttle = throttleController.calculate(lastArea);
+
+            if (throttleController.onTarget()) 
+            {
+                throttle = 0;
+                throttleLocked =  true;
             }
 
-            SmartDashboard.putNumber("Align Speed", speed);
+            SmartDashboard.putNumber("Throttle Speed", throttle);
 
-            Util.consoleLog("yaw=%.2f  speed=%.4f", lastYaw, speed);
+            double yaw = RobotContainer.navx.getYaw();
 
-            driveBase.drive(0, -speed, 0);
+            double rotate = rotateController.calculate(yaw);
+
+            Util.consoleLog("yaw=%.2f  strafe=%.4f  area=%.2f  throttle=%.4f", lastYaw, strafe, lastArea, throttle);
+
+            driveBase.drive(-throttle, -strafe, rotate);
         } else 
-            finished = true;    // No targets visible.
+            noTarget = true;    // No targets visible.
     }
 
     @Override
     public boolean isFinished()
     {
-        return finished;
+        return noTarget | (strafeLocked && throttleLocked);
     }
 
     @Override
     public void end(boolean interrupted) 
     {
-        Util.consoleLog("interrupted=%b, last Yaw=%.2f", interrupted, lastYaw);
+        Util.consoleLog("interrupted=%b, last Yaw=%.2f,  area=%.2f", interrupted, lastYaw, lastArea);
 
         driveBase.stop();
 
         //photonVision.setLedMode(VisionLEDMode.kOff);
 
         SmartDashboard.putBoolean("AutoTarget", false);
+
+        if (strafeLocked && throttleLocked) SmartDashboard.putBoolean("TargetLocked", true);
     }
 }

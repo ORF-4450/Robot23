@@ -13,9 +13,11 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class PhotonVision extends SubsystemBase
 {
-    private PhotonCamera    camera = new PhotonCamera("4450-LL");
+    private PhotonCamera            camera = new PhotonCamera("LL-4450");
     
-    private VisionLEDMode   ledMode = VisionLEDMode.kOff;
+    private PhotonPipelineResult    latestResult;
+    
+    private VisionLEDMode           ledMode = VisionLEDMode.kOff;
 
 	public PhotonVision() 
 	{
@@ -30,7 +32,48 @@ public class PhotonVision extends SubsystemBase
      */
     public PhotonPipelineResult getLatestResult()
     {
-        return camera.getLatestResult();
+        latestResult = camera.getLatestResult();
+
+        return latestResult;
+    }
+
+    /**
+     * Indicates if lastest camera results list contains targets. Must 
+     * call getLatestResult() before calling.
+     * @return True if targets available, false if not.
+     */
+    public boolean hasTargets()
+    {
+        getLatestResult();
+
+        return latestResult.hasTargets();
+    }
+
+    /**
+     * Returns the yaw angle of the best target in the latest camera results
+     * list. Must call hasTargets() before calling this function.
+     * @return Best target yaw value from straight ahead or zero. -yaw means
+     * target is left of robot center.
+     */
+    public double getYaw()
+    {
+        if (hasTargets()) 
+            return latestResult.getBestTarget().getYaw();
+        else
+            return 0;
+    }
+
+    /**
+     * Returns the area of the best target in the latest camera results
+     * list. Must call hasTargets() before calling this function.
+     * @return Best target area value.
+     */
+    public double getArea()
+    {
+        if (hasTargets()) 
+            return latestResult.getBestTarget().getArea();
+        else
+            return 0;
     }
  
     /**
@@ -85,19 +128,8 @@ public class PhotonVision extends SubsystemBase
         //super.initSendable(builder);
         builder.setSmartDashboardType("Subsystem");
 
-        PhotonPipelineResult result = getLatestResult();
-
-        builder.addBooleanProperty("has Targets", () -> result.hasTargets(), null);
-
-        if (result.hasTargets())
-        {
-            PhotonTrackedTarget target = result.getBestTarget();
-
-            builder.addDoubleProperty("target yaw", () -> target.getYaw(), null);
-            builder.addDoubleProperty("target area", () -> target.getArea(), null);
-        } else {
-            builder.addDoubleProperty("target yaw", () -> 0, null);
-            builder.addDoubleProperty("target area", () -> 0, null);
-        }
+        builder.addBooleanProperty("has Targets", () -> hasTargets(), null);
+        builder.addDoubleProperty("target yaw", () -> getYaw(), null);
+        builder.addDoubleProperty("target area", () -> getArea(), null);
 	}   	
 }

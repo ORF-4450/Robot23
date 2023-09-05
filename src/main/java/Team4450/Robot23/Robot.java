@@ -8,6 +8,7 @@ import Team4450.Robot23.wpilib.TimedRobot;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.WPILibVersion;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -113,7 +114,7 @@ public class Robot extends TimedRobot
 
       // Log RobotLib and WPILib versions we are using. Note Robolib WPILib version can be different
       // than robot WPILib version. Should be the same for best results.
-      Util.consoleLog("Robot WPILib=%s", WPILibVersion.Version);
+      Util.consoleLog("Robot WPILib=%s  Java=%s", WPILibVersion.Version, System.getProperty("java.version"));
       Util.consoleLog("RobotLib=%s", LibraryVersion.version);
 
       // Note: Any Sendables added to SmartDashboard or Shuffleboard are sent to the DS on every

@@ -28,7 +28,7 @@ public class AlignToTape extends CommandBase
     private SynchronousPID          strafeController = new SynchronousPID("AlignToTape", 0.03, .003, .003);
     private SynchronousPID          throttleController = new SynchronousPID("DriveToTape", 0.20, .020, .020);
     private SynchronousPID          rotateController = new SynchronousPID("RotateToTape", 0.03, .003, .003);
-    private final double            maxSpeed = .15;
+    private final double            maxSpeed = .15, maxRotate = .10;
     private double                  startTime, lastYaw, lastArea;
     private boolean                 strafeLocked, throttleLocked, noTarget;
 
@@ -38,11 +38,11 @@ public class AlignToTape extends CommandBase
 
         strafeController.setOutputRange(-maxSpeed, maxSpeed);
         throttleController.setOutputRange(-maxSpeed, maxSpeed);
-        throttleController.setOutputRange(-maxSpeed, maxSpeed);
+        rotateController.setOutputRange(-maxRotate, maxRotate);
 
         // We want zero yaw to target as reported by PV.
         strafeController.setSetpoint(0);
-        strafeController.setTolerance(.5);
+        strafeController.setTolerance(.25);
 
         // We want to be close enough so that target is .80% of field
         // of vision as reported by PV.
@@ -68,6 +68,7 @@ public class AlignToTape extends CommandBase
         photonVision.setLedMode(VisionLEDMode.kOn);
 
         startTime = Util.timeStamp();
+        
 
         strafeController.reset();
         throttleController.reset();
@@ -75,8 +76,6 @@ public class AlignToTape extends CommandBase
 
         noTarget = strafeLocked = throttleLocked = false;
         lastArea = lastYaw = Double.NaN;
-
-        //driveBase.setBrakeMode(true);
 
         SmartDashboard.putBoolean("AutoTarget", true);
         SmartDashboard.putBoolean("TargetLocked", false);
@@ -99,7 +98,7 @@ public class AlignToTape extends CommandBase
 
             lastYaw = target.getYaw();
 
-            double strafe = strafeController.calculate(lastYaw);
+            double strafe = -strafeController.calculate(lastYaw);
     
             if (strafeController.onTarget()) 
             {
@@ -109,11 +108,11 @@ public class AlignToTape extends CommandBase
     
             SmartDashboard.putNumber("Strafe Speed", strafe);
     
-            Util.consoleLog("yaw=%.2f  strafe=%.4f", lastYaw, strafe);
+            //Util.consoleLog("yaw=%.2f  strafe=%.4f", lastYaw, strafe);
             
             lastArea = target.getArea();
 
-            double throttle = throttleController.calculate(lastArea);
+            double throttle = -throttleController.calculate(lastArea);
 
             if (throttleController.onTarget()) 
             {
@@ -125,11 +124,14 @@ public class AlignToTape extends CommandBase
 
             double yaw = RobotContainer.navx.getYaw();
 
-            double rotate = rotateController.calculate(yaw);
+            double rotate = -rotateController.calculate(yaw);
 
-            Util.consoleLog("yaw=%.2f  strafe=%.4f  area=%.2f  throttle=%.4f", lastYaw, strafe, lastArea, throttle);
+            Util.consoleLog("yaw=%.2f  strafe=%.3f  area=%.2f  throttle=%.3f  navx=%.1f  rot=%.2f", lastYaw, strafe, 
+                            lastArea, throttle, yaw, rotate);
 
-            driveBase.drive(-throttle, -strafe, rotate);
+            //rotate = 0;
+
+            driveBase.drive(throttle, strafe, rotate);
         } else 
             noTarget = true;    // No targets visible.
     }

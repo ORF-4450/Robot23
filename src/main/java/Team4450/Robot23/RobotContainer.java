@@ -357,6 +357,10 @@ public class RobotContainer
 		new Trigger(() -> driverPad.getBButton())
     		.onTrue(new InstantCommand(driveBase::toggleBrakeMode));
 
+		// Toggle Limelight LED.
+		new Trigger(() -> driverPad.getAButton())
+    		.onTrue(new InstantCommand(photonVision::toggleLedMode));
+
 		// Set drive wheels to parking orientation.
 		new Trigger(() -> driverPad.getXButton())
     		.onTrue(new ParkWheels(driveBase));

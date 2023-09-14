@@ -21,7 +21,7 @@ public class PhotonVision extends SubsystemBase
 
 	public PhotonVision() 
 	{
-        //setLedMode(ledMode);
+        setLedMode(ledMode);
 
 		Util.consoleLog("PhotonVision created!");
 	}
@@ -82,6 +82,8 @@ public class PhotonVision extends SubsystemBase
      */
     public void selectPipeline(int index)
     {
+        Util.consoleLog("%d", index);
+
         camera.setPipelineIndex(index);
     }
 
@@ -91,6 +93,8 @@ public class PhotonVision extends SubsystemBase
      */
     public void setLedMode(VisionLEDMode mode)
     {
+        Util.consoleLog("%d", mode.value);
+
         camera.setLED(mode);
     }
 
@@ -112,6 +116,8 @@ public class PhotonVision extends SubsystemBase
      */
     public void inputSnapshot()
     {
+        Util.consoleLog();
+
         camera.takeInputSnapshot();
     }
 
@@ -119,6 +125,8 @@ public class PhotonVision extends SubsystemBase
      * Save post-processed image from camera stream.
      */    public void outputSnapshot()
     {
+        Util.consoleLog();
+
         camera.takeOutputSnapshot();
     }
         

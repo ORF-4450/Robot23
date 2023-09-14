@@ -55,6 +55,9 @@
     }
   },
   "NetworkTables": {
+    "Retained Values": {
+      "open": false
+    },
     "SmartDashboard": {
       "Field2d": {
         "open": true
@@ -93,6 +96,9 @@
         "Version": {
           "open": true
         },
+        "open": true
+      },
+      "photonvision": {
         "open": true
       }
     }

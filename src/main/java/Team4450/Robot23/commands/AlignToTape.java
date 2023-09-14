@@ -25,9 +25,9 @@ public class AlignToTape extends CommandBase
     private PhotonVision            photonVision;
     private PhotonPipelineResult    result;
     private DriveBase               driveBase;
-    private SynchronousPID          strafeController = new SynchronousPID("AlignToTape", 0.03, .003, .003);
-    private SynchronousPID          throttleController = new SynchronousPID("DriveToTape", 0.20, .020, .020);
-    private SynchronousPID          rotateController = new SynchronousPID("RotateToTape", 0.03, .003, .003);
+    private SynchronousPID          strafeController = new SynchronousPID("AlignToTape", .03, .003, .003);
+    private SynchronousPID          throttleController = new SynchronousPID("DriveToTape", 1.0, .1, .01);
+    private SynchronousPID          rotateController = new SynchronousPID("RotateToTape", .03, .003, .003);
     private final double            maxSpeed = .15, maxRotate = .10;
     private double                  startTime, lastYaw, lastArea;
     private boolean                 strafeLocked, throttleLocked, noTarget;
@@ -47,7 +47,7 @@ public class AlignToTape extends CommandBase
         // We want to be close enough so that target is .80% of field
         // of vision as reported by PV.
         throttleController.setSetpoint(.80);
-        throttleController.setTolerance(.05);
+        throttleController.setTolerance(.03);
 
         rotateController.setSetpoint(0);
         rotateController.setTolerance(.5);
@@ -69,7 +69,6 @@ public class AlignToTape extends CommandBase
 
         startTime = Util.timeStamp();
         
-
         strafeController.reset();
         throttleController.reset();
         rotateController.reset();
@@ -145,11 +144,12 @@ public class AlignToTape extends CommandBase
     @Override
     public void end(boolean interrupted) 
     {
-        Util.consoleLog("interrupted=%b, last Yaw=%.2f,  area=%.2f", interrupted, lastYaw, lastArea);
+        Util.consoleLog("interrupted=%b, last Yaw=%.2f, area=%.2f, not=%b, lock=%b", interrupted, lastYaw, 
+                        lastArea, noTarget, (strafeLocked && throttleLocked));
 
         driveBase.stop();
 
-        //photonVision.setLedMode(VisionLEDMode.kOff);
+        photonVision.setLedMode(VisionLEDMode.kOff);
 
         SmartDashboard.putBoolean("AutoTarget", false);
 

@@ -86,6 +86,7 @@ POV_180                 Reset simulated yaw.
 POV_270                 Reset simulated distance traveled.
 B                       Toggle drive wheel brake mode.
 X                       Drivebase park mode.
+A                       Toggle Limelight LED.
 
 
 Utility GamePad - Left Joystick

@@ -28,7 +28,7 @@ public class AlignToTape extends CommandBase
     private SynchronousPID          strafeController = new SynchronousPID("AlignToTape", .03, .003, .003);
     private SynchronousPID          throttleController = new SynchronousPID("DriveToTape", 1.0, .1, .01);
     private SynchronousPID          rotateController = new SynchronousPID("RotateToTape", .03, .003, .003);
-    private final double            maxSpeed = .15, maxRotate = .10;
+    private final double            maxSpeed = .20, maxRotate = .10;
     private double                  startTime, lastYaw, lastArea;
     private boolean                 strafeLocked, throttleLocked, noTarget;
 
@@ -83,11 +83,19 @@ public class AlignToTape extends CommandBase
     @Override
     public void execute()
     {
+        double  throttle = 0, strafe = 0;
+
         // Delay first test for targets to allow PV to get going after we turn on LED
         // and process the next camera image. Otherwise we call getLatestResult before
         // there is one available and result is null.
 
         if (Util.getElaspedTime(startTime) < 0.75) return;
+
+        // Note: We strafe, that is align our position side to side and correct rotation
+        // as a first phase, no throttle (forward). When strafe is completed (we are aligned),
+        // then we apply throttle to move forward to to the scoring position. All this because
+        // when we were doing all 3 motions simultaneously, we would drive forward before 
+        // alignment was finished and hit the platform legs while still moving sideways.
 
         result = photonVision.getLatestResult();
 
@@ -95,29 +103,33 @@ public class AlignToTape extends CommandBase
         {
             PhotonTrackedTarget target = result.getBestTarget();
 
-            lastYaw = target.getYaw();
-
-            double strafe = -strafeController.calculate(lastYaw);
-    
-            if (strafeController.onTarget()) 
+            if (!strafeLocked)
             {
-                strafe = 0;
-                strafeLocked = true;
+                lastYaw = target.getYaw();
+
+                strafe = -strafeController.calculate(lastYaw);
+        
+                if (strafeController.onTarget()) 
+                {
+                    strafe = 0;
+                    strafeLocked = true;
+                }
             }
-    
+
             SmartDashboard.putNumber("Strafe Speed", strafe);
     
-            //Util.consoleLog("yaw=%.2f  strafe=%.4f", lastYaw, strafe);
-            
-            lastArea = target.getArea();
-
-            double throttle = -throttleController.calculate(lastArea);
-
-            if (throttleController.onTarget()) 
+            if (strafeLocked)
             {
-                throttle = 0;
-                throttleLocked =  true;
-            }
+                lastArea = target.getArea();
+
+                throttle = -throttleController.calculate(lastArea);
+
+                if (throttleController.onTarget()) 
+                {
+                    throttle = 0;
+                    throttleLocked =  true;
+                }
+            } 
 
             SmartDashboard.putNumber("Throttle Speed", throttle);
 
@@ -127,8 +139,6 @@ public class AlignToTape extends CommandBase
 
             Util.consoleLog("yaw=%.2f  strafe=%.3f  area=%.2f  throttle=%.3f  navx=%.1f  rot=%.2f", lastYaw, strafe, 
                             lastArea, throttle, yaw, rotate);
-
-            //rotate = 0;
 
             driveBase.drive(throttle, strafe, rotate);
         } else 

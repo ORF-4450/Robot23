@@ -16,6 +16,7 @@ import Team4450.Lib.MonitorPDP;
 import Team4450.Lib.NavX;
 import Team4450.Lib.Util;
 import Team4450.Robot23.commands.AlignToTape;
+import Team4450.Robot23.commands.AlignToTapeLL;
 import Team4450.Robot23.commands.CloseClaw;
 import Team4450.Robot23.commands.DriveArm;
 import Team4450.Robot23.commands.DriveClaw;
@@ -48,6 +49,7 @@ import Team4450.Robot23.subsystems.Arm;
 import Team4450.Robot23.subsystems.Claw;
 import Team4450.Robot23.subsystems.DriveBase;
 import Team4450.Robot23.subsystems.Intake;
+import Team4450.Robot23.subsystems.LimeLight;
 import Team4450.Robot23.subsystems.PhotonVision;
 import Team4450.Robot23.subsystems.ShuffleBoard;
 import Team4450.Robot23.subsystems.Winch;
@@ -83,6 +85,7 @@ public class RobotContainer
 	public static Claw			claw;
 	public static Intake		intake;
 	public static PhotonVision	photonVision;
+	public static LimeLight		limeLight;
 
 	// Subsystem Default Commands.
 
@@ -215,6 +218,7 @@ public class RobotContainer
 		claw = new Claw();
 		intake = new Intake();
 		photonVision = new PhotonVision();
+		limeLight = new LimeLight();
 
 		// Create any persistent commands.
 
@@ -376,6 +380,9 @@ public class RobotContainer
 		// Toggle automatic tape target alignment command.
 		new Trigger(() -> driverPad.getLeftTrigger())		
 			.toggleOnTrue(new AlignToTape(photonVision, driveBase));
+
+		// new Trigger(() -> driverPad.getLeftTrigger())		
+		// 	.toggleOnTrue(new AlignToTapeLL(limeLight, driveBase));		
 		
 		// -------- Utility pad buttons ----------
 		// What follows is an example from 2022 robot:

@@ -37,12 +37,12 @@ public class LimeLight extends SubsystemBase
 	NetworkTableEntry		ty0 = networkTable.getEntry("ty0");
 	NetworkTableEntry		ledMode = networkTable.getEntry("ledMode");
 	NetworkTableEntry		camMode = networkTable.getEntry("camMode");
-	NetworkTableEntry		pipeline = networkTable.getEntry("pipline");
+	NetworkTableEntry		pipeline = networkTable.getEntry("pipeline");
 	NetworkTableEntry		streamMode = networkTable.getEntry("stream");
 
 	public enum LedMode
 	{
-		pipline,
+		pipeline,
 		off,
 		blink,
 		on;
@@ -64,11 +64,13 @@ public class LimeLight extends SubsystemBase
 	public LimeLight() 
 	{
 		Util.consoleLog("LimeLight created!");
+
+		setLedMode(LedMode.off);
 	}
 	
 	/**
-	 * Save snapshots to LimeLight storage.
-	 * @param save True to save snapshots.
+	 * Save snapshot to LimeLight storage.
+	 * @param save True to save one snapshot.
 	 */
 	public void saveSnapshots(boolean save)
 	{
@@ -82,10 +84,11 @@ public class LimeLight extends SubsystemBase
 	@Override
 	public void periodic() 
 	{
-        if (robot.isEnabled())
-            setLedMode(LedMode.on);
-        else
-            setLedMode(LedMode.off);
+		// Commands that use this class will control the LED.
+        // if (robot.isEnabled())
+        //     setLedMode(LedMode.on);
+        // else
+        //     setLedMode(LedMode.off);
     }
 
 	/**
@@ -176,6 +179,15 @@ public class LimeLight extends SubsystemBase
 		return null;
 	}
 
+	/**
+	 * Return a measure of the target area (size). 
+	 * @return The distance as a % of the total field view area that
+	 * is occupied by the target area.
+	 */
+	public double getArea()
+	{
+		return area;
+	}
 	/**
 	 * Return a measure of the target distance. 
 	 * @return The distance as a % of the total field view area that

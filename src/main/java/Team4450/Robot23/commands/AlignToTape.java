@@ -25,10 +25,10 @@ public class AlignToTape extends CommandBase
     private PhotonVision            photonVision;
     private PhotonPipelineResult    result;
     private DriveBase               driveBase;
-    private SynchronousPID          strafeController = new SynchronousPID("AlignToTape", .03, .003, .003);
-    private SynchronousPID          throttleController = new SynchronousPID("DriveToTape", 1.0, .1, .01);
+    private SynchronousPID          strafeController = new SynchronousPID("AlignToTape", .03, .03, .003);
+    private SynchronousPID          throttleController = new SynchronousPID("DriveToTape", 1.2, .1, .01);
     private SynchronousPID          rotateController = new SynchronousPID("RotateToTape", .03, .003, .003);
-    private final double            maxSpeed = .20, maxRotate = .10;
+    private final double            maxSpeed = .25, maxRotate = .10;
     private double                  startTime, lastYaw, lastArea;
     private boolean                 strafeLocked, throttleLocked, noTarget;
 
@@ -42,12 +42,12 @@ public class AlignToTape extends CommandBase
 
         // We want zero yaw to target as reported by PV.
         strafeController.setSetpoint(0);
-        strafeController.setTolerance(.25);
+        strafeController.setTolerance(.05);
 
-        // We want to be close enough so that target is .80% of field
+        // We want to be close enough so that target is .32% of field
         // of vision as reported by PV.
-        throttleController.setSetpoint(.80);
-        throttleController.setTolerance(.03);
+        throttleController.setSetpoint(.33); // .33 = 960x720 .80 = 1920x1080
+        throttleController.setTolerance(.01);
 
         rotateController.setSetpoint(0);
         rotateController.setTolerance(.5);
@@ -103,10 +103,10 @@ public class AlignToTape extends CommandBase
         {
             PhotonTrackedTarget target = result.getBestTarget();
 
+            lastYaw = target.getYaw();
+
             if (!strafeLocked)
             {
-                lastYaw = target.getYaw();
-
                 strafe = -strafeController.calculate(lastYaw);
         
                 if (strafeController.onTarget()) 
@@ -154,7 +154,7 @@ public class AlignToTape extends CommandBase
     @Override
     public void end(boolean interrupted) 
     {
-        Util.consoleLog("interrupted=%b, last Yaw=%.2f, area=%.2f, not=%b, lock=%b", interrupted, lastYaw, 
+        Util.consoleLog("interrupted=%b, last Yaw=%.2f, area=%.2f, notarget=%b, locked=%b", interrupted, lastYaw, 
                         lastArea, noTarget, (strafeLocked && throttleLocked));
 
         driveBase.stop();

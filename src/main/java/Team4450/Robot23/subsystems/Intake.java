@@ -205,7 +205,7 @@ public class Intake extends SubsystemBase
 
 		builder.addDoubleProperty("1 Motor Current", this::getMotorCurrent, null);
 		builder.addDoubleProperty("2 Max Motor Current", this::getMaxMotorCurrent, null);
-		builder.addDoubleProperty("3 Motor temp", this::getTemperature, null);
-		builder.addDoubleProperty("4 Max Motor temp", this::getMaxTemperature, null);
+		//builder.addDoubleProperty("3 Motor temp", this::getTemperature, null);
+		//builder.addDoubleProperty("4 Max Motor temp", this::getMaxTemperature, null);
 	}   	
 }

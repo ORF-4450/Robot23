@@ -96,6 +96,8 @@ public class PhotonVision extends SubsystemBase
         Util.consoleLog("%d", mode.value);
 
         camera.setLED(mode);
+
+        ledMode = mode;
     }
 
     /**

@@ -7,14 +7,13 @@ import Team4450.Lib.Util;
 import Team4450.Robot23.RobotContainer;
 import Team4450.Robot23.commands.ExtendArm;
 import Team4450.Robot23.commands.LowerArm;
-import Team4450.Robot23.commands.OpenClaw;
 import Team4450.Robot23.commands.RaiseArm;
 import Team4450.Robot23.commands.RetractArm;
 import Team4450.Robot23.commands.autonomous.AutoDriveProfiled.Brakes;
 import Team4450.Robot23.commands.autonomous.AutoDriveProfiled.StopMotors;
 import Team4450.Robot23.subsystems.Arm;
-import Team4450.Robot23.subsystems.Claw;
 import Team4450.Robot23.subsystems.DriveBase;
+import Team4450.Robot23.subsystems.Intake;
 import Team4450.Robot23.subsystems.Winch;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -35,7 +34,7 @@ public class AutoScoreHigh extends CommandBase
 	private final DriveBase         driveBase;
     private final Winch             winch;
     private final Arm               arm;
-    private final Claw              claw;
+    private final Intake            intake;
 	
 	private SequentialCommandGroup	commands = null;
 	private	Pose2d					startingPose;
@@ -47,11 +46,11 @@ public class AutoScoreHigh extends CommandBase
 	 * @param driveBase DriveBase subsystem used by this command to drive the robot.
      * @param winch Winch subsystem.
      * @param arm Arm subsystem.
-     * @param claw Claw subsystem.
+     * @param intake Intake subsystem.
      * @param startingPose Start location pose.
      * @param startingPoseIndex The starting pose position 0-9.
 	 */
-	public AutoScoreHigh(DriveBase driveBase, Winch winch, Arm arm, Claw claw,
+	public AutoScoreHigh(DriveBase driveBase, Winch winch, Arm arm, Intake intake,
                          Pose2d startingPose, Integer startingPoseIndex) 
 	{
 		Util.consoleLog("idx=%d", startingPoseIndex);
@@ -59,7 +58,7 @@ public class AutoScoreHigh extends CommandBase
 		this.driveBase = driveBase;
         this.winch = winch;
         this.arm = arm;
-        this.claw = claw;
+        this.intake = intake;
 
 		this.startingPose = startingPose;
 
@@ -70,7 +69,7 @@ public class AutoScoreHigh extends CommandBase
 		// commands added to the command list. If any command in the
 		// list also requires the drive base it will cause this command
 		// to be interrupted.
-		addRequirements(this.driveBase, this.winch, this.arm, this.claw);
+		addRequirements(this.driveBase, this.winch, this.arm, this.intake);
 	}
 	
 	/**
@@ -119,13 +118,13 @@ public class AutoScoreHigh extends CommandBase
 
 		// First action is to lower the arm.
 
-		Command command = new LowerArm(winch, -45);
+		Command command = new LowerArm(winch, -227);	// -45
 
 		pCommands.addCommands(command);
 
         // Next action is to extend arms.
 
-        command = new ExtendArm(arm, 242);
+        command = new ExtendArm(arm, 104);	// 242
 
 		pCommands.addCommands(command);
 
@@ -133,9 +132,9 @@ public class AutoScoreHigh extends CommandBase
 
         commands.addCommands(pCommands);
 
-        // Next sequential action is to open the claw.
+        // Next sequential action is to drop the game piece.
 
-        command = new OpenClaw(claw);
+        command = new InstantCommand(intake::dropGamePiece);
 
 		commands.addCommands(command);
 

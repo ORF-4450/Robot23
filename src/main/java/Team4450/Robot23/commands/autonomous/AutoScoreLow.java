@@ -13,12 +13,14 @@ import Team4450.Robot23.commands.autonomous.AutoDriveProfiled.StopMotors;
 import Team4450.Robot23.subsystems.Arm;
 import Team4450.Robot23.subsystems.Claw;
 import Team4450.Robot23.subsystems.DriveBase;
+import Team4450.Robot23.subsystems.Intake;
 import Team4450.Robot23.subsystems.Winch;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
@@ -32,7 +34,7 @@ public class AutoScoreLow extends CommandBase
 	private final DriveBase         driveBase;
     private final Winch             winch;
     private final Arm               arm;
-    private final Claw              claw;
+    private final Intake            intake;
 	
 	private SequentialCommandGroup	commands = null;
 	private Command					command = null;
@@ -45,11 +47,11 @@ public class AutoScoreLow extends CommandBase
 	 * @param driveBase DriveBase subsystem used by this command to drive the robot.
      * @param winch Winch subsystem.
      * @param arm Arm subsystem.
-     * @param claw Claw subsystem.
+     * @param intake Intake subsystem.
      * @param startingPose Start location pose.
      * @param startingPoseIndex The starting pose position 0-9.
 	 */
-	public AutoScoreLow(DriveBase driveBase, Winch winch, Arm arm, Claw claw,
+	public AutoScoreLow(DriveBase driveBase, Winch winch, Arm arm, Intake intake,
                     Pose2d startingPose, Integer startingPoseIndex) 
 	{
 		Util.consoleLog("idx=%d", startingPoseIndex);
@@ -57,7 +59,7 @@ public class AutoScoreLow extends CommandBase
 		this.driveBase = driveBase;
         this.winch = winch;
         this.arm = arm;
-        this.claw = claw;
+        this.intake = intake;
 
 		this.startingPose = startingPose;
 
@@ -68,7 +70,7 @@ public class AutoScoreLow extends CommandBase
 		// commands added to the command list. If any command in the
 		// list also requires the drive base it will cause this command
 		// to be interrupted.
-		addRequirements(this.driveBase, this.winch, this.arm, this.claw);
+		addRequirements(this.driveBase, this.winch, this.arm, this.intake);
 	}
 	
 	/**
@@ -115,15 +117,13 @@ public class AutoScoreLow extends CommandBase
 		
         // First action is to lower the arm to drop position.
 
-//        command = new DropArm(winch, arm);
-
 		command = new LowerArm(winch, -68);
 
 		commands.addCommands(command);
 
-        // Next action is to open the claw.
+        // Next action is to drop the game piece.
 
-        command = new OpenClaw(claw);
+        command = new InstantCommand(intake::dropGamePiece);
 
 		commands.addCommands(command);
 

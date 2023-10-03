@@ -2,7 +2,7 @@ package Team4450.Robot23.commands;
 
 import Team4450.Lib.Util;
 import Team4450.Robot23.subsystems.Arm;
-import Team4450.Robot23.subsystems.Claw;
+import Team4450.Robot23.subsystems.Intake;
 import Team4450.Robot23.subsystems.Winch;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -21,13 +21,13 @@ public class ScoreHigh extends CommandBase
     private SequentialCommandGroup	commands;
     private ParallelCommandGroup    pCommands; 
 
-    public ScoreHigh(Winch winch, Arm arm, Claw claw)
+    public ScoreHigh(Winch winch, Arm arm, Intake intake)
     {
         Util.consoleLog();
 
         this.winch = winch;
 
-        addRequirements(winch, arm, claw);
+        addRequirements(winch, arm, intake);
 
         // Build the command sequence to move arm to high scoring position.
 		

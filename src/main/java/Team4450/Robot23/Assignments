@@ -108,9 +108,9 @@ Button Name				Function
 POV_0                   Raise arm to starting position.
 POV_180                 Fully retract arm.
 POV_270                 Reset Arm encoder to zero.
-RIGHT_TRIGGER           Fully open claw.
-LEFT_TRIGGER            Close claw on cone.
-LEFT_BUMPER             Close claw on cube.
+RIGHT_TRIGGER           Drop game piece.
+LEFT_TRIGGER            Intake cone.
+LEFT_BUMPER             Intake cube.
 RIGHT_BUMPER            Drop arm to lowest position.
 X                       Move arm to feed station position.
 Y                       Move arm to high scoring position.

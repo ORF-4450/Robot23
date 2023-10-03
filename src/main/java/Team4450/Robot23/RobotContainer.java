@@ -82,7 +82,7 @@ public class RobotContainer
 	public static DriveBase 	driveBase;
 	public static Winch			winch;
 	public static Arm			arm;
-	public static Claw			claw;
+	//public static Claw			claw;
 	public static Intake		intake;
 	public static PhotonVision	photonVision;
 	public static LimeLight		limeLight;
@@ -215,7 +215,7 @@ public class RobotContainer
 		driveBase = new DriveBase();
 		winch = new Winch();
 		arm = new Arm(winch);
-		claw = new Claw();
+		//claw = new Claw();
 		intake = new Intake();
 		photonVision = new PhotonVision();
 		limeLight = new LimeLight();
@@ -429,17 +429,16 @@ public class RobotContainer
 		//new Trigger(() -> utilityPad.getYButton()).toggleOnTrue(lowerArm1);
 
 		// Start or stop (if already in progress), the command to position for feeder pickup.
-		new Trigger(() -> utilityPad.getXButton()).toggleOnTrue(new FeedStation(winch, arm, claw));
+		new Trigger(() -> utilityPad.getXButton()).toggleOnTrue(new FeedStation(winch, arm, intake));
 
 		// Start or stop (if already in progress), the command to extend the arm to mid scoring position.
-		new Trigger(() -> utilityPad.getBButton()).toggleOnTrue(new ScoreMid(winch, arm, claw));
+		new Trigger(() -> utilityPad.getBButton()).toggleOnTrue(new ScoreMid(winch, arm, intake));
 
 		// Start or stop (if already in progress), the command to extend the arm to high scoring position.
-		new Trigger(() -> utilityPad.getYButton()).toggleOnTrue(new ScoreHigh(winch, arm, claw));
+		new Trigger(() -> utilityPad.getYButton()).toggleOnTrue(new ScoreHigh(winch, arm, intake));
 
 		new Trigger(() -> utilityPad.getPOVAngle(270)).onTrue(new InstantCommand(arm::resetPosition));
 		//new Trigger(() -> utilityPad.getYButton()).onTrue(new InstantCommand(winch::resetPosition));
-		//new Trigger(() -> utilityPad.getBButton()).onTrue(new InstantCommand(claw::resetPosition));
 	}
 
 	/**
@@ -483,15 +482,15 @@ public class RobotContainer
 				break;
  				
 			case ScoreLow:
-				autoCommand = new AutoScoreLow(driveBase, winch, arm, claw, startingPose, startingPoseIndex);
+				autoCommand = new AutoScoreLow(driveBase, winch, arm, intake, startingPose, startingPoseIndex);
 				break;
  				
 			case ScoreHigh:
-				autoCommand = new AutoScoreHigh(driveBase, winch, arm, claw, startingPose, startingPoseIndex);
+				autoCommand = new AutoScoreHigh(driveBase, winch, arm, intake, startingPose, startingPoseIndex);
 				break;
  				
 			case ScoreHighNoDrive:
-				autoCommand = new AutoScoreHighNoDrive(driveBase, winch, arm, claw, startingPose, startingPoseIndex);
+				autoCommand = new AutoScoreHighNoDrive(driveBase, winch, arm, intake, startingPose, startingPoseIndex);
 				break;
 				
 			case TestAuto1:

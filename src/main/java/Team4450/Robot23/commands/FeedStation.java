@@ -3,6 +3,7 @@ package Team4450.Robot23.commands;
 import Team4450.Lib.Util;
 import Team4450.Robot23.subsystems.Arm;
 import Team4450.Robot23.subsystems.Claw;
+import Team4450.Robot23.subsystems.Intake;
 import Team4450.Robot23.subsystems.Winch;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -21,13 +22,13 @@ public class FeedStation extends CommandBase
     private ParallelCommandGroup    pCommands; 
     private SequentialCommandGroup	commands;
 
-    public FeedStation(Winch winch, Arm arm, Claw claw)
+    public FeedStation(Winch winch, Arm arm, Intake intake)
     {
         Util.consoleLog();
 
         this.winch = winch;
 
-        addRequirements(winch, arm, claw);
+        addRequirements(winch, arm, intake);
 
         // Build the command sequence to move arm to feed station position.
 		
@@ -39,19 +40,13 @@ public class FeedStation extends CommandBase
 
 		// First action is to lower the arm.
 
-		Command command = new LowerArm(winch, getName(), -37);
+		Command command = new LowerArm(winch, getName(), -22.4);
 
 		pCommands.addCommands(command);
         
-        // Next action is to open the claw.
-
-        command = new OpenClaw(claw);
-
-		pCommands.addCommands(command);
-
         // Next action is to extend arms.
 
-        command = new ExtendArm(arm, getName(), 35.5);
+        command = new ExtendArm(arm, getName(), 70.0);
 
 		pCommands.addCommands(command);
         
@@ -64,6 +59,12 @@ public class FeedStation extends CommandBase
         command = new InstantCommand(winch::toggleHoldPosition);
 
 		commands.addCommands(command);
+
+        // Now turn on intake rollers.
+
+        command = new IntakeCone(intake);
+
+        commands.addCommands(command);
     }
 
     @Override

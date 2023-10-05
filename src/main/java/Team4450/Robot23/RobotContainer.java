@@ -435,10 +435,13 @@ public class RobotContainer
 		new Trigger(() -> utilityPad.getBButton()).toggleOnTrue(new ScoreMid(winch, arm, intake));
 
 		// Start or stop (if already in progress), the command to extend the arm to high scoring position.
-		new Trigger(() -> utilityPad.getYButton()).toggleOnTrue(new ScoreHigh(winch, arm, intake));
+		//new Trigger(() -> utilityPad.getYButton()).toggleOnTrue(new ScoreHigh(winch, arm, intake));
 
-		new Trigger(() -> utilityPad.getPOVAngle(270)).onTrue(new InstantCommand(arm::resetPosition));
-		//new Trigger(() -> utilityPad.getYButton()).onTrue(new InstantCommand(winch::resetPosition));
+		// Apply holding voltage to winch.
+		new Trigger(() -> utilityPad.getYButton()).onTrue(new InstantCommand(winch::toggleHoldPosition));
+
+		//new Trigger(() -> utilityPad.getPOVAngle(270)).onTrue(new InstantCommand(arm::resetPosition));
+		new Trigger(() -> utilityPad.getBackButton()).onTrue(new InstantCommand(winch::resetPosition));
 	}
 
 	/**

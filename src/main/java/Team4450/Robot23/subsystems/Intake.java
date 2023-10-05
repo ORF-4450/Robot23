@@ -17,7 +17,7 @@ public class Intake extends SubsystemBase
     private FXEncoder       encoder = new FXEncoder(motor);
 
     private final double    MAX_POWER = .50;
-    private double          maxCurrent, lastTimeCalled, lastPower, maxTemp;
+    private double          maxCurrent, lastTimeCalled, lastPower = -.15, maxTemp;
     private boolean         holdPosition;
 
     private SynchronousPID  controller = new SynchronousPID(getName() + "Hold", 0.0001, 0, 0);
@@ -80,6 +80,8 @@ public class Intake extends SubsystemBase
 
     public void dropGamePiece()
     {
+        Util.consoleLog("hold=%b", holdPosition);
+
         if (!holdPosition) return;
 
         setPower(-lastPower);
@@ -165,7 +167,7 @@ public class Intake extends SubsystemBase
     }
 
     /**
-     * Starts or stop winch position hold function. Non zero input
+     * Starts or stop intake position hold function. Non zero input
      * power also turns off hold function.
      */
     public void toggleHoldPosition()

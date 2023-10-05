@@ -68,9 +68,9 @@ public class AutoScoreLow extends CommandBase
 		// Use addRequirements() here to declare subsystem dependencies.
 		// This command is requiring the driveBase for itself and all 
 		// commands added to the command list. If any command in the
-		// list also requires the drive base it will cause this command
-		// to be interrupted.
-		addRequirements(this.driveBase, this.winch, this.arm, this.intake);
+		// list also requires the drive base, or any other subsystem
+		// listed here, it will cause this command to be interrupted.
+		addRequirements(this.driveBase); //, this.winch, this.arm, this.intake);
 	}
 	
 	/**
@@ -115,9 +115,15 @@ public class AutoScoreLow extends CommandBase
 		
 		commands = new SequentialCommandGroup();
 		
-        // First action is to lower the arm to drop position.
+        // First action is to hold the game piece.
 
-		command = new LowerArm(winch, -68);
+        command = new InstantCommand(intake::toggleHoldPosition);
+
+		commands.addCommands(command);
+
+        // Next action is to lower the arm to drop position.
+
+		command = new LowerArm(winch, -60);	//-68
 
 		commands.addCommands(command);
 
@@ -168,6 +174,8 @@ public class AutoScoreLow extends CommandBase
 	public void end(boolean interrupted) 
 	{
 		Util.consoleLog("interrupted=%b", interrupted);
+
+		if (interrupted) commands.cancel();
 		
 		driveBase.drive(0, 0, 0);
 		

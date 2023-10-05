@@ -39,13 +39,13 @@ public class ScoreMid extends CommandBase
 
 		// First action is to lower the arm.
 
-		Command command = new LowerArm(winch, getName(), -227);  // -47
+		Command command = new LowerArm(winch, getName(), -51);  // -47
 
 		pCommands.addCommands(command);
 
         // Next action is to extend arms.
 
-        command = new ExtendArm(arm, getName(), 104);   // 105
+        command = new ExtendArm(arm, getName(), 114);   // 105
 
 		pCommands.addCommands(command);
 

@@ -24,7 +24,7 @@ import edu.wpi.first.wpilibj.DriverStation;
  */
 public final class Constants
 {
-	public static String		PROGRAM_NAME = "RAC23-10.03.23-1";
+	public static String		PROGRAM_NAME = "RAC23-10.04.23-1";
 
 	public static Robot			robot;
 
@@ -99,8 +99,8 @@ public final class Constants
 
     // Slew is rate of change per second in whatever unit you are using.
     // We are doing % stick input so unit is 100% or 1. So a slew of 1 is
-    // ramp to 1 (100% power) in 1 second. So a slew of 3 is 3 units per
-    // second or 1 unit in 1/3 second. So larger slew is slower ramp to
+    // ramp to 1 unit (100% power) in 1 second. So a slew of 3 is 3 units per
+    // second or 1 unit in 1/3 second. So larger slew is quicker ramp to
     // 100%. 1.5 is 100% in 3/4 second. 2 is 100% in 1/2 second.
     public static final double  THROTTLE_SLEW = 0.9;        
     public static final double  ROTATION_SLEW = 1.0;  //3.0;

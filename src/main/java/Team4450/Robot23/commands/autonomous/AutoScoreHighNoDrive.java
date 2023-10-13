@@ -67,7 +67,7 @@ public class AutoScoreHighNoDrive extends CommandBase
 		// commands added to the command list. If any command in the
 		// list also requires the drive base, or any other subsystem
 		// listed here, it will cause this command to be interrupted.
-		addRequirements(this.driveBase); //, this.winch, this.arm, this.intake);
+		addRequirements(this.driveBase); 
 	}
 	
 	/**

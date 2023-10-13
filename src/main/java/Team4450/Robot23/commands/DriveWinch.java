@@ -25,6 +25,12 @@ public class DriveWinch extends CommandBase
     }
 
     @Override
+    public void initialize()
+    {
+        Util.consoleLog();
+    }
+
+    @Override
     public void execute()
     {
         double power = deadband(winchSupplier.getAsDouble(), THROTTLE_DEADBAND);

@@ -99,7 +99,7 @@ Utility GamePad - Right Joystick
 Button Name				Function
 -----------------------------------------------------------------------------------
 Y Axis                  Winch Up/down, pull back (+) is up.
-X Axis                  Claw Open/Close, right (+) is close, left is open.
+//X Axis                  Claw Open/Close, right (+) is close, left is open.
 
 
 Utility GamePad - Buttons

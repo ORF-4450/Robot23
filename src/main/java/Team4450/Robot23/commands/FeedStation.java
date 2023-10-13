@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 /**
  * Lower arm from fully up position to correct height for feeder station,
- * open the claw and extend the arms to grab position in prep for pickup.
+ * extend the arms to grab position in prep for pickup. Turn on intake.
  */
 public class FeedStation extends CommandBase 
 {
@@ -28,7 +28,7 @@ public class FeedStation extends CommandBase
 
         this.winch = winch;
 
-        addRequirements(winch, arm, intake);
+        //addRequirements(intake);
 
         // Build the command sequence to move arm to feed station position.
 		
@@ -46,7 +46,7 @@ public class FeedStation extends CommandBase
         
         // Next action is to extend arms.
 
-        command = new ExtendArm(arm, getName(), 70.0);
+        command = new ExtendArm(arm, getName(), 53.0); // 70
 
 		pCommands.addCommands(command);
         
@@ -56,9 +56,9 @@ public class FeedStation extends CommandBase
 
         // Now hold winch position.
 
-        command = new InstantCommand(winch::toggleHoldPosition);
+        //command = new InstantCommand(winch::toggleHoldPosition);
 
-		commands.addCommands(command);
+		//commands.addCommands(command);
 
         // Now turn on intake rollers.
 
@@ -74,7 +74,12 @@ public class FeedStation extends CommandBase
 
         // Run the commands, only if winch mostly up.
 
-        if (winch.getPosition() > -5) commands.schedule();
+        if (winch.getPosition() > -5) 
+        {
+            Util.consoleLog("schedule CG");
+
+            commands.schedule();
+        }
 
         SmartDashboard.putBoolean(getName(), true);
     }

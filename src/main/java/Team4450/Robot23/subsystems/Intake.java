@@ -87,7 +87,7 @@ public class Intake extends SubsystemBase
         setPower(-lastPower);
         
         try {
-            Thread.sleep(250);
+            Thread.sleep(400);
         }
         catch (Exception e) {}
 

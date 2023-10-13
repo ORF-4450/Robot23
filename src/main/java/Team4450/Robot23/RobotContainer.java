@@ -441,7 +441,7 @@ public class RobotContainer
 		new Trigger(() -> utilityPad.getYButton()).onTrue(new InstantCommand(winch::toggleHoldPosition));
 
 		//new Trigger(() -> utilityPad.getPOVAngle(270)).onTrue(new InstantCommand(arm::resetPosition));
-		new Trigger(() -> utilityPad.getBackButton()).onTrue(new InstantCommand(winch::resetPosition));
+		new Trigger(() -> utilityPad.getBackButton()).onTrue(new InstantCommand(arm::resetPosition));
 	}
 
 	/**

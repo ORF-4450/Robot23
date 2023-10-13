@@ -34,7 +34,7 @@
     },
     "###/SmartDashboard/Field2d": {
       "Collapsed": "0",
-      "Pos": "602,30",
+      "Pos": "602,29",
       "Size": "1011,550"
     },
     "###/SmartDashboard/Gyro2": {
@@ -60,7 +60,7 @@
     "###NetworkTables": {
       "Collapsed": "0",
       "Pos": "495,66",
-      "Size": "1098,880"
+      "Size": "1098,891"
     },
     "###Other Devices": {
       "Collapsed": "0",

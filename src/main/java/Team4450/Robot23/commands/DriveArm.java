@@ -28,6 +28,12 @@ public class DriveArm extends CommandBase
     }
 
     @Override
+    public void initialize()
+    {
+        Util.consoleLog();
+    }
+    
+    @Override
     public void execute()
     {
         double power = deadband(armSupplier.getAsDouble(), THROTTLE_DEADBAND);
